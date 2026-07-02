@@ -1,0 +1,49 @@
+# Configuration file for `prek`, a git hook framework written in Rust.
+# See https://prek.j178.dev for more information.
+#:schema https://www.schemastore.org/prek.json
+
+[[repos]]
+repo = "builtin"
+hooks = [
+  { id = "trailing-whitespace" },
+  { id = "end-of-file-fixer" },
+  { id = "mixed-line-ending" },
+  { id = "check-case-conflict" },
+  { id = "check-shebang-scripts-are-executable" },
+  { id = "check-executables-have-shebangs" },
+  { id = "check-toml" },
+  { id = "check-yaml" },
+  { id = "check-xml" },
+]
+
+[[repos]]
+repo = "local"
+hooks = [
+  { id = "format", name = "format", language = "system", entry = "mise tasks run format:oxlint", exclude = "^team-hermes-packages-react/" },
+  { id = "vp-check", name = "vp check (web)", language = "system", entry = "mise tasks run team-hermes-packages-react:check", files = "^team-hermes-packages-react/", pass_filenames = false },
+  { id = "dclint", name = "Lint Docker Compose files", language = "node", additional_dependencies = [
+    "dclint@3.1.0",
+  ], entry = "dclint", files = "(docker-)?compose(.[a-z]+)?\\.ya?ml$" },
+]
+
+[[repos]]
+repo = "https://github.com/astral-sh/ruff-pre-commit"
+rev = "22f0422809455ec89ffdcf5a00170ba816e42ddb" # frozen: v0.15.16
+hooks = [{ id = "ruff-check", args = ["--fix"] }, { id = "ruff-format" }]
+
+[[repos]]
+repo = "https://github.com/hadolint/hadolint"
+# NOTE: This should be kept in sync with what's specified by mise
+#       The reason for this, is because hadolint-docker fetches the :latest tag, rather than a pinned version
+rev = "57e1618d78fd469a92c1e584e8c9313024656623" # frozen: v2.14.0
+hooks = [{ id = "hadolint" }]
+
+[[repos]]
+repo = "https://github.com/koalaman/shellcheck-precommit"
+rev = "99470f5e12208ff0fb17ab81c3c494f7620a1d8d" # v0.11.0
+hooks = [{ id = "shellcheck" }]
+
+[[repos]]
+repo = "https://github.com/scop/pre-commit-shfmt"
+rev = "05c1426671b9237fb5e1444dd63aa5731bec0dfb" # v3.13.1-1
+hooks = [{ id = "shfmt", args = ["-w", "-i", "4"] }]

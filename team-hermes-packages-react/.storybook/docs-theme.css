@@ -1,0 +1,22 @@
+/* Storybook docs page styling using EDS color tokens.
+ * Inherits light/dark mode from [data-color-scheme] set by the theme addon. */
+
+.sbdocs-wrapper,
+.sb-main-padded {
+  background-color: var(--eds-color-bg-canvas);
+  color: var(--eds-color-text-strong);
+}
+
+.sbdocs-content {
+  color: var(--eds-color-text-strong);
+}
+
+/* Canvas (story preview) background */
+.docs-story {
+  background-color: var(--eds-color-bg-surface);
+}
+
+/* Canvas border */
+.sbdocs-preview {
+  border-color: var(--eds-color-border-default);
+}

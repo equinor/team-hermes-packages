@@ -1,0 +1,17 @@
+name: "On Pull Request"
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+
+permissions:
+  contents: read
+
+jobs:
+  linting-and-checks:
+    uses: ./.github/workflows/linting-and-checks.yaml
+
+  react-test-and-build:
+    uses: ./.github/workflows/react-test-and-build.yaml

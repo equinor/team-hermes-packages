@@ -1,0 +1,41 @@
+[tools]
+oxfmt = "0.54.0"
+node = "24.16.0"
+vite-plus = "0.2.1"
+prek = { version = "0.4.4", postinstall = "prek install" }
+python = "3.14.6"
+uv = "0.11.21"
+hadolint = "2.14.0"
+
+[settings]
+python.uv_venv_auto = "source"
+
+[plugins]
+vite-plus = "https://github.com/markmals/mise-vite-plus"
+
+[tasks."format:oxlint"]
+run = "oxfmt --no-error-on-unmatched-pattern"
+
+[tasks."team-hermes-packages-react:dependencies"]
+dir = "{{config_root}}/team-hermes-packages-react"
+run = "vp install --frozen-lockfile"
+
+[tasks."team-hermes-packages-react:check"]
+depends = ["team-hermes-packages-react:dependencies"]
+dir = "{{config_root}}/team-hermes-packages-react"
+run = "vp check --fix"
+
+[tasks."test:unit:team-hermes-packages-react"]
+dir = "{{config_root}}/team-hermes-packages-react"
+depends = ["team-hermes-packages-react:dependencies"]
+run = "vp test"
+
+[tasks."team-hermes-packages-react:pack"]
+depends = ["team-hermes-packages-react:dependencies"]
+dir = "{{config_root}}/team-hermes-packages-react"
+run = "vp pack"
+
+[tasks."team-hermes-packages-react:build-storybook"]
+depends = ["team-hermes-packages-react:dependencies"]
+dir = "{{config_root}}/team-hermes-packages-react"
+run = "vp exec storybook build"

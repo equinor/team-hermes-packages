@@ -1,0 +1,52 @@
+name: "Deploy Storybook to GitHub Pages"
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "team-hermes-packages-react/**"
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: team-hermes-packages-react
+    steps:
+      - name: "Setup: checkout repository"
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: "Setup: Runtimes"
+        uses: jdx/mise-action@1648a7812b9aeae629881980618f079932869151 # v4.0.1
+        timeout-minutes: 5
+
+      - name: "Setup: Install dependencies"
+        run: vp install --frozen-lockfile
+
+      - name: "Build Storybook"
+        run: vp exec storybook build
+
+      - name: "Upload Pages artifact"
+        uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3.0.1
+        with:
+          path: team-hermes-packages-react/storybook-static
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: "Deploy to GitHub Pages"
+        id: deployment
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac2b3c603fc # v4.0.5

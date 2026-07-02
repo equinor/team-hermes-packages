@@ -1,0 +1,71 @@
+import { Meta, Primary, Controls, Canvas, ArgTypes } from "@storybook/addon-docs/blocks";
+import * as ChipStories from "./Chip.stories";
+
+<Meta of={ChipStories} />
+
+# Chip
+
+Chips are compact elements that represent an attribute, input, or action. They allow users to filter content, make selections, or trigger actions.
+
+<Primary />
+
+<Controls />
+
+## Usage
+
+- Use chips to represent tags, filters, or selectable attributes.
+- Chips can be interactive (clickable) to trigger actions like filtering or navigation.
+- Add a dismiss button when the chip represents a removable selection.
+- Use tooltips to provide additional context when chip labels are abbreviated.
+
+```tsx
+import { Chip } from "team-hermes-packages-react";
+```
+
+```tsx
+<Chip theme="accent" fontSize="sm" onDismiss={() => removeFilter(id)}>
+  Active filter
+</Chip>
+```
+
+## Examples
+
+### Themes
+
+The `theme` prop maps to EDS color appearance tokens via the `data-color-appearance` attribute.
+
+<Canvas of={ChipStories.Themes} />
+
+### With icon
+
+Chips can include an EDS icon before the label for additional visual context.
+
+<Canvas of={ChipStories.WithIcon} />
+
+### Interactive
+
+When `onClick` is provided, the chip content becomes a clickable button with hover styles.
+
+<Canvas of={ChipStories.Interactive} />
+
+### Dismissible
+
+When `onDismiss` is provided, a dismiss button appears on the right side of the chip.
+
+<Canvas of={ChipStories.Dismissible} />
+
+### Interactive and dismissible
+
+Chips can be both interactive and dismissible. Use `chipTooltip` and `dismissTooltip` to describe each action.
+
+<Canvas of={ChipStories.InteractiveAndDismissible} />
+
+### Sizes
+
+The `fontSize` prop controls the overall size of the chip, including padding and icon dimensions.
+
+<Canvas of={ChipStories.Sizes} />
+
+## Props
+
+<ArgTypes of={ChipStories} />
