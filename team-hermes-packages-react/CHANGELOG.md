@@ -1,0 +1,16 @@
+# Changelog
+
+## 1.0.0 (2026-07-10)
+
+
+### Features
+
+* init main repo and react project ([2c6010b](https://github.com/equinor/team-hermes-packages/commit/2c6010b7f9ab474ae301eab292c315fd986da742))
+* initial hooks and components ([cf3e896](https://github.com/equinor/team-hermes-packages/commit/cf3e896aba61684210ebffe32c233d56c706fbee))
+
+
+### Bug Fixes
+
+* exclude changelog and passWithNoTests ([a45def4](https://github.com/equinor/team-hermes-packages/commit/a45def462da2a5a5acc9b4211d28158a2ed97b4a))
+* missing config ([d16ac6d](https://github.com/equinor/team-hermes-packages/commit/d16ac6d1f5fca899a601b9b4ec08919d8110f364))
+* testing in CI ([4e0b71c](https://github.com/equinor/team-hermes-packages/commit/4e0b71c4b576254c4f300e9b8a771103776d4c1d))
