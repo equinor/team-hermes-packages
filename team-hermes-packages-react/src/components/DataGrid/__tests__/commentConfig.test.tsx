@@ -1,5 +1,5 @@
-import { fireEvent, render, screen } from '@testing-library/react'
-import { describe, expect, it, vi } from 'vitest'
+import { cleanup, fireEvent, render, screen } from '@testing-library/react'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 
 // Mock to break circular dependency: @/hooks → useFilters → @/common/components → DataGridCell → FilterDialog.utils → @/hooks
 vi.mock('@/common/components/FilterDialog/FilterDialog.utils', () => ({}))
@@ -47,6 +47,8 @@ function createMockCellActions(overrides: Partial<CellActions> = {}): CellAction
 }
 
 describe('DataGridCommentSection', () => {
+  afterEach(cleanup)
+
   it('should render individual comments', () => {
     const commentConfig = createTestCommentConfig()
     const cellActions = createMockCellActions()

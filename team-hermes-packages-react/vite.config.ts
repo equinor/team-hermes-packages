@@ -6,6 +6,8 @@ export default defineConfig({
   plugins: [tailwindcss()],
   test: {
     passWithNoTests: true,
+    environment: 'jsdom',
+    setupFiles: ['./vitest.setup.ts'],
   },
   resolve: {
     alias: [{ find: '@', replacement: path.resolve(import.meta.dirname, './src') }],
