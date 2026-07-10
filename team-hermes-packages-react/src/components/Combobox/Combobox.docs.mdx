@@ -1,0 +1,67 @@
+import { Meta, Primary, Controls, Canvas, ArgTypes } from '@storybook/addon-docs/blocks'
+import * as ComboboxStories from './Combobox.stories'
+
+<Meta of={ComboboxStories} />
+
+# Combobox
+
+A searchable dropdown selector built on Base UI's Combobox. Supports single and multi-select modes with type-ahead filtering.
+
+<Primary />
+
+<Controls />
+
+## Usage
+
+- Use Combobox when the list of options is large enough that users benefit from filtering by typing.
+- For a small fixed set of options without search, consider a plain select or `MenuCheckboxList`.
+- In multi-select mode, selected items render as removable chips inside the input.
+
+```tsx
+import { Combobox, type ComboboxItem } from 'team-hermes-packages-react'
+```
+
+```tsx
+const items: ComboboxItem[] = [
+  { label: 'Apple', value: 'apple' },
+  { label: 'Banana', value: 'banana' },
+]
+
+;<Combobox items={items} value={selected} onChange={setSelected} placeholder="Pick a fruit" />
+```
+
+## Examples
+
+### With label
+
+A label is displayed above the input for context.
+
+<Canvas of={ComboboxStories.WithLabel} />
+
+### Clearable
+
+In single-select mode, `clearable` adds a button to reset the selection.
+
+<Canvas of={ComboboxStories.Clearable} />
+
+### With error
+
+The `error` prop displays a validation message below the input.
+
+<Canvas of={ComboboxStories.WithError} />
+
+### Disabled
+
+A disabled combobox prevents interaction.
+
+<Canvas of={ComboboxStories.Disabled} />
+
+### Multiple
+
+Enable `multiple` to allow selecting several items. Selections are shown as removable chips.
+
+<Canvas of={ComboboxStories.Multiple} />
+
+## Props
+
+<ArgTypes of={ComboboxStories} />

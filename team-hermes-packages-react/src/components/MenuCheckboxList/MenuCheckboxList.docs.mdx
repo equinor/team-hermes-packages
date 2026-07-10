@@ -1,0 +1,81 @@
+import { Meta, Primary, Controls, Canvas, ArgTypes } from '@storybook/addon-docs/blocks'
+import * as MenuCheckboxListStories from './MenuCheckboxList.stories'
+
+<Meta of={MenuCheckboxListStories} />
+
+# MenuCheckboxList
+
+A dropdown menu with checkbox items, built on Base UI's Menu. Useful for toggling visibility of columns, filters, or any set of boolean options. Supports both uncontrolled (with a `trigger`) and controlled open state.
+
+<Primary />
+
+<Controls />
+
+## Usage
+
+- Use `MenuCheckboxList` when users need to toggle multiple options on/off from a dropdown.
+- Options with `visible: false` are hidden from the menu, which is handy for programmatically excluding certain choices.
+
+```tsx
+import { MenuCheckboxList } from 'team-hermes-packages-react'
+```
+
+```tsx
+<MenuCheckboxList
+  trigger={<button>Columns</button>}
+  options={[
+    { label: 'Name', value: 'name' },
+    { label: 'Status', value: 'status' },
+  ]}
+  value={selectedColumns}
+  onChange={setSelectedColumns}
+/>
+```
+
+### Controlled mode
+
+Manage the open state yourself when you need to open the menu programmatically:
+
+```tsx
+const [open, setOpen] = useState(false);
+
+<button onClick={() => setOpen(true)}>Open menu</button>
+
+<MenuCheckboxList
+  open={open}
+  setIsOpen={setOpen}
+  options={options}
+  value={selectedColumns}
+  onChange={setSelectedColumns}
+/>
+```
+
+## Examples
+
+### Default
+
+Some options are pre-selected.
+
+<Canvas of={MenuCheckboxListStories.Default} />
+
+### None selected
+
+Starting with an empty selection.
+
+<Canvas of={MenuCheckboxListStories.NoneSelected} />
+
+### With hidden options
+
+Options with `visible: false` are excluded from the rendered list.
+
+<Canvas of={MenuCheckboxListStories.WithHiddenOptions} />
+
+### Controlled
+
+Use `open` and `setIsOpen` to control the menu state externally.
+
+<Canvas of={MenuCheckboxListStories.Controlled} />
+
+## Props
+
+<ArgTypes of={MenuCheckboxListStories} />

@@ -1,0 +1,67 @@
+import { Meta, Primary, Controls, Canvas, ArgTypes } from '@storybook/addon-docs/blocks'
+import * as NavBarStories from './NavBar.stories'
+
+<Meta of={NavBarStories} />
+
+# NavBar
+
+A top-level navigation bar that provides category-based navigation with dropdown menus, a color scheme toggle, optional user information popover, and a help/support section. The application name displayed in the navbar is configured via `applicationConfig.name`.
+
+<Primary />
+
+<Controls />
+
+## Usage
+
+```tsx
+import { NavBar } from 'team-hermes-packages-react'
+```
+
+```tsx
+<NavBar
+  categories={[
+    {
+      title: 'Dashboard',
+      basePath: 'dashboard',
+      icon: dashboard,
+      theme: 'success',
+      links: [{ href: '/overview', title: 'Overview', description: 'Main dashboard', icon: home }],
+    },
+  ]}
+  LinkComponent={RouterLink}
+  user={{ name: 'Ola Nordmann', email: 'ola@equinor.com', roles: ['admin'] }}
+  logOut={() => signOut()}
+  applicationConfig={{
+    name: 'MyApp',
+    roles: [{ value: 'admin', label: 'Admin' }],
+    serviceNowLink: 'https://equinor.service-now.com',
+    githubRepoName: 'equinor/team-hermes-packages',
+  }}
+/>
+```
+
+## Props
+
+<ArgTypes />
+
+## Features
+
+- **Category navigation** — Groups links under collapsible dropdown menus.
+- **Active indicator** — Highlights the category matching the current route.
+- **Color scheme toggle** — Switches between light and dark mode.
+- **User popover** — Displays user info and permissions when `user` is provided.
+- **Support section** — Shows help/support dialog with ServiceNow and GitHub links.
+
+## Examples
+
+### With user information
+
+Displays the user popover with permissions and a sign-out button.
+
+<Canvas of={NavBarStories.WithUser} />
+
+### With application config
+
+Shows the support section with links to ServiceNow and GitHub.
+
+<Canvas of={NavBarStories.WithApplicationConfig} />

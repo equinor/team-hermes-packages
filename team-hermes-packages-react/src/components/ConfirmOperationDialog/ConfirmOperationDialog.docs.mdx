@@ -1,0 +1,72 @@
+import { Meta, Primary, Controls, Canvas, ArgTypes } from '@storybook/addon-docs/blocks'
+import * as ConfirmOperationDialogStories from './ConfirmOperationDialog.stories'
+
+<Meta of={ConfirmOperationDialogStories} />
+
+# ConfirmOperationDialog
+
+A confirmation dialog built on [Base UI AlertDialog](https://base-ui.com/). Prompts the user to confirm a destructive or important action before proceeding. Supports both uncontrolled (with a `trigger`) and controlled open state.
+
+<Primary />
+
+<Controls />
+
+## Usage
+
+- Use for destructive or irreversible actions (delete, discard, overwrite).
+- Provide a clear `title` and optional `description` so the user understands the consequence.
+- Use `confirmButtonColor="danger"` (default) for destructive actions, or `"primary"` for non-destructive confirmations.
+- Set `operationIsLoading` to show a spinner on the confirm button during async operations.
+
+```tsx
+import { ConfirmOperationDialog } from 'team-hermes-packages-react'
+```
+
+```tsx
+<ConfirmOperationDialog
+  trigger={<button>Delete</button>}
+  title="Delete item?"
+  description="This action cannot be undone."
+  onConfirm={handleDelete}
+/>
+```
+
+### Controlled mode
+
+Manage the open state yourself when you need to open the dialog programmatically:
+
+```tsx
+const [open, setOpen] = useState(false)
+
+;<ConfirmOperationDialog isOpen={open} setIsOpen={setOpen} title="Delete item?" onConfirm={handleDelete} />
+```
+
+## Examples
+
+### With custom labels
+
+Customize the confirm and cancel button text to match the action.
+
+<Canvas of={ConfirmOperationDialogStories.WithCustomLabels} />
+
+### Primary confirm
+
+Use `confirmButtonColor="primary"` for non-destructive confirmations.
+
+<Canvas of={ConfirmOperationDialogStories.PrimaryConfirm} />
+
+### Loading
+
+Set `operationIsLoading` to show a spinner on the confirm button while the operation is in progress.
+
+<Canvas of={ConfirmOperationDialogStories.Loading} />
+
+### No description
+
+The dialog works with just a title when no additional context is needed.
+
+<Canvas of={ConfirmOperationDialogStories.NoDescription} />
+
+## Props
+
+<ArgTypes of={ConfirmOperationDialogStories} />

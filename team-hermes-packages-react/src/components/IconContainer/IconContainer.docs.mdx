@@ -1,0 +1,68 @@
+import { Meta, Primary, Controls, Canvas, ArgTypes } from '@storybook/addon-docs/blocks'
+import * as IconContainerStories from './IconContainer.stories'
+
+<Meta of={IconContainerStories} />
+
+# IconContainer
+
+A themed container for displaying an EDS icon, text, or both. Useful for avatars, status indicators, and compact visual labels.
+
+<Primary />
+
+<Controls />
+
+## Usage
+
+- Use `IconContainer` to give icons a themed background with consistent sizing.
+- When both `icon` and `text` are provided, the container doubles in width to fit both.
+- Use the `loading` prop to replace content with a spinner during async operations.
+
+```tsx
+import { IconContainer } from 'team-hermes-packages-react'
+```
+
+```tsx
+<IconContainer icon={save} variant="success" shape="circle" />
+```
+
+## Examples
+
+### Variants
+
+The `variant` prop controls the background and foreground colors using theme CSS variables.
+
+<Canvas of={IconContainerStories.Variants} />
+
+### Shapes
+
+Choose between a `rounded` rectangle or a `circle`.
+
+<Canvas of={IconContainerStories.Shapes} />
+
+### With text
+
+Display a text or number value instead of an icon.
+
+<Canvas of={IconContainerStories.WithText} />
+
+### Icon and text
+
+When both `icon` and `text` are provided, the container doubles in width to display both.
+
+<Canvas of={IconContainerStories.IconAndText} />
+
+### Loading
+
+When `loading` is true, a circular progress indicator replaces the icon and text.
+
+<Canvas of={IconContainerStories.Loading} />
+
+### Sizes
+
+Use `size` to control the container dimensions and `iconSize` to control the icon dimensions independently.
+
+<Canvas of={IconContainerStories.Sizes} />
+
+## Props
+
+<ArgTypes of={IconContainerStories} />

@@ -1,0 +1,186 @@
+import { Meta, Primary, Controls, ArgTypes } from '@storybook/addon-docs/blocks'
+import * as DataGridStories from './DataGrid.stories'
+
+<Meta of={DataGridStories} />
+
+# DataGrid
+
+A feature-rich, editable data grid built on [TanStack Table](https://tanstack.com/table) with virtualised rows and columns, drag-to-reorder headers, clipboard operations, undo/redo, and inline cell editing.
+
+<Primary />
+
+<Controls />
+
+## Quick start
+
+```tsx
+import { DataGrid } from 'team-hermes-packages-react'
+import { type ColumnDef, getCoreRowModel, useReactTable } from '@tanstack/react-table'
+
+type Row = { uid: string; name: string; depth: number }
+
+const columns: ColumnDef<Row>[] = [
+  { id: 'name', accessorKey: 'name', header: 'Name' },
+  { id: 'depth', accessorKey: 'depth', header: 'Depth' },
+]
+
+function MyGrid() {
+  const [data, setData] = useState<Row[]>(initialRows)
+
+  const table = useReactTable({
+    data,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+    getRowId: (row) => row.uid,
+    meta: { setData },
+  })
+
+  return <DataGrid table={table} />
+}
+```
+
+## Props
+
+See `DataGridProps` in `DataGrid.types.tsx` for full JSDoc descriptions.
+
+<ArgTypes of={DataGridStories} />
+
+## Table meta
+
+Supply these on `useReactTable({ meta: { ... } })`. All properties are documented with JSDoc in the `TableMeta` augmentation in `DataGrid.types.tsx`.
+
+```tsx
+meta: {
+  setData,              // Required for editing — state setter
+  defaultRowFactory,    // Creates new rows (preferred)
+  defaultRowValue,      // Static template cloned for new rows
+  onCellsChanged,       // Callback after cell mutations
+  validationErrors,     // Keyed as "[rowIndex].columnId"
+  validationWarnings,   // Same format as errors
+  validationKeyPrefix,  // 'rowIndex' | 'rowId'
+  addColumn,            // Callback when column added
+  removeColumn,         // Callback when column removed
+}
+```
+
+## Column meta
+
+Extend each column definition with `meta` to control behaviour per-column. All properties are documented with JSDoc in the `ColumnMeta` augmentation in `DataGrid.types.tsx`.
+
+```tsx
+{
+  id: "depth",
+  accessorKey: "depth",
+  header: "Depth",
+  meta: {
+    dataType: AttributeType.NUMBER,
+    editable: true,
+    unit: "m",
+    isSortable: true,
+    minValue: 0,
+    maxValue: 10000,
+  },
+}
+```
+
+## Nested values (dot syntax)
+
+DataGrid supports nested object properties using dot-notation in `accessorKey`. This works across all features including editing, copy/paste, undo/redo, and filtering:
+
+```tsx
+// Data shape
+type Row = {
+  uid: string
+  site: { country_identifier_source: string; area: string }
+  measurement: { value: number; unit: string }
+}
+
+// Column definitions
+const columns: ColumnDef<Row>[] = [
+  {
+    id: 'country_identifier_source',
+    accessorKey: 'site.country_identifier_source',
+    header: 'Country',
+    meta: { dataType: AttributeType.TEXT, editable: false },
+  },
+  {
+    id: 'area',
+    accessorKey: 'site.area',
+    header: 'Area',
+    meta: { dataType: AttributeType.TEXT, editable: true },
+  },
+  {
+    id: 'measurement_value',
+    accessorKey: 'measurement.value',
+    header: 'Measurement',
+    meta: { dataType: AttributeType.NUMBER, editable: true, unit: 'm' },
+  },
+]
+```
+
+Under the hood, DataGrid uses `getNestedValue()` for reads and `deepSet()` for writes, so arbitrarily deep paths like `"a.b.c"` work correctly.
+
+## Keyboard shortcuts
+
+<table>
+  <thead>
+    <tr>
+      <th>Shortcut</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>**Arrow keys**</td>
+      <td>Navigate between cells</td>
+    </tr>
+    <tr>
+      <td>**Shift + Arrow**</td>
+      <td>Extend selection</td>
+    </tr>
+    <tr>
+      <td>**Home / End**</td>
+      <td>Jump to first / last cell</td>
+    </tr>
+    <tr>
+      <td>**Space**</td>
+      <td>Enter edit mode on selected cell</td>
+    </tr>
+    <tr>
+      <td>**Enter**</td>
+      <td>Commit edit</td>
+    </tr>
+    <tr>
+      <td>**Escape**</td>
+      <td>Cancel edit</td>
+    </tr>
+    <tr>
+      <td>**Ctrl+C**</td>
+      <td>Copy selected cells</td>
+    </tr>
+    <tr>
+      <td>**Ctrl+V**</td>
+      <td>Paste into selected cells</td>
+    </tr>
+    <tr>
+      <td>**Ctrl+E**</td>
+      <td>Open comment on selected cell</td>
+    </tr>
+    <tr>
+      <td>**Ctrl+Z**</td>
+      <td>Undo</td>
+    </tr>
+    <tr>
+      <td>**Ctrl+Y** / **Ctrl+Shift+Z**</td>
+      <td>Redo</td>
+    </tr>
+    <tr>
+      <td>**Backspace / Delete**</td>
+      <td>Clear selected cells</td>
+    </tr>
+    <tr>
+      <td>**Type any character**</td>
+      <td>Start editing with that character</td>
+    </tr>
+  </tbody>
+</table>

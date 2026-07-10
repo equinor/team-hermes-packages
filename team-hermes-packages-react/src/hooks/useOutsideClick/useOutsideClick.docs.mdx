@@ -1,0 +1,60 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Hooks/useOutsideClick" />
+
+# useOutsideClick
+
+A hook that detects clicks outside one or more elements and invokes a callback. Useful for closing dropdowns, popovers, or modals when the user clicks elsewhere.
+
+## Usage
+
+```tsx
+import { useRef } from 'react'
+import { useOutsideClick } from 'team-hermes-packages-react'
+
+function Dropdown({ onClose }: { onClose: () => void }) {
+  const menuRef = useRef<HTMLDivElement>(null)
+  const triggerRef = useRef<HTMLButtonElement>(null)
+
+  useOutsideClick([menuRef, triggerRef], onClose)
+
+  return (
+    <>
+      <button ref={triggerRef}>Toggle</button>
+      <div ref={menuRef}>Menu content</div>
+    </>
+  )
+}
+```
+
+## API
+
+### `useOutsideClick(refs, callback)`
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`refs`</td>
+      <td>`React.RefObject<HTMLElement | null>[]`</td>
+      <td>Array of refs whose elements are considered "inside". A click on any of these elements (or their descendants) will **not** trigger the callback.</td>
+    </tr>
+    <tr>
+      <td>`callback`</td>
+      <td>`() => void`</td>
+      <td>Function called when a `mousedown` event occurs outside all referenced elements.</td>
+    </tr>
+  </tbody>
+</table>
+
+## Notes
+
+- The hook listens on the `mousedown` event so the callback fires before `click`, matching native dropdown behaviour.
+- Pass multiple refs when the trigger and the popup are separate DOM trees (e.g. portalled content).
+- If `refs` is empty, the callback is never invoked.

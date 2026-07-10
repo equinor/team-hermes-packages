@@ -1,0 +1,71 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Hooks/useCustomToast" />
+
+# useCustomToast
+
+A hook that provides convenience methods for showing styled toast notifications via `react-toastify`.
+
+## Usage
+
+```tsx
+import { useCustomToast } from 'team-hermes-packages-react'
+
+function SaveButton() {
+  const toast = useCustomToast()
+
+  const handleSave = async () => {
+    try {
+      await saveData()
+      toast.success('Changes saved successfully.')
+    } catch {
+      toast.error('Save failed', 'Could not save your changes.')
+    }
+  }
+
+  return <button onClick={handleSave}>Save</button>
+}
+```
+
+## API
+
+### `useCustomToast()`
+
+Returns an object with four toast methods:
+
+<table>
+  <thead>
+    <tr>
+      <th>Method</th>
+      <th>Signature</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`success`</td>
+      <td>`(message: string) => void`</td>
+      <td>Shows a success toast that auto-closes after 3 s.</td>
+    </tr>
+    <tr>
+      <td>`error`</td>
+      <td>`(title?: string, message?: string, autoClose?: number | false) => void`</td>
+      <td>Shows a danger toast. Defaults to *"Oh Snap!"* / *"An unexpected error occurred."* with 8 s auto-close.</td>
+    </tr>
+    <tr>
+      <td>`warning`</td>
+      <td>`(title: string, message: string, autoClose?: number | false) => void`</td>
+      <td>Shows a warning toast. Auto-closes after 5 s by default.</td>
+    </tr>
+    <tr>
+      <td>`info`</td>
+      <td>`(title: string, message: string, autoClose?: number | false) => void`</td>
+      <td>Shows an info toast. Does **not** auto-close by default.</td>
+    </tr>
+  </tbody>
+</table>
+
+## Notes
+
+- All toasts render the shared `ToastMessage` component with a `title`, `details`, and colour `type`.
+- Set `autoClose` to `false` to keep a toast visible until the user dismisses it.

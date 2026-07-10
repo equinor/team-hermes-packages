@@ -1,0 +1,16 @@
+@reference "tailwindcss";
+
+.dialog-popup-base {
+  @apply fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg bg-surface p-6 outline-1 outline-stroke-subtle;
+}
+
+.dialog-backdrop {
+  @apply fixed inset-0 min-h-dvh bg-black opacity-20 transition-all duration-150 dark:opacity-70 supports-[-webkit-touch-callout:none]:absolute;
+
+  &[data-ending-style] {
+    @apply opacity-0;
+  }
+  &[data-starting-style] {
+    @apply opacity-0;
+  }
+}

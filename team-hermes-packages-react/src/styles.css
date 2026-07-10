@@ -1,2 +1,106 @@
-@import "tailwindcss";
-@import "@equinor/eds-tokens/css/variables";
+@import 'tailwindcss';
+@import '@equinor/eds-tokens/css/variables';
+@import './shared/styles/eds-overrides.css';
+@import './shared/styles/dialog.css';
+@import './shared/styles/menu.css';
+
+@theme {
+  /* Backgrounds */
+  --color-surface: var(--eds-color-bg-floating);
+  --color-surface-hover: light-dark(#818f9019, #ade2e619);
+  --color-surface-subtle: light-dark(#818f9019, #ade2e619);
+
+  /* Text */
+  --color-primary: var(--eds-color-text-strong);
+  --color-secondary: var(--eds-color-text-subtle);
+
+  /* Borders */
+  --color-stroke-subtle: var(--eds-color-border-subtle);
+  --color-stroke-medium: var(--eds-color-border-medium);
+  --color-stroke-strong: var(--eds-color-border-strong);
+
+  /* bg-surface-theme + use with data-color-appearance="[theme]" */
+  --color-surface-theme: calc(var(--eds-color-border-subtle) / 30);
+  /* text-color-theme + use with data-color-appearance="[theme]" */
+  --color-color-theme: var(--eds-color-bg-fill-emphasis-default);
+
+  --color-theme-success-fg: var(--eds-color-bg-success-fill-emphasis-default);
+  --color-theme-success-bg: var(--eds-color-bg-success-surface);
+  --color-theme-info-fg: var(--eds-color-bg-info-fill-emphasis-default);
+  --color-theme-info-bg: var(--eds-color-bg-info-surface);
+  --color-theme-accent-fg: var(--eds-color-bg-accent-fill-emphasis-default);
+  --color-theme-accent-bg: var(--eds-color-bg-accent-surface);
+  --color-theme-warning-fg: var(--eds-color-bg-warning-fill-emphasis-default);
+  --color-theme-warning-bg: var(--eds-color-bg-warning-surface);
+  --color-theme-danger-fg: var(--eds-color-bg-danger-fill-emphasis-default);
+  --color-theme-danger-bg: var(--eds-color-bg-danger-surface);
+  --color-theme-neutral-fg: var(--text-secondary-color);
+  --color-theme-neutral-bg: light-dark(#818f9019, #ade2e619);
+}
+
+:root {
+  --focus-outline-color: var(--eds-color-text-link);
+  --focus-outline-width: 2px;
+  --focus-outline-style: dashed;
+  --focus-outline: var(--focus-outline-color) var(--focus-outline-width) var(--focus-outline-style);
+  --box-elevation: 5px 5px 10px rgba(0, 0, 0, 0.05);
+}
+
+dialog {
+  margin: auto;
+}
+
+#root {
+  isolation: isolate;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  font-family: 'Equinor', sans-serif;
+  display: flex;
+  flex-direction: column;
+  color: var(--color-primary);
+}
+
+* {
+  box-sizing: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+a:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: -2px;
+}
+
+a {
+  color: inherit;
+  font-size: inherit;
+  text-decoration: inherit;
+  &:focus-visible {
+    outline: var(--focus-outline);
+  }
+}
+
+.text-link {
+  @apply text-(--link-color) underline hover:no-underline;
+}
+
+.text-overline {
+  @apply text-xs font-medium uppercase tracking-wide;
+}
+
+.text-meta {
+  @apply text-xs tracking-wide text-(--text-secondary-color);
+}

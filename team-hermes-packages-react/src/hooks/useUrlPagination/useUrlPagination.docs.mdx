@@ -1,0 +1,126 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Hooks/useUrlPagination" />
+
+# useUrlPagination
+
+A hook that stores TanStack Table pagination state (`page` and `per_page`) in the URL via [nuqs](https://nuqs.47ng.com/), so that pagination survives page reloads and is shareable via the address bar.
+
+## Usage
+
+```tsx
+import { useUrlPagination } from 'team-hermes-packages-react'
+import { useReactTable, getCoreRowModel } from '@tanstack/react-table'
+
+function MyTable() {
+  const { pagination, setPagination, resetPage } = useUrlPagination()
+
+  const table = useReactTable({
+    data,
+    columns,
+    state: { pagination },
+    onPaginationChange: setPagination,
+    getCoreRowModel: getCoreRowModel(),
+    manualPagination: true,
+  })
+
+  return <>{/* render table */}</>
+}
+```
+
+### Resetting the page on filter changes
+
+Call `resetPage` whenever the result set changes (e.g. when filters are applied) to send the user back to the first page:
+
+```tsx
+const { pagination, setPagination, resetPage } = useUrlPagination()
+
+const handleFilterChange = (filter: string) => {
+  setFilter(filter)
+  resetPage()
+}
+```
+
+### Prefixed params for multiple tables
+
+Use the `prefix` option when a page contains more than one paginated table to avoid URL param collisions:
+
+```tsx
+const orders = useUrlPagination({ prefix: 'orders' })
+// → URL params: orders_page, orders_per_page
+
+const items = useUrlPagination({ prefix: 'items' })
+// → URL params: items_page, items_per_page
+```
+
+## API
+
+### `useUrlPagination(options?)`
+
+Accepts an optional options object:
+
+<table>
+  <thead>
+    <tr>
+      <th>Option</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`defaultPageSize`</td>
+      <td>`number`</td>
+      <td>`25`</td>
+      <td>Number of rows per page.</td>
+    </tr>
+    <tr>
+      <td>`defaultPageIndex`</td>
+      <td>`number`</td>
+      <td>`0`</td>
+      <td>Initial 0-based page index.</td>
+    </tr>
+    <tr>
+      <td>`history`</td>
+      <td>`'push' | 'replace'`</td>
+      <td>`'push'`</td>
+      <td>How URL changes are recorded in browser history.</td>
+    </tr>
+    <tr>
+      <td>`prefix`</td>
+      <td>`string`</td>
+      <td>—</td>
+      <td>Optional prefix for URL param names (e.g. `"w"` → `w_page`, `w_per_page`).</td>
+    </tr>
+  </tbody>
+</table>
+
+Returns an object with:
+
+<table>
+  <thead>
+    <tr>
+      <th>Property</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`pagination`</td>
+      <td>`PaginationState`</td>
+      <td>Current pagination state (`pageIndex`, `pageSize`), compatible with TanStack Table.</td>
+    </tr>
+    <tr>
+      <td>`setPagination`</td>
+      <td>`Dispatch<SetStateAction<PaginationState>>`</td>
+      <td>State setter to pass to TanStack Table's `onPaginationChange`.</td>
+    </tr>
+    <tr>
+      <td>`resetPage`</td>
+      <td>`() => void`</td>
+      <td>Resets the page index to `0`. Call when filters or sorting change.</td>
+    </tr>
+  </tbody>
+</table>

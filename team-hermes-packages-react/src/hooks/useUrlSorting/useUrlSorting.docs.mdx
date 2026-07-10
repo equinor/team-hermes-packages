@@ -1,0 +1,102 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Hooks/useUrlSorting" />
+
+# useUrlSorting
+
+A hook that stores TanStack Table sorting state (`sort_by` and `sort_order`) in the URL via [nuqs](https://nuqs.47ng.com/), so that the active sort column and direction survive page reloads and are shareable via the address bar. Supports a single sorted column.
+
+## Usage
+
+```tsx
+import { useUrlSorting, useUrlPagination } from 'team-hermes-packages-react'
+import { useReactTable, getCoreRowModel } from '@tanstack/react-table'
+
+function MyTable() {
+  const { resetPage, pagination, setPagination } = useUrlPagination()
+  const { sorting, setSorting } = useUrlSorting({ onSortChange: resetPage })
+
+  const table = useReactTable({
+    data,
+    columns,
+    state: { sorting, pagination },
+    onSortingChange: setSorting,
+    onPaginationChange: setPagination,
+    getCoreRowModel: getCoreRowModel(),
+    manualSorting: true,
+    manualPagination: true,
+  })
+
+  return <>{/* render table */}</>
+}
+```
+
+### Resetting pagination on sort change
+
+Use the `onSortChange` callback to reset the page index when the user changes the sort column or direction:
+
+```tsx
+const { resetPage } = useUrlPagination()
+const { sorting, setSorting } = useUrlSorting({ onSortChange: resetPage })
+```
+
+## API
+
+### `useUrlSorting(options?)`
+
+Accepts an optional options object:
+
+<table>
+  <thead>
+    <tr>
+      <th>Option</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`defaultSortOrder`</td>
+      <td>`'asc' | 'desc'`</td>
+      <td>`'asc'`</td>
+      <td>Default sort direction when a column is first sorted.</td>
+    </tr>
+    <tr>
+      <td>`history`</td>
+      <td>`'push' | 'replace'`</td>
+      <td>`'push'`</td>
+      <td>How URL changes are recorded in browser history.</td>
+    </tr>
+    <tr>
+      <td>`onSortChange`</td>
+      <td>`() => void`</td>
+      <td>—</td>
+      <td>Called after the sort state changes — use to reset pagination.</td>
+    </tr>
+  </tbody>
+</table>
+
+Returns an object with:
+
+<table>
+  <thead>
+    <tr>
+      <th>Property</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`sorting`</td>
+      <td>`SortingState`</td>
+      <td>Current sorting state, compatible with TanStack Table.</td>
+    </tr>
+    <tr>
+      <td>`setSorting`</td>
+      <td>`Dispatch<SetStateAction<SortingState>>`</td>
+      <td>State setter to pass to TanStack Table's `onSortingChange`.</td>
+    </tr>
+  </tbody>
+</table>
