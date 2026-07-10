@@ -1,0 +1,72 @@
+import { Meta, Primary, Controls, Canvas, ArgTypes } from '@storybook/addon-docs/blocks'
+import * as PopoverStories from './Popover.stories'
+
+<Meta of={PopoverStories} />
+
+# Popover
+
+A popover overlay built on Base UI's Popover. It renders a positioned popup portal. Supports both uncontrolled (with a `trigger`) and controlled open state.
+
+<Primary />
+
+<Controls />
+
+## Usage
+
+- Use Popover for contextual content that should appear on demand next to a trigger.
+- The popup is rendered through a portal, so it won't be clipped by overflow containers.
+- Static compound members `Popover.Trigger` and `Popover.createHandle` are re-exported from Base UI for advanced composition.
+
+```tsx
+import { Popover } from 'team-hermes-packages-react'
+```
+
+```tsx
+<Popover trigger={<button>Open</button>}>
+  <div style={{ padding: '1rem' }}>Popover body</div>
+</Popover>
+```
+
+### Controlled mode
+
+Manage the open state yourself when you need to open the popover programmatically:
+
+```tsx
+const [open, setOpen] = useState(false);
+
+<button onClick={() => setOpen(true)}>Open</button>
+
+<Popover open={open} setIsOpen={setOpen}>
+  <div style={{ padding: '1rem' }}>Popover body</div>
+</Popover>
+```
+
+## Examples
+
+### Default
+
+A basic popover with text content.
+
+<Canvas of={PopoverStories.Default} />
+
+### With rich content
+
+Popovers can contain headings, paragraphs, forms, or any React content.
+
+<Canvas of={PopoverStories.WithRichContent} />
+
+### Custom trigger class
+
+Style the trigger element directly since you control it.
+
+<Canvas of={PopoverStories.CustomTriggerClass} />
+
+### Controlled
+
+Use `open` and `setIsOpen` to control the popover state externally.
+
+<Canvas of={PopoverStories.Controlled} />
+
+## Props
+
+<ArgTypes of={PopoverStories} />

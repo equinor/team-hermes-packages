@@ -1,0 +1,66 @@
+import { Meta, Primary, Controls, Canvas, ArgTypes } from '@storybook/addon-docs/blocks'
+import * as ActionListStories from './ActionList.stories'
+
+<Meta of={ActionListStories} />
+
+# ActionList
+
+A panel component (`ActionListPanel`) that groups navigable list items (`ActionListItem`). Use it to present a set of related actions or links in a visually grouped card.
+
+<Primary />
+
+<Controls />
+
+## Usage
+
+```tsx
+import { ActionListPanel, ActionListItem } from 'team-hermes-packages-react'
+```
+
+```tsx
+<ActionListPanel icon={dashboard} title="Quick Actions" description="3 items" variant="accent">
+  <ActionListItem
+    icon={home}
+    title="Overview"
+    description="View the main dashboard."
+    linkTo="/overview"
+    LinkComponent={RouterLink}
+  />
+  <ActionListItem
+    icon={folder}
+    title="Reports"
+    description="Access reports and analytics."
+    linkTo="/reports"
+    LinkComponent={RouterLink}
+  />
+</ActionListPanel>
+```
+
+## ActionListPanel Props
+
+<ArgTypes of={ActionListStories.default} />
+
+## ActionListItem Props
+
+| Prop            | Description                                                      |
+| --------------- | ---------------------------------------------------------------- |
+| `icon`          | EDS icon displayed in the item.                                  |
+| `title`         | Primary text for the item.                                       |
+| `description`   | Secondary text shown below the title.                            |
+| `linkTo`        | Navigation target. Wrapped in `LinkComponent` or a plain anchor. |
+| `variant`       | Color theme for the icon container. Defaults to `"success"`.     |
+| `locked`        | When `true`, disables interaction and shows a lock chip.         |
+| `lockedReason`  | Text displayed in the lock chip. Defaults to `"No access"`.      |
+| `LinkComponent` | Router-aware link component. Falls back to a plain `<a>` tag.    |
+
+## Examples
+
+### With theme variant
+
+<Canvas of={ActionListStories.SuccessVariant} />
+
+### With locked items
+
+Locked items show a chip indicating restricted access and disable navigation.
+
+<Canvas of={ActionListStories.WithLockedItems} />

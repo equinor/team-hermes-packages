@@ -1,0 +1,493 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Feature Components/DataGrid/Features" />
+
+# DataGrid Features
+
+An overview of the features provided by the DataGrid component.
+
+---
+
+## Cell editing
+
+When `editable` is `true`, users can edit cells by:
+
+- **Double-clicking** a cell
+- Pressing **Space** when a single cell is selected
+- **Typing any character** to start editing immediately with that input
+
+Pressing **Enter** or blurring the cell commits the change. **Escape** cancels without saving.
+
+### Editor types
+
+The editor displayed depends on the column's `meta.dataType`:
+
+<table>
+  <thead>
+    <tr>
+      <th>`dataType`</th>
+      <th>Editor</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`TEXT`</td>
+      <td>Text input</td>
+    </tr>
+    <tr>
+      <td>`NUMBER`</td>
+      <td>Numeric input (comma decimals are normalised to dots)</td>
+    </tr>
+    <tr>
+      <td>`DATE_STRING`</td>
+      <td>Native date picker</td>
+    </tr>
+    <tr>
+      <td>`BOOLEAN`</td>
+      <td>Checkbox</td>
+    </tr>
+    <tr>
+      <td>`TEXT_ARRAY` / `NUMBER_ARRAY`</td>
+      <td>Not inline-editable — fires `onArrayCellClick` instead</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Combobox editor
+
+When `meta.options` is provided, the cell renders a **Combobox dropdown** instead of a free-text input, constraining values to a predefined list.
+
+#### Custom editor
+
+Supply `meta.cellEditorComponent` with a React component that receives `{ cell, table, onCommit, onClose }` to fully customise the editing experience.
+
+### Per-column editability
+
+Set `meta: { editable: false }` on individual columns to lock them even when the grid-level `editable` is `true`.
+
+---
+
+## Nested values (dot syntax)
+
+DataGrid supports nested object properties using **dot-notation accessor keys**. This works seamlessly across editing, copy/paste, undo/redo, and clipboard operations.
+
+```tsx
+type Row = {
+  uid: string
+  site: { country_identifier_source: string; area: string }
+}
+
+const columns: ColumnDef<Row>[] = [
+  {
+    id: 'country_identifier_source',
+    accessorKey: 'site.country_identifier_source',
+    header: 'Country',
+    meta: { dataType: AttributeType.TEXT, editable: false },
+  },
+  {
+    id: 'area',
+    accessorKey: 'site.area',
+    header: 'Area',
+    meta: { dataType: AttributeType.TEXT, editable: true },
+  },
+]
+```
+
+Internally, reads use `getNestedValue()` and writes use `deepSet()`, so paths of arbitrary depth (e.g. `"a.b.c.d"`) are fully supported.
+
+---
+
+## Copy, paste & delete
+
+All clipboard actions work on **rectangular multi-cell selections**.
+
+### Copy (Ctrl+C)
+
+Copies selected cells to the clipboard as **tab-separated, newline-delimited** text. This format is compatible with Excel and Google Sheets.
+
+### Paste (Ctrl+V)
+
+- **Single row on clipboard → many cells selected:** the row is broadcast to fill all selected cells.
+- **Multi-row clipboard → selection:** rows are pasted in order, aligned by column tabs.
+- Values are automatically type-converted (e.g. comma-decimal strings become numbers).
+
+### Delete (Backspace)
+
+Clears selected cells. Behaviour is controlled by the `deletionStrategy` prop:
+
+<table>
+  <thead>
+    <tr>
+      <th>Strategy</th>
+      <th>Behaviour</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`'remove'`</td>
+      <td>Removes the property from the row object entirely</td>
+    </tr>
+    <tr>
+      <td>`'nullify'`</td>
+      <td>Sets the value to `null` (preserves object shape)</td>
+    </tr>
+  </tbody>
+</table>
+
+All three actions are also available from the **right-click context menu** and the **actions bar** buttons.
+
+---
+
+## Undo & redo
+
+Every cell mutation (edit, paste, delete, shorten decimals) is recorded on an **undo stack** with up to **50 entries**.
+
+<table>
+  <thead>
+    <tr>
+      <th>Shortcut</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>**Ctrl+Z**</td>
+      <td>Undo last change</td>
+    </tr>
+    <tr>
+      <td>**Ctrl+Y** or **Ctrl+Shift+Z**</td>
+      <td>Redo</td>
+    </tr>
+  </tbody>
+</table>
+
+Undo/redo buttons are also shown in the actions bar. The system tracks `{ rowIndex, columnId, oldValue, newValue }` per cell, and correctly handles nested paths via `deepSet()`.
+
+---
+
+## Client-side filtering
+
+When `filterable` is `true` and `manualFiltering` is not set on the table, DataGrid shows a **filter row** below the header. Each column can be filtered based on its data type.
+
+### Text columns
+
+- **Multi-select filter:** shows all unique values in a checkbox list. Selecting values keeps only matching rows (`eq` operator).
+- **Search filter:** free-text input that performs case-insensitive substring matching (`ilike` operator).
+
+### Number columns
+
+Operators available:
+
+<table>
+  <thead>
+    <tr>
+      <th>Operator</th>
+      <th>Label</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`eq`</td>
+      <td>Equals</td>
+    </tr>
+    <tr>
+      <td>`neq`</td>
+      <td>Not equals</td>
+    </tr>
+    <tr>
+      <td>`gt`</td>
+      <td>Greater than</td>
+    </tr>
+    <tr>
+      <td>`gte`</td>
+      <td>Greater than or equal to</td>
+    </tr>
+    <tr>
+      <td>`lt`</td>
+      <td>Less than</td>
+    </tr>
+    <tr>
+      <td>`lte`</td>
+      <td>Less than or equal to</td>
+    </tr>
+    <tr>
+      <td>`between`</td>
+      <td>Between two values (range)</td>
+    </tr>
+    <tr>
+      <td>`contains`</td>
+      <td>Substring match on the number's string representation</td>
+    </tr>
+  </tbody>
+</table>
+
+### Select columns
+
+Columns with `meta.filterOptions` or `meta.filterVariant: 'select'` show a simplified **equals / not equals** filter.
+
+### Custom operators
+
+Supply `meta.operatorOptions` on a column to override the default operator list entirely.
+
+### Composing filters
+
+The filter system supports an `AND`/`OR` delimiter and an `additionalOperator` + `additionalValue` for compound conditions on a single column.
+
+---
+
+## Decimal actions (shorten decimals)
+
+Available in the actions bar when the grid is editable and cells are selected. Opens a modal to **round numeric values** in the selection.
+
+### Options
+
+- **Decimal places:** 0, 1, 2, 3, 4, or a custom value
+- **Rounding mode:**
+  - **Round** — nearest value (default)
+  - **Floor** — round down
+  - **Ceil** — round up
+
+Only cells in columns with `dataType: NUMBER` are affected. Non-numeric cells are silently skipped. The operation is recorded for undo/redo.
+
+---
+
+## Sorting
+
+Click a column header to cycle through sort states:
+
+**None → Ascending → Descending → None**
+
+A sort direction icon is shown in the header. Sorting can be disabled per-column with `meta: { isSortable: false }`.
+
+Requires `getSortedRowModel()` in your table configuration.
+
+---
+
+## Column interactions
+
+### Drag to reorder
+
+Unpinned columns can be **dragged and dropped** to reorder them. Pinned columns are locked in place. The drag uses dnd-kit with a 5px activation threshold and is restricted to the horizontal axis.
+
+### Resize
+
+Drag the column border to resize.
+
+### Pin
+
+Right-click a column header to access pinning options (pin left, pin right, or unpin). Pinned columns stay visible with sticky positioning and a shadow indicator on the boundary.
+
+### Hide
+
+Columns can be hidden via the header context menu.
+
+---
+
+## Row selection
+
+When `enableRowSelection` is `true`:
+
+- A **checkbox column** is added as the first column.
+- Click a checkbox to select/deselect a row.
+- The **header checkbox** toggles select-all / deselect-all.
+- Use **Ctrl+Click** for multi-select and **Shift+Click** for range selection.
+
+---
+
+## Add & remove rows
+
+### Add rows
+
+When `enableAddRows` is `true`, an _Add row_ button appears in the actions bar. It opens a modal to choose:
+
+- **Count:** 1, 5, 10, 20, or a custom number
+- **Position:** end of the table (default) or at a specific index
+
+New rows are created via `meta.defaultRowFactory()` (preferred) or by cloning `meta.defaultRowValue`.
+
+### Remove rows
+
+When `enableRemoveRows` is `true`, the row context menu includes a _Delete row_ option. The row is immediately spliced from the data array.
+
+---
+
+## Validation
+
+Supply `validationErrors` and/or `validationWarnings` on the table meta to display cell-level validation:
+
+```tsx
+meta: {
+  validationErrors: {
+    "[0].depth": "Depth exceeds maximum limit",
+    "[3].porosity": "Must be between 0 and 1",
+  },
+  validationWarnings: {
+    "[1].status": "Pending review",
+  },
+}
+```
+
+### Display
+
+- **Cell icons:** red ✕ for errors, orange ⚠ for warnings
+- **Row badge:** status icon in the action (row number) cell
+- **Sidebar:** collapsible panel listing all errors and warnings with prev/next navigation. Click an entry to jump to the cell.
+- **Filter by status:** a header cell lets you filter rows to show only errors, warnings, or valid rows.
+
+### Key format
+
+Keys follow the pattern `"[rowIndex].columnId"`. Set `meta.validationKeyPrefix: 'rowId'` to key by row ID instead of index.
+
+---
+
+## Comments
+
+Enable cell-level annotations by providing a `commentConfig` object:
+
+```tsx
+const commentConfig: DataGridCommentConfig<MyComment> = {
+  enabled: true,
+  getComments: (rowId, columnId) => fetchComments(rowId, columnId),
+  getAllComments: () => allComments,
+  getCommentCellPath: (comment) => `${comment.rowId}.${comment.columnId}`,
+  rowHasComments: (rowId) => hasComments(rowId),
+  CommentPopover: MyCommentPopover,
+  CommentPreview: MyCommentPreview,
+}
+
+;<DataGrid table={table} commentConfig={commentConfig} />
+```
+
+- **Ctrl+E** opens the comment popover on the selected cell
+- A blue comment icon appears in cells with comments
+- The **sidebar** lists all comments with click-to-navigate
+
+---
+
+## Loading states
+
+Use `loadingStateConfig` to show skeleton placeholders:
+
+```tsx
+<DataGrid
+  table={table}
+  loadingStateConfig={{
+    isDataLoading: isLoading,
+    showSkeletonRows: true,
+    skeletonRowsAmount: 10,
+    showSkeletonColumns: true,
+    skeletonColumnsAmount: 5,
+  }}
+/>
+```
+
+<table>
+  <thead>
+    <tr>
+      <th>Key</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`areColumnsLoading`</td>
+      <td>Column structure is loading (triggers column skeleton)</td>
+    </tr>
+    <tr>
+      <td>`isDataLoading`</td>
+      <td>Row data is loading (triggers row skeleton)</td>
+    </tr>
+    <tr>
+      <td>`showSkeletonRows`</td>
+      <td>Render row skeleton placeholders</td>
+    </tr>
+    <tr>
+      <td>`skeletonRowsAmount`</td>
+      <td>Number of skeleton rows to show</td>
+    </tr>
+    <tr>
+      <td>`showSkeletonColumns`</td>
+      <td>Render column skeleton placeholders</td>
+    </tr>
+    <tr>
+      <td>`skeletonColumnsAmount`</td>
+      <td>Number of skeleton columns to show</td>
+    </tr>
+  </tbody>
+</table>
+
+---
+
+## Virtualisation
+
+DataGrid virtualises both rows and columns for performance:
+
+- **Rows:** estimated 44px height, 10-row overscan
+- **Columns:** only unpinned columns are virtualised; pinned columns always render
+
+This allows the grid to handle thousands of rows without performance degradation.
+
+---
+
+## Actions bar
+
+The sticky bottom bar provides quick access to common operations:
+
+<table>
+  <thead>
+    <tr>
+      <th>Button</th>
+      <th>Shortcut</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Add row</td>
+      <td>—</td>
+      <td>Opens the add-row modal</td>
+    </tr>
+    <tr>
+      <td>Shorten decimals</td>
+      <td>—</td>
+      <td>Opens the decimal rounding modal</td>
+    </tr>
+    <tr>
+      <td>Copy</td>
+      <td>Ctrl+C</td>
+      <td>Copies selected cells</td>
+    </tr>
+    <tr>
+      <td>Paste</td>
+      <td>Ctrl+V</td>
+      <td>Pastes clipboard into selection</td>
+    </tr>
+    <tr>
+      <td>Clear</td>
+      <td>Backspace</td>
+      <td>Deletes selected cell values</td>
+    </tr>
+    <tr>
+      <td>Comment</td>
+      <td>Ctrl+E</td>
+      <td>Opens comment popover</td>
+    </tr>
+    <tr>
+      <td>Edit</td>
+      <td>Space</td>
+      <td>Enters edit mode on the selected cell</td>
+    </tr>
+    <tr>
+      <td>Undo</td>
+      <td>Ctrl+Z</td>
+      <td>Reverts last change</td>
+    </tr>
+    <tr>
+      <td>Redo</td>
+      <td>Ctrl+Y</td>
+      <td>Re-applies last undone change</td>
+    </tr>
+  </tbody>
+</table>
+
+Buttons are contextually enabled/disabled based on the current selection and editability state.

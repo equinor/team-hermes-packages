@@ -1,0 +1,80 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Hooks/useColorScheme" />
+
+# useColorScheme
+
+A hook and initializer for managing light/dark color scheme with system preference detection, localStorage persistence, and a toggle function.
+EDS color scheme is applied via the `data-color-scheme` attribute on the `<html>` element, which can be used in CSS to style components based on the current scheme.
+
+## Setup
+
+Call `initColorScheme()` early in your app (before React renders) to apply the saved or system-preferred color scheme. This prevents a flash of incorrect colors on load.
+
+```tsx
+import { initColorScheme } from 'team-hermes-packages-react'
+
+initColorScheme()
+
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <App />
+  </StrictMode>
+)
+```
+
+## Usage
+
+Use the `useColorScheme` hook in any component that needs to read or toggle the current scheme.
+
+```tsx
+import { useColorScheme } from 'team-hermes-packages-react'
+
+function ThemeToggle() {
+  const { colorScheme, toggleColorScheme } = useColorScheme()
+
+  return <button onClick={toggleColorScheme}>Current: {colorScheme} — click to switch</button>
+}
+```
+
+## How it works
+
+1. **`initColorScheme()`** reads `localStorage` for a saved preference. If none exists, it falls back to the system preference via `prefers-color-scheme`. It then sets `data-color-scheme` on `<html>`.
+
+2. **`useColorScheme()`** subscribes to changes on the `data-color-scheme` attribute using `useSyncExternalStore` and a `MutationObserver`, so it stays in sync even if the attribute is changed externally.
+
+3. **`toggleColorScheme()`** flips between `"light"` and `"dark"`, saves the choice to `localStorage`, and updates the DOM attribute.
+
+4. If no stored preference exists, the hook listens for system preference changes (e.g. OS-level dark mode toggle) and applies them automatically.
+
+## API
+
+### `initColorScheme()`
+
+Call once at app startup, outside of React. Reads the stored or system color scheme and sets `data-color-scheme` on the document element.
+
+### `useColorScheme()`
+
+Returns an object with:
+
+<table>
+  <thead>
+    <tr>
+      <th>Property</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`colorScheme`</td>
+      <td>`'light' | 'dark'`</td>
+      <td>The current active color scheme.</td>
+    </tr>
+    <tr>
+      <td>`toggleColorScheme`</td>
+      <td>`() => void`</td>
+      <td>Toggles between light and dark, persisting the choice to `localStorage`.</td>
+    </tr>
+  </tbody>
+</table>

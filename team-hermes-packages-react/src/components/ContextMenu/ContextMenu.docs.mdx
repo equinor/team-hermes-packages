@@ -1,0 +1,83 @@
+import { Meta, Primary, Controls, Canvas, ArgTypes } from '@storybook/addon-docs/blocks'
+import * as ContextMenuStories from './ContextMenu.stories'
+
+<Meta of={ContextMenuStories} />
+
+# ContextMenu
+
+A right-click context menu built on [Base UI](https://base-ui.com/). Supports icons, keyboard shortcuts, nested submenus, and conditional visibility. Can be used in uncontrolled mode with a `trigger` element or in controlled mode for custom positioning.
+
+<Primary />
+
+<Controls />
+
+## Usage
+
+- Provide a `trigger` element for standard right-click behavior, or use controlled props (`open`, `setIsOpen`, `triggerId`, `triggerRef`) for custom trigger logic.
+- Each menu item can have an `icon`, a `shortcut` label, an `onClick` handler, and nested `subItems`.
+- Set `hidden: true` on items to conditionally exclude them from the menu (e.g. role-based visibility).
+
+```tsx
+import { ContextMenu } from 'team-hermes-packages-react'
+```
+
+```tsx
+<ContextMenu
+  trigger={<div>Right-click here</div>}
+  items={[
+    { label: 'Edit', icon: edit, onClick: handleEdit },
+    { label: 'Delete', icon: delete_to_trash, onClick: handleDelete },
+  ]}
+/>
+```
+
+### Controlled mode
+
+For cases where you need to manage the open state yourself (e.g. opening the menu programmatically or anchoring it to a specific element):
+
+```tsx
+const [open, setOpen] = useState(false);
+const triggerRef = useRef<HTMLElement>(null);
+
+<button ref={triggerRef} id="my-trigger" onClick={() => setOpen(true)}>
+  Open menu
+</button>
+
+<ContextMenu
+  open={open}
+  setIsOpen={setOpen}
+  triggerId="my-trigger"
+  triggerRef={triggerRef}
+  items={items}
+/>
+```
+
+## Examples
+
+### With icons
+
+Menu items can include EDS icons for visual context.
+
+<Canvas of={ContextMenuStories.WithIcons} />
+
+### With shortcuts
+
+Display keyboard shortcut hints alongside menu items.
+
+<Canvas of={ContextMenuStories.WithShortcuts} />
+
+### With submenus
+
+Items with `subItems` render as expandable submenus with a chevron indicator.
+
+<Canvas of={ContextMenuStories.WithSubmenus} />
+
+### With hidden items
+
+Items with `hidden: true` are excluded from the rendered menu. Useful for role-based or conditional visibility.
+
+<Canvas of={ContextMenuStories.WithHiddenItems} />
+
+## Props
+
+<ArgTypes of={ContextMenuStories} />

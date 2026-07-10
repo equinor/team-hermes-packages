@@ -1,0 +1,80 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Hooks/useCopyToClipboard" />
+
+# useCopyToClipboard
+
+A hook that copies text to the clipboard and tracks the copy state, automatically resetting after a configurable timeout.
+
+## Usage
+
+```tsx
+import { useCopyToClipboard } from 'team-hermes-packages-react'
+
+function CopyButton({ text }: { text: string }) {
+  const { copy, isCopied } = useCopyToClipboard()
+
+  return <button onClick={() => copy(text)}>{isCopied ? 'Copied!' : 'Copy'}</button>
+}
+```
+
+## How it works
+
+1. **`copy(text)`** writes the given string to the clipboard using the [Clipboard API](https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText).
+2. On success, `isCopied` becomes `true` for the duration of `resetTimeout` (default 1 second), then resets to `false`.
+3. On failure, the error is logged, `isCopied` remains `false`, and the `onError` callback is invoked if provided.
+
+## API
+
+### `useCopyToClipboard(options?)`
+
+Accepts an optional options object:
+
+<table>
+  <thead>
+    <tr>
+      <th>Option</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`resetTimeout`</td>
+      <td>`number`</td>
+      <td>`1000`</td>
+      <td>Duration in milliseconds before `isCopied` resets to `false`.</td>
+    </tr>
+    <tr>
+      <td>`onError`</td>
+      <td>`(error: unknown) => void`</td>
+      <td>—</td>
+      <td>Callback invoked when the copy operation fails.</td>
+    </tr>
+  </tbody>
+</table>
+
+Returns an object with:
+
+<table>
+  <thead>
+    <tr>
+      <th>Property</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`copy`</td>
+      <td>`(text: string) => Promise<void>`</td>
+      <td>Copies the given text to the clipboard.</td>
+    </tr>
+    <tr>
+      <td>`isCopied`</td>
+      <td>`boolean`</td>
+      <td>`true` after a successful copy, resets to `false` after `resetTimeout` ms.</td>
+    </tr>
+  </tbody>
+</table>

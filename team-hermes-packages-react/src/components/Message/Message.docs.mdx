@@ -1,0 +1,78 @@
+import { Meta, Primary, Controls, Canvas, ArgTypes } from '@storybook/addon-docs/blocks'
+import * as MessageStories from './Message.stories'
+
+<Meta of={MessageStories} />
+
+# Message
+
+Messages provide contextual feedback, status information, or guidance related to a workflow. They support visual types, optional titles, custom icons, and dismiss actions.
+
+<Primary />
+
+<Controls />
+
+## Usage
+
+- Use messages to communicate status, feedback, warnings, or errors close to the relevant content.
+- Add a `title` when the message needs a short, scannable summary.
+- Use `type` to match the message severity or purpose.
+- Use `onDismiss` for temporary messages that users can close.
+- Use `fullWidth` when the message should fill the available container.
+
+```tsx
+import { Message } from 'team-hermes-packages-react'
+```
+
+```tsx
+<Message type="success" title="Saved">
+  Your changes have been saved.
+</Message>
+```
+
+## Examples
+
+### With title
+
+Use `title` to provide a short summary before the message content.
+
+<Canvas of={MessageStories.WithTitle} />
+
+### Types
+
+The `type` prop maps to EDS color appearance tokens via the `data-color-appearance` attribute.
+
+<Canvas of={MessageStories.Types} />
+
+### Dismissible
+
+When `onDismiss` is provided, a dismiss button appears on the right side of the message.
+
+<Canvas of={MessageStories.Dismissible} />
+
+### Icon at end
+
+Use `iconPosition="end"` to place the icon after the message content.
+
+<Canvas of={MessageStories.IconAtEnd} />
+
+### Without icon
+
+Use `iconPosition="none"` when the message should be displayed without an icon.
+
+<Canvas of={MessageStories.WithoutIcon} />
+
+### Custom icon
+
+Use `iconOverride` to display a specific EDS icon instead of the default icon for the selected type.
+
+<Canvas of={MessageStories.CustomIcon} />
+
+### Full width
+
+Use `fullWidth` when the message should span the full available width.
+
+<Canvas of={MessageStories.FullWidth} />
+
+## Props
+
+<ArgTypes of={MessageStories} />

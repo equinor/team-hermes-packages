@@ -1,0 +1,45 @@
+import { Meta, Primary, Controls, Canvas, ArgTypes } from '@storybook/addon-docs/blocks'
+import * as QuickAccessButtonStories from './QuickAccessButton.stories'
+
+<Meta of={QuickAccessButtonStories} />
+
+# QuickAccessButton
+
+A card-style button that provides quick navigation to key areas of the application. Supports color themes, locked states, and custom link components.
+
+<Primary />
+
+<Controls />
+
+## Usage
+
+```tsx
+import { QuickAccessButton } from 'team-hermes-packages-react'
+```
+
+```tsx
+<QuickAccessButton
+  icon={dashboard}
+  label="Dashboard"
+  description="View overview"
+  linkTo="/dashboard"
+  variant="accent"
+  LinkComponent={RouterLink}
+/>
+```
+
+## Props
+
+<ArgTypes />
+
+## Examples
+
+### All variants
+
+<Canvas of={QuickAccessButtonStories.Variants} />
+
+### Locked state
+
+When `locked` is `true`, interaction is disabled and a chip indicates the reason that's provided in the `lockedReason` prop.
+
+<Canvas of={QuickAccessButtonStories.Locked} />

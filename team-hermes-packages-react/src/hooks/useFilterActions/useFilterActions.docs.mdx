@@ -1,0 +1,71 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Hooks/useFilterActions" />
+
+# useFilterActions
+
+A hook that provides helper functions for working with DataGrid filter values and operator options.
+
+## Usage
+
+```tsx
+import { useFilterActions } from 'team-hermes-packages-react'
+
+function FilterEditor({ column, filters, setFilters }) {
+  const { getOperatorOptions, updateFilterValue, removeFilterValue } = useFilterActions()
+
+  const operators = getOperatorOptions(column)
+
+  return (
+    <Combobox
+      items={operators}
+      value={selectedOperator}
+      onChange={(op) => {
+        setFilters(updateFilterValue(filters, op.value, inputValue))
+      }}
+    />
+  )
+}
+```
+
+## API
+
+### `useFilterActions()`
+
+Returns an object with three functions:
+
+<table>
+  <thead>
+    <tr>
+      <th>Function</th>
+      <th>Signature</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`getOperatorOptions`</td>
+      <td>`(column?: Column) => ComboboxItem[]`</td>
+      <td>Returns the available filter operators for a column based on its data type and meta configuration.</td>
+    </tr>
+    <tr>
+      <td>`updateFilterValue`</td>
+      <td>`(filters: FilterValue, operator: FilterOperator, value: string) => FilterValue`</td>
+      <td>Adds a value to the filter for the given operator. Creates a new filter entry if one doesn't exist, or appends to the existing one. Returns the same array if the value is already present.</td>
+    </tr>
+    <tr>
+      <td>`removeFilterValue`</td>
+      <td>`(filters: FilterValue, operator: FilterOperator, value: string) => FilterValue`</td>
+      <td>Removes a value from the filter for the given operator. Drops the filter entry entirely when no values remain.</td>
+    </tr>
+  </tbody>
+</table>
+
+## Operator resolution
+
+`getOperatorOptions` resolves operators in the following order:
+
+1. **Custom operators** — `column.columnDef.meta.operatorOptions` if provided.
+2. **Select operators** (`eq`, `neq`) — columns with `filterOptions` or `site_identifier_source`.
+3. **String operators** (`eq`, `ilike`, `neq`) — columns with `AttributeType.TEXT`.
+4. **Number / date operators** (`eq`, `neq`, `gt`, `gte`, `lt`, `lte`) — default for all other columns.

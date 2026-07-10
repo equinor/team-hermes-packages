@@ -1,6 +1,6 @@
-import { Meta } from "@storybook/addon-docs/blocks";
+import { Meta } from '@storybook/addon-docs/blocks'
 
-import Github from "./assets/github.svg";
+import Github from './assets/github.svg'
 
 <Meta title="Introduction" />
 
@@ -9,6 +9,21 @@ import Github from "./assets/github.svg";
 A React component library providing shared code and components for Team Hermes projects.
 
 Components are previewed and documented via Storybook. The package is hosted on GitHub Packages for internal consumption.
+
+## Installation
+
+```bash
+vp add @equinor/team-hermes-packages-react@git+https://github.com:equinor/team-hermes-packages#[release-version-tag]
+
+#example
+vp add @equinor/team-hermes-packages-react@git+https://github.com:equinor/team-hermes-packages#^1.0.0
+```
+
+Import the stylesheet in your app's entry point:
+
+```ts
+import 'team-hermes-packages-react/style.css'
+```
 
 ## Stack
 
@@ -20,6 +35,6 @@ Components are previewed and documented via Storybook. The package is hosted on 
 <div className="flex items-center gap-2 pt-8">
   <img src={Github} alt="GitHub logo" className="size-6" />
   <a href="https://github.com/equinor/team-hermes-packages" target="_blank">
-    {"Go to repository"}
+    {'Go to repository'}
   </a>
 </div>

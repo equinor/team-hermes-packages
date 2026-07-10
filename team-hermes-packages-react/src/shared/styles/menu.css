@@ -1,0 +1,31 @@
+@reference "tailwindcss";
+
+.menu-popup {
+  @apply flex flex-col gap-2 z-50 rounded-md bg-surface p-2 outline-1 outline-stroke-subtle;
+  @apply max-h-[80vh] overflow-auto;
+  @apply origin-(--transform-origin) transition-[transform,scale,opacity];
+  @apply z-50;
+
+  &[data-ending-style] {
+    @apply scale-90 opacity-0;
+  }
+
+  &[data-starting-style] {
+    @apply scale-90 opacity-0;
+  }
+}
+
+.menu-group-label {
+  @apply text-xs text-secondary uppercase px-2 pb-3;
+}
+
+.menu-item {
+  @apply flex items-center gap-2 text-sm rounded px-4 py-2 outline-none hover:bg-surface-hover cursor-pointer data-disabled:pointer-events-none;
+  svg {
+    @apply text-(--text-secondary-color);
+  }
+}
+
+.menu-shortcut {
+  @apply ml-auto text-xs p-0.5 bg-surface-hover text-secondary;
+}
