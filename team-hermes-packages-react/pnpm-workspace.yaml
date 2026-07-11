@@ -3,4 +3,5 @@ overrides:
   vitest: 'npm:@voidzero-dev/vite-plus-test@latest'
 
 allowBuilds:
+  '@parcel/watcher': true
   esbuild: true

@@ -27,7 +27,7 @@
     "access": "public"
   },
   "scripts": {
-    "build": "vp pack",
+    "build": "vp pack && vp exec tailwindcss -i src/styles.css -o dist/style.css",
     "dev": "vp pack --watch",
     "test": "vp test",
     "check": "vp check",
@@ -59,6 +59,7 @@
     "@storybook/addon-mcp": "^0.6.0",
     "@storybook/addon-themes": "^10.4.6",
     "@storybook/react-vite": "^10.4.6",
+    "@tailwindcss/cli": "^4.3.2",
     "@tailwindcss/vite": "^4.3.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",

@@ -4,6 +4,8 @@
 @import './shared/styles/dialog.css';
 @import './shared/styles/menu.css';
 
+@source "./**/*.{ts,tsx}";
+
 @theme {
   /* Backgrounds */
   --color-surface: var(--eds-color-bg-floating);
@@ -20,7 +22,7 @@
   --color-stroke-strong: var(--eds-color-border-strong);
 
   /* bg-surface-theme + use with data-color-appearance="[theme]" */
-  --color-surface-theme: calc(var(--eds-color-border-subtle) / 30);
+  --color-surface-theme: color-mix(in oklab, var(--eds-color-border-subtle) 30%, transparent);
   /* text-color-theme + use with data-color-appearance="[theme]" */
   --color-color-theme: var(--eds-color-bg-fill-emphasis-default);
 

@@ -9,7 +9,7 @@ const MockLink = ({ to, children, ...rest }: React.ComponentProps<'a'> & { to: s
   </a>
 )
 
-const meta = {
+const meta: Meta<typeof ActionListPanel> = {
   title: 'Call to actions/ActionList',
   component: ActionListPanel,
   parameters: {
@@ -70,7 +70,7 @@ const meta = {
     },
     children: { control: false },
   },
-} satisfies Meta<typeof ActionListPanel>
+}
 
 export default meta
 type Story = StoryObj<typeof meta>
