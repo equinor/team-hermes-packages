@@ -12,17 +12,16 @@ Components are previewed and documented via Storybook. The package is hosted on 
 
 ## Installation
 
-```bash
-vp add @equinor/team-hermes-packages-react@git+https://github.com:equinor/team-hermes-packages#[release-version-tag]
+### Temporary installation from GitHub Packages:
 
-#example
-vp add @equinor/team-hermes-packages-react@git+https://github.com:equinor/team-hermes-packages#^1.0.0
+```bash
+gh api -H "Accept: application/octet-stream" repos/equinor/team-hermes-packages/releases/assets/$(gh api repos/equinor/team-hermes-packages/releases/tags/team-hermes-packages-react-v1.1.0 --jq '.assets[0].id') > /tmp/team-hermes-packages-react-1.1.0.tgz && yarn add @equinor/team-hermes-packages-react@/tmp/team-hermes-packages-react-1.1.0.tgz
 ```
 
 Import the stylesheet in your app's entry point:
 
 ```ts
-import 'team-hermes-packages-react/style.css'
+import '@equinor/team-hermes-packages-react/style.css'
 ```
 
 ## Stack
