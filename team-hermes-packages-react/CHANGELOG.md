@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/equinor/team-hermes-packages/compare/team-hermes-packages-react-v1.0.0...team-hermes-packages-react-v1.0.1) (2026-07-11)
+
+
+### Bug Fixes
+
+* styling and types build errors ([9c44155](https://github.com/equinor/team-hermes-packages/commit/9c441556abef71cf17b092f6eb263f1bd61a0d71))
+
 ## 1.0.0 (2026-07-10)
 
 
