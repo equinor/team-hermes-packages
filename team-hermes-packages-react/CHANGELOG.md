@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/equinor/team-hermes-packages/compare/team-hermes-packages-react-v1.1.0...team-hermes-packages-react-v1.1.1) (2026-07-11)
+
+
+### Bug Fixes
+
+* storybook build ([bddebc5](https://github.com/equinor/team-hermes-packages/commit/bddebc583055b0dbe2dd8f5422fa8762b28c1a09))
+
 ## [1.1.0](https://github.com/equinor/team-hermes-packages/compare/team-hermes-packages-react-v1.0.1...team-hermes-packages-react-v1.1.0) (2026-07-11)
 
 
