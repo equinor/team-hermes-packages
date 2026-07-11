@@ -1,0 +1,50 @@
+import { Meta, Primary, Controls, Canvas } from '@storybook/addon-docs/blocks'
+import * as FileUploadInputStories from './FileUploadInput.stories'
+
+<Meta of={FileUploadInputStories} />
+
+# FileUploadInput
+
+A drop zone for file uploads that supports both click-to-browse and drag-and-drop from the OS. Visual feedback is provided during drag interactions via the `data-drop-state` attribute.
+
+<Primary />
+
+<Controls />
+
+## Usage
+
+- Use `FileUploadInput` when users need to upload one or more files.
+- The component handles both click-to-browse (via a hidden file input) and native drag-and-drop.
+- Accepted file types are displayed to the user and enforced on the file input.
+
+```tsx
+import { FileUploadInput } from 'team-hermes-packages-react'
+```
+
+```tsx
+<FileUploadInput accept=".pdf,.docx" multiple onFileChange={(files) => handleUpload(files)} />
+```
+
+## Drop states
+
+The component exposes a `data-drop-state` attribute for styling:
+
+| State           | Description                                                  |
+| --------------- | ------------------------------------------------------------ |
+| `idle`          | No drag interaction in progress                              |
+| `potentialDrop` | Reserved for external monitor use (border becomes solid)     |
+| `overTarget`    | Files are being dragged over the drop zone (opacity reduces) |
+
+## Examples
+
+### Single file
+
+Restrict the input to a single file by omitting or setting `multiple` to `false`.
+
+<Canvas of={FileUploadInputStories.SingleFile} />
+
+### Image upload
+
+Accept only image file types.
+
+<Canvas of={FileUploadInputStories.ImageUpload} />
