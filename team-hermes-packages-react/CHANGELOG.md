@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/equinor/team-hermes-packages/compare/team-hermes-packages-react-v1.0.1...team-hermes-packages-react-v1.1.0) (2026-07-11)
+
+
+### Features
+
+* add FileUploadInput component ([61d8494](https://github.com/equinor/team-hermes-packages/commit/61d849461b4c79453f9856c59ea0d76c299b80ea))
+
 ## [1.0.1](https://github.com/equinor/team-hermes-packages/compare/team-hermes-packages-react-v1.0.0...team-hermes-packages-react-v1.0.1) (2026-07-11)
 
 
