@@ -32,7 +32,7 @@ export function IconContainer(props: IconContainerProps) {
   return (
     <div
       ref={ref}
-      className="flex items-center gap-2 justify-center shrink-0 bg-(--eds-color-border-subtle)/30"
+      className="flex items-center gap-2 justify-center shrink-0 bg-[color-mix(in_oklab,var(--eds-color-border-subtle)_30%,transparent)]"
       data-color-appearance={variant}
       style={{
         width: doubleContent ? size * 2 : size,

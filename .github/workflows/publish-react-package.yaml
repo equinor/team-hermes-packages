@@ -27,7 +27,7 @@ jobs:
         run: vp install --frozen-lockfile
 
       - name: "Build library"
-        run: vp pack
+        run: vp run build
 
       - name: "Create tarball"
         run: npm pack

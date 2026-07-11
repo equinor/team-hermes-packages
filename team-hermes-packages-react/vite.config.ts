@@ -10,7 +10,7 @@ export default defineConfig({
     setupFiles: ['./vitest.setup.ts'],
   },
   resolve: {
-    alias: [{ find: '@', replacement: path.resolve(import.meta.dirname, './src') }],
+    alias: { '@': path.resolve(import.meta.dirname, './src') },
     tsconfigPaths: true,
   },
   pack: {
