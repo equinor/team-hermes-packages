@@ -1,0 +1,67 @@
+import { Meta, Primary, Controls, Canvas, ArgTypes } from '@storybook/addon-docs/blocks'
+import * as TabsStories from './Tabs.stories'
+
+<Meta of={TabsStories} />
+
+# Tabs
+
+Styled wrappers around Base UI's Tabs primitives. They provide the Team Hermes tab list, active indicator, tab button, and panel styling while keeping the Base UI composition model.
+
+<Primary />
+
+<Controls />
+
+## Usage
+
+- Use Tabs to switch between related sections without leaving the current page.
+- Tabs are controlled: provide `value` and update it from `onValueChange`.
+- Keep tab labels short and use a clear `aria-label` on `TabsList` when there is no visible heading.
+- Use `className` on the individual primitives for small layout adjustments, such as constrained or scrollable tab lists.
+
+```tsx
+import { Tab, TabPanel, TabsList, TabsRoot, type TabValue } from 'team-hermes-packages-react'
+```
+
+```tsx
+const [value, setValue] = useState<TabValue>('overview')
+
+;<TabsRoot value={value} onValueChange={(nextValue) => setValue(nextValue)}>
+  <TabsList aria-label="Project sections">
+    <Tab value="overview">Overview</Tab>
+    <Tab value="activity">Activity</Tab>
+  </TabsList>
+
+  <TabPanel value="overview">Overview content</TabPanel>
+  <TabPanel value="activity">Activity content</TabPanel>
+</TabsRoot>
+```
+
+## Examples
+
+### Default
+
+A basic controlled tab set with three tabs and matching panels.
+
+<Canvas of={TabsStories.Default} />
+
+### Active activity tab
+
+Tabs can start on any active value supplied by application state.
+
+<Canvas of={TabsStories.ActiveActivityTab} />
+
+### Custom panel content
+
+Panels can contain any React content.
+
+<Canvas of={TabsStories.CustomPanelContent} />
+
+### Scrollable list
+
+Use `className` on `TabsList` when the tab row needs local layout constraints.
+
+<Canvas of={TabsStories.ScrollableList} />
+
+## Props
+
+<ArgTypes of={TabsStories} />

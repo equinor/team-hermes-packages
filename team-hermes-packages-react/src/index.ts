@@ -3,15 +3,20 @@
  */
 
 import './styles.css'
+export type { Theme } from './shared/types/themes.type'
 
 // UI COMPONENTS
 export { Chip } from './components/Chip/Chip'
-export { Combobox, type ComboboxItem } from './components/Combobox/Combobox'
 export { ContextMenu, type ContextMenuItem } from './components/ContextMenu/ContextMenu'
 export { IconContainer } from './components/IconContainer/IconContainer'
 export { MenuCheckboxList } from './components/MenuCheckboxList/MenuCheckboxList'
 export { Message } from './components/Message/Message'
 export { Popover } from './components/Popover/Popover'
+export { Tab, TabPanel, TabsList, TabsRoot, type TabValue } from './components/Tabs/Tabs'
+
+// FORM COMPONENTS
+export { Combobox, type ComboboxItem } from './components/Combobox/Combobox'
+export { FileUploadInput } from './components/FileUploadInput/FileUploadInput'
 
 // CALL-TO-ACTION COMPONENTS
 export { QuickAccessButton } from './components/QuickAccessButton/QuickAccessButton'
