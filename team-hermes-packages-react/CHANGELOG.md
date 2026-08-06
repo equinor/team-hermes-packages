@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/equinor/team-hermes-packages/compare/team-hermes-packages-react-v1.1.1...team-hermes-packages-react-v1.2.0) (2026-08-06)
+
+
+### Features
+
+* add tabs + export FileUploadInput ([8104826](https://github.com/equinor/team-hermes-packages/commit/81048263a85014143bb6f2de3bf15bc364d231fa))
+
 ## [1.1.1](https://github.com/equinor/team-hermes-packages/compare/team-hermes-packages-react-v1.1.0...team-hermes-packages-react-v1.1.1) (2026-07-11)
 
 
