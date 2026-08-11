@@ -1,4 +1,4 @@
-# team-hermes-packages-react
+# @team-hermes/react-components
 
 A React component library providing shared code and components for Team Hermes projects. Components are previewed and documented via Storybook. The package is hosted on GitHub Packages for internal consumption.
 

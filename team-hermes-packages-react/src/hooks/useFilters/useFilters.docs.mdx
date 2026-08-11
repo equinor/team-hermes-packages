@@ -1,0 +1,145 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Hooks/useFilters" />
+
+# useFilters
+
+A hook that provides utility functions for converting between filter objects (`ColumnFiltersState`) and URI-compatible strings, as well as building OData-style request filter strings.
+
+## Usage
+
+```tsx
+import { useFilters } from '@/hooks/useFilters'
+
+function FilteredTable({ columns }) {
+  const { createFiltersObjectFromURIString, createURIStringFromFiltersObject, createRequestString } = useFilters()
+
+  // Restore filters from a URL search param
+  const params = new URLSearchParams(window.location.search)
+  const filters = createFiltersObjectFromURIString(params.get('filters'))
+
+  // Persist filters back to the URL
+  const filterString = createURIStringFromFiltersObject(filters)
+
+  // Build a server-side request filter string
+  const requestFilter = createRequestString(filters, columns)
+  // e.g. "(status eq 'active') and (priority gt 2)"
+}
+```
+
+## API
+
+### `useFilters()`
+
+Returns an object with three functions:
+
+<table>
+  <thead>
+    <tr>
+      <th>Function</th>
+      <th>Signature</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`createFiltersObjectFromURIString`</td>
+      <td>`(filterString: string | null) => ColumnFiltersState`</td>
+      <td>Parses a URI-encoded filter string into a `ColumnFiltersState` array. Returns an empty array when the input is `null` or empty.</td>
+    </tr>
+    <tr>
+      <td>`createURIStringFromFiltersObject`</td>
+      <td>`(filters: ColumnFiltersState) => string`</td>
+      <td>Serializes a `ColumnFiltersState` array into a compact URI-safe string. Skips filters with no values.</td>
+    </tr>
+    <tr>
+      <td>`createRequestString`</td>
+      <td>`(filters: ColumnFiltersState, columns: ColumnDef[]) => string | undefined`</td>
+      <td>Builds an OData-style filter expression from the current filters and column definitions. Wraps text values in quotes based on the column's `meta.dataType`. Returns `undefined` when there are no active filters.</td>
+    </tr>
+  </tbody>
+</table>
+
+## URI string format
+
+Filters are serialized using `*`, `+`, and `;` as delimiters:
+
+```
+columnId*operator*value1,value2+operator2*value3;otherColumn*eq*hello
+```
+
+<table>
+  <thead>
+    <tr>
+      <th>Delimiter</th>
+      <th>Separates</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`;`</td>
+      <td>Columns</td>
+    </tr>
+    <tr>
+      <td>`*`</td>
+      <td>Column ID, operator, and values</td>
+    </tr>
+    <tr>
+      <td>`+`</td>
+      <td>Multiple sub-filters on the same column</td>
+    </tr>
+    <tr>
+      <td>`,`</td>
+      <td>Multiple values within one sub-filter</td>
+    </tr>
+  </tbody>
+</table>
+
+### Example roundtrip
+
+```ts
+const uri = 'status*eq*active;priority*gt*2'
+const filters = createFiltersObjectFromURIString(uri)
+// [
+//   { id: 'status', value: [{ operator: 'eq', properties: ['active'] }] },
+//   { id: 'priority', value: [{ operator: 'gt', properties: ['2'] }] },
+// ]
+
+createURIStringFromFiltersObject(filters)
+// 'status*eq*active;priority*gt*2'
+```
+
+## Types
+
+### `FilterValue`
+
+```ts
+type FilterValue = {
+  operator: FilterOperator
+  properties: (string | number | boolean | null)[]
+}[]
+```
+
+### `FilterOperator`
+
+```ts
+enum FilterOperator {
+  eq = 'eq',
+  neq = 'neq',
+  like = 'like',
+  ilike = 'ilike',
+  notlike = 'notlike',
+  notilike = 'notilike',
+  gt = 'gt',
+  lt = 'lt',
+  gte = 'gte',
+  lte = 'lte',
+  inlist = 'inlist',
+  notinlist = 'notinlist',
+  isnull = 'isnull',
+  notnull = 'notnull',
+  contains = 'contains',
+  notcontains = 'notcontains',
+  between = 'between',
+}
+```

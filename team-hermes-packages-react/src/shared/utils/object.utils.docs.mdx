@@ -1,0 +1,145 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Utils/Object" />
+
+# Object Utils
+
+Utility functions for reading, writing, and deleting nested properties using dot/bracket notation paths.
+
+---
+
+## `deepSet`
+
+Sets a nested value in an object using a dot/bracket notation path. Intermediate objects and arrays are created automatically.
+
+```ts
+import { deepSet } from '@team-hermes/react-components'
+
+const obj: Record<string, any> = {}
+deepSet(obj, 'a.b.c', 42)
+// obj → { a: { b: { c: 42 } } }
+
+deepSet(obj, 'items[0].name', 'first')
+// obj → { a: { b: { c: 42 } }, items: [{ name: "first" }] }
+```
+
+### Parameters
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`obj`</td>
+      <td>`any`</td>
+      <td>The target object to mutate.</td>
+    </tr>
+    <tr>
+      <td>`path`</td>
+      <td>`string`</td>
+      <td>Dot/bracket notation path (e.g. `"a.b[0].c"`).</td>
+    </tr>
+    <tr>
+      <td>`val`</td>
+      <td>`any`</td>
+      <td>The value to set.</td>
+    </tr>
+  </tbody>
+</table>
+
+**Returns** `void`
+
+---
+
+## `deleteByPath`
+
+Deletes a property from an object at a dot/bracket notation path.
+
+```ts
+import { deleteByPath } from '@team-hermes/react-components'
+
+const obj = { a: { b: { c: 42 } } }
+deleteByPath(obj, 'a.b.c') // true — obj is now { a: { b: {} } }
+deleteByPath(obj, 'x.y.z') // false — path does not exist
+```
+
+### Parameters
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`obj`</td>
+      <td>`any`</td>
+      <td>The object to modify.</td>
+    </tr>
+    <tr>
+      <td>`path`</td>
+      <td>`string`</td>
+      <td>Dot/bracket notation path (e.g. `"a.b.c"` or `"a[0].b"`).</td>
+    </tr>
+  </tbody>
+</table>
+
+**Returns** `boolean` — `true` if the property was deleted, `false` if the path doesn't exist.
+
+---
+
+## `getNestedValue`
+
+Retrieves a nested value from an object using a dot notation path, with an optional default.
+
+```ts
+import { getNestedValue } from '@team-hermes/react-components'
+
+const obj = { a: { b: { c: 42 } } }
+getNestedValue(obj, 'a.b.c') // 42
+getNestedValue(obj, 'a.x.y') // null
+getNestedValue(obj, 'a.x.y', 'fallback') // "fallback"
+```
+
+### Parameters
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`obj`</td>
+      <td>`any`</td>
+      <td>—</td>
+      <td>The object to query.</td>
+    </tr>
+    <tr>
+      <td>`path`</td>
+      <td>`string`</td>
+      <td>—</td>
+      <td>Dot notation path (e.g. `"a.b.c"`).</td>
+    </tr>
+    <tr>
+      <td>`defaultValue`</td>
+      <td>`any`</td>
+      <td>`null`</td>
+      <td>Value returned when the path does not exist.</td>
+    </tr>
+  </tbody>
+</table>
+
+**Returns** The value at the path, or `defaultValue` if not found.

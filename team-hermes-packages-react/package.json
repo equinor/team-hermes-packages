@@ -1,6 +1,6 @@
 {
-  "name": "team-hermes-packages-react",
-  "version": "1.2.0",
+  "name": "@team-hermes/react-components",
+  "version": "1.2.1",
   "description": "Shared React components for Team Hermes.",
   "homepage": "https://github.com/equinor/team-hermes-packages#readme",
   "bugs": {
@@ -24,7 +24,8 @@
     "./style.css": "./dist/style.css"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
     "build": "vp pack && vp exec tailwindcss -i src/styles.css -o dist/style.css",

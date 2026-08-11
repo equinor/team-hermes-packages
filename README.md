@@ -2,7 +2,7 @@
 
 Team Hermes Packages is a monorepo that contains shared code between Team Hermes projects.
 
-## team-hermes-packages-react
+## @team-hermes/react-components
 
 ### Key Features
 
