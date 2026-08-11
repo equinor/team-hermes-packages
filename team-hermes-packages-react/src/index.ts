@@ -15,6 +15,7 @@ export { ContextMenu, type ContextMenuItem } from './components/ContextMenu/Cont
 // FEATURE COMPONENTS
 export { DataGrid } from './components/DataGrid/DataGrid'
 export { DataGridPagination } from './components/DataGrid/DataGridPagination/DataGridPagination'
+export { filterFn } from './components/DataGrid/DataGrid.utils'
 export { FacetOption } from './components/FacetOption/FacetOption'
 export { FileUploadInput } from './components/FileUploadInput/FileUploadInput'
 export { IconContainer } from './components/IconContainer/IconContainer'
