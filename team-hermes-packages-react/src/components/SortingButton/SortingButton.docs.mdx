@@ -1,0 +1,38 @@
+import { ArgTypes, Meta, Primary, Canvas } from '@storybook/addon-docs/blocks'
+import * as SortingButtonStories from './SortingButton.stories'
+
+<Meta of={SortingButtonStories} />
+
+# SortingButton
+
+A dropdown menu button for sorting TanStack Table columns. It displays the currently active sort column and direction, and allows users to toggle sorting on any sortable column.
+
+<Primary />
+
+## Usage
+
+```tsx
+import { SortingButton } from '@team-hermes/react-components'
+```
+
+```tsx
+<SortingButton table={table} />
+```
+
+The component requires a TanStack Table instance passed via the `table` prop. It reads the table's sorting state and column definitions to render the menu.
+
+## Behavior
+
+- Shows the currently active sort column label next to an "Order by:" prefix.
+- Displays `"None"` when no sorting is active.
+- Clicking a column in the dropdown toggles its sort direction.
+- An arrow icon indicates the current sort direction (ascending/descending) next to the active column.
+- Columns with `enableSorting: false` are excluded from the menu.
+
+## Example
+
+<Canvas of={SortingButtonStories.Default} />
+
+## Props
+
+<ArgTypes />

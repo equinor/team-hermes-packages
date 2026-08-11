@@ -1,0 +1,183 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Utils/DateTime" />
+
+# DateTime Utils
+
+Utility functions for formatting and comparing dates and times.
+
+---
+
+## `timeAgo`
+
+Returns a human-readable relative time string (e.g. "2 days ago", "40 minutes ago"). Uses `Intl.RelativeTimeFormat` under the hood.
+
+```ts
+import { timeAgo } from '@team-hermes/react-components'
+
+timeAgo('2026-08-09T12:00:00Z') // "2 days ago"
+timeAgo(new Date().toISOString()) // "Now"
+```
+
+### Parameters
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`dateString`</td>
+      <td>`string`</td>
+      <td>A valid date string. If no timezone suffix is present, UTC is assumed.</td>
+    </tr>
+  </tbody>
+</table>
+
+**Returns** `string` — A relative time string, or `"Now"` if less than 1 second has elapsed.
+
+---
+
+## `isWithinLastHours`
+
+Checks whether a date string falls within the last _n_ hours from now.
+
+```ts
+import { isWithinLastHours } from '@team-hermes/react-components'
+
+isWithinLastHours('2026-08-11T10:00:00Z', 2) // true if within 2 hours
+```
+
+### Parameters
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`dateString`</td>
+      <td>`string`</td>
+      <td>A valid date string. UTC is assumed if no timezone suffix is present.</td>
+    </tr>
+    <tr>
+      <td>`hours`</td>
+      <td>`number`</td>
+      <td>The number of hours to check against.</td>
+    </tr>
+  </tbody>
+</table>
+
+**Returns** `boolean`
+
+---
+
+## `formatDate`
+
+Formats a date as `dd/mm/yyyy`. Returns the original input as a string if parsing fails.
+
+```ts
+import { formatDate } from '@team-hermes/react-components'
+
+formatDate('2026-08-11T00:00:00Z') // "11/08/2026"
+formatDate(new Date(2026, 7, 11)) // "11/08/2026"
+formatDate('not-a-date') // "not-a-date"
+```
+
+### Parameters
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`input`</td>
+      <td>`string \| Date`</td>
+      <td>The date to format.</td>
+    </tr>
+  </tbody>
+</table>
+
+**Returns** `string`
+
+---
+
+## `formatYear`
+
+Extracts and returns the year from an epoch-millisecond number or an ISO date string. Useful for formatting histogram bucket keys.
+
+```ts
+import { formatYear } from '@team-hermes/react-components'
+
+formatYear(1786147200000) // "2026"
+formatYear('2026-08-11T00:00:00Z') // "2026"
+formatYear(undefined) // "—"
+```
+
+### Parameters
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`key`</td>
+      <td>`string \| number \| undefined`</td>
+      <td>An epoch-ms number, an ISO date string, or `undefined`.</td>
+    </tr>
+  </tbody>
+</table>
+
+**Returns** `string` — The four-digit year, or `"—"` if the input is nullish.
+
+---
+
+## `formatDateForInput`
+
+Formats a date string into `yyyy-MM-dd` for use as a value in `<input type="date">` elements.
+
+```ts
+import { formatDateForInput } from '@team-hermes/react-components'
+
+formatDateForInput('2026-08-11T00:00:00Z') // "2026-08-11"
+formatDateForInput(null) // null
+```
+
+### Parameters
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`value`</td>
+      <td>`string \| undefined \| null`</td>
+      <td>The date string to format.</td>
+    </tr>
+  </tbody>
+</table>
+
+**Returns** `string | null` — The formatted date, or `null` if the input is falsy.

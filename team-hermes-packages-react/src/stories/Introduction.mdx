@@ -4,7 +4,7 @@ import Github from './assets/github.svg'
 
 <Meta title="Introduction" />
 
-# team-hermes-packages-react
+# @team-hermes/react-components
 
 A React component library providing shared code and components for Team Hermes projects.
 
@@ -15,13 +15,13 @@ Components are previewed and documented via Storybook. The package is hosted on 
 ### Temporary installation from GitHub Packages:
 
 ```bash
-gh api -H "Accept: application/octet-stream" repos/equinor/team-hermes-packages/releases/assets/$(gh api repos/equinor/team-hermes-packages/releases/tags/team-hermes-packages-react-v1.1.0 --jq '.assets[0].id') > /tmp/team-hermes-packages-react-1.1.0.tgz && yarn add @equinor/team-hermes-packages-react@/tmp/team-hermes-packages-react-1.1.0.tgz
+gh api -H "Accept: application/octet-stream" repos/equinor/team-hermes-packages/releases/assets/$(gh api repos/equinor/team-hermes-packages/releases/tags/@team-hermes/react-components-v1.1.0 --jq '.assets[0].id') > /tmp/@team-hermes/react-components-1.1.0.tgz && yarn add @equinor/@team-hermes/react-components@/tmp/@team-hermes/react-components-1.1.0.tgz
 ```
 
 Import the stylesheet in your app's entry point:
 
 ```ts
-import '@equinor/team-hermes-packages-react/style.css'
+import '@equinor/@team-hermes/react-components/style.css'
 ```
 
 ## Stack

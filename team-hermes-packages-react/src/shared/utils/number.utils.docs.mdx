@@ -1,0 +1,77 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Utils/Number" />
+
+# Number Utils
+
+Utility functions for formatting numbers and file sizes.
+
+---
+
+## `formatFileSize`
+
+Formats a byte count as a human-readable file size string in KB or MB.
+
+```ts
+import { formatFileSize } from '@team-hermes/react-components'
+
+formatFileSize(512) // "0.5 KB"
+formatFileSize(1048576) // "1.0 MB"
+formatFileSize(2621440) // "2.5 MB"
+```
+
+### Parameters
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`bytes`</td>
+      <td>`number`</td>
+      <td>The file size in bytes.</td>
+    </tr>
+  </tbody>
+</table>
+
+**Returns** `string` — e.g. `"1.5 MB"` or `"256.0 KB"`.
+
+---
+
+## `formatNumberToLocale`
+
+Formats a number with spaces as thousand separators and no decimal places. Non-integer values are rounded to the nearest whole number.
+
+```ts
+import { formatNumberToLocale } from '@team-hermes/react-components'
+
+formatNumberToLocale(1234567) // "1 234 567"
+formatNumberToLocale(99.7) // "100"
+formatNumberToLocale(null) // ""
+```
+
+### Parameters
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`n`</td>
+      <td>`number \| null \| undefined`</td>
+      <td>The number to format.</td>
+    </tr>
+  </tbody>
+</table>
+
+**Returns** `string` — The formatted number, or `""` if the input is nullish.

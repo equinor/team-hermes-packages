@@ -14,7 +14,7 @@ A panel component (`ActionListPanel`) that groups navigable list items (`ActionL
 ## Usage
 
 ```tsx
-import { ActionListPanel, ActionListItem } from 'team-hermes-packages-react'
+import { ActionListPanel, ActionListItem } from '@team-hermes/react-components'
 ```
 
 ```tsx
@@ -42,16 +42,7 @@ import { ActionListPanel, ActionListItem } from 'team-hermes-packages-react'
 
 ## ActionListItem Props
 
-| Prop            | Description                                                      |
-| --------------- | ---------------------------------------------------------------- |
-| `icon`          | EDS icon displayed in the item.                                  |
-| `title`         | Primary text for the item.                                       |
-| `description`   | Secondary text shown below the title.                            |
-| `linkTo`        | Navigation target. Wrapped in `LinkComponent` or a plain anchor. |
-| `variant`       | Color theme for the icon container. Defaults to `"success"`.     |
-| `locked`        | When `true`, disables interaction and shows a lock chip.         |
-| `lockedReason`  | Text displayed in the lock chip. Defaults to `"No access"`.      |
-| `LinkComponent` | Router-aware link component. Falls back to a plain `<a>` tag.    |
+<ArgTypes of={ActionListStories.default} />
 
 ## Examples
 

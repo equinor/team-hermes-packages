@@ -1,0 +1,78 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Utils/String" />
+
+# String Utils
+
+Utility functions for common string operations.
+
+## `pluralize`
+
+Appends `"s"` to a string when the count is anything other than 1.
+
+```ts
+import { pluralize } from '@team-hermes/react-components'
+
+pluralize('item', 1) // "item"
+pluralize('item', 0) // "items"
+pluralize('item', 5) // "items"
+```
+
+### Parameters
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`str`</td>
+      <td>`string`</td>
+      <td>The base word to pluralize.</td>
+    </tr>
+    <tr>
+      <td>`count`</td>
+      <td>`number`</td>
+      <td>The item count used to decide whether to add `"s"`.</td>
+    </tr>
+  </tbody>
+</table>
+
+**Returns** `string`
+
+## `generateSlug`
+
+Converts a string into a URL-friendly slug by lowercasing, stripping non-alphanumeric characters, and replacing spaces with hyphens.
+
+```ts
+import { generateSlug } from '@team-hermes/react-components'
+
+generateSlug('Hello World!') // "hello-world"
+generateSlug('  Multiple   spaces  ') // "multiple-spaces"
+generateSlug('Special @#$ chars') // "special--chars"
+```
+
+### Parameters
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`str`</td>
+      <td>`string`</td>
+      <td>The input string to convert into a slug.</td>
+    </tr>
+  </tbody>
+</table>
+
+**Returns** `string` — A lowercase, hyphen-separated slug.

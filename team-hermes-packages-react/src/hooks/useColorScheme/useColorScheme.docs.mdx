@@ -12,7 +12,7 @@ EDS color scheme is applied via the `data-color-scheme` attribute on the `<html>
 Call `initColorScheme()` early in your app (before React renders) to apply the saved or system-preferred color scheme. This prevents a flash of incorrect colors on load.
 
 ```tsx
-import { initColorScheme } from 'team-hermes-packages-react'
+import { initColorScheme } from '@team-hermes/react-components'
 
 initColorScheme()
 
@@ -28,7 +28,7 @@ createRoot(document.getElementById('root')!).render(
 Use the `useColorScheme` hook in any component that needs to read or toggle the current scheme.
 
 ```tsx
-import { useColorScheme } from 'team-hermes-packages-react'
+import { useColorScheme } from '@team-hermes/react-components'
 
 function ThemeToggle() {
   const { colorScheme, toggleColorScheme } = useColorScheme()

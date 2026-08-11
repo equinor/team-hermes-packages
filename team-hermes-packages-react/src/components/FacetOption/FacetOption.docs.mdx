@@ -1,0 +1,57 @@
+import { Meta, Primary, Controls, Canvas, ArgTypes } from '@storybook/addon-docs/blocks'
+import * as FacetOptionStories from './FacetOption.stories'
+
+<Meta of={FacetOptionStories} />
+
+# FacetOption
+
+A checkbox-style option used in faceted search filters. Each option displays a label, an optional result count, and a checkbox icon that toggles on click.
+
+<Primary />
+
+<Controls />
+
+## Usage
+
+- Use inside a list of filter categories to let users narrow down search results.
+- Pass a `count` to show how many results match the option.
+- Use `dimmed` to de-emphasise options with zero results.
+- Use `indented` for child options in hierarchical facets.
+
+```tsx
+import { FacetOption } from '@team-hermes/react-components'
+```
+
+```tsx
+<FacetOption label="Documents" count={142} checked={selected} onChange={setSelected} />
+```
+
+## Examples
+
+### With count
+
+Displays a result count on the right side of the label.
+
+<Canvas of={FacetOptionStories.WithCount} />
+
+### Dimmed
+
+Reduces opacity to visually de-emphasise options, typically used for options with zero results.
+
+<Canvas of={FacetOptionStories.Dimmed} />
+
+### Indented
+
+Adds extra left padding for nested or hierarchical facets.
+
+<Canvas of={FacetOptionStories.Indented} />
+
+### Facet list
+
+Multiple options composed into a typical filter list with interactive state.
+
+<Canvas of={FacetOptionStories.FacetList} />
+
+## Props
+
+<ArgTypes of={FacetOptionStories} />
