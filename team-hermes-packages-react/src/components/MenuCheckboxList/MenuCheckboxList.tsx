@@ -46,7 +46,7 @@ export function MenuCheckboxList(props: MenuCheckboxListProps) {
                   <Menu.CheckboxItem
                     key={option.value}
                     data-testid={testIds?.option?.(option.value)}
-                    checked={value.includes(option.value)}
+                    checked={value?.includes(option.value)}
                     onCheckedChange={(checked) => {
                       if (checked) {
                         onChange([...value, option.value])
