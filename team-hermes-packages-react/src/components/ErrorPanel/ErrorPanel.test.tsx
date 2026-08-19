@@ -52,7 +52,7 @@ describe('ErrorPanel', () => {
   test('does not crash rendering an unknown error with a circular reference', () => {
     const circular: Record<string, unknown> = { a: 1 }
     circular.self = circular
-    expect(() => render(<ErrorPanel error={circular} />)).not.toThrow()
-    expect(screen.getByText('Something went wrong')).toBeInTheDocument()
+    const { getByText } = render(<ErrorPanel error={circular} />)
+    expect(getByText('Something went wrong')).toBeInTheDocument()
   })
 })
