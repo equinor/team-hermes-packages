@@ -1,6 +1,6 @@
 export { useFilterActions } from './useFilterActions/useFilterActions'
 export { useCopyToClipboard } from './useCopyToClipboard/useCopyToClipboard'
-export { useColorScheme } from './useColorScheme/useColorScheme'
+export { useColorScheme, initColorScheme } from './useColorScheme/useColorScheme'
 export { useUrlPagination } from './useUrlPagination/useUrlPagination'
 export { useCustomToast } from './useCustomToast/useCustomToast'
 export { useUrlSorting } from './useUrlSorting/useUrlSorting'
