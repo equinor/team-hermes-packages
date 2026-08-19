@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.1](https://github.com/equinor/team-hermes-packages/compare/team-hermes-packages-react-v1.3.0...team-hermes-packages-react-v1.3.1) (2026-08-19)
+
+
+### Bug Fixes
+
+* remove global styles ([b9a75ec](https://github.com/equinor/team-hermes-packages/commit/b9a75ece2374e07c821ec1648761eceb68afb6f9))
+
 ## [1.3.0](https://github.com/equinor/team-hermes-packages/compare/team-hermes-packages-react-v1.2.0...team-hermes-packages-react-v1.3.0) (2026-08-19)
 
 
