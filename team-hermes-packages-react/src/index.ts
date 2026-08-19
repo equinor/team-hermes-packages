@@ -8,6 +8,7 @@ export { ActionListItem } from './components/ActionList/ActionListItem'
 export { ActionListPanel } from './components/ActionList/ActionListPanel'
 // UI COMPONENTS
 export { Chip } from './components/Chip/Chip'
+export { ErrorPanel } from './components/ErrorPanel/ErrorPanel'
 // FORM COMPONENTS
 export { Combobox, type ComboboxItem } from './components/Combobox/Combobox'
 export { ConfirmOperationDialog } from './components/ConfirmOperationDialog/ConfirmOperationDialog'
@@ -43,3 +44,9 @@ export type { Theme } from './shared/types/themes.type'
 
 // UTILS
 export * from './shared/utils'
+
+// API
+export * from './shared/platform/api'
+
+// TELEMETRY
+export * from './shared/platform/telemetry'
