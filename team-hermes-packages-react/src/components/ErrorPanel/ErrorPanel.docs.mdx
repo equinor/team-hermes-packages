@@ -1,0 +1,64 @@
+import { Meta, Primary, Controls, Canvas } from '@storybook/addon-docs/blocks'
+import * as ErrorPanelStories from './ErrorPanel.stories'
+
+<Meta of={ErrorPanelStories} />
+
+# ErrorPanel
+
+A standardised error display for API errors and unknown failures. It maps each `ApiError` variant to a human-readable title and always surfaces the `traceId` so support engineers can locate the failing request in logs.
+
+<Primary />
+
+## Usage
+
+```tsx
+import { ErrorPanel } from '@team-hermes/react-components'
+```
+
+```tsx
+<ErrorPanel error={error} />
+```
+
+The `error` prop accepts any value. When an `ApiError` is passed, the panel renders a specific title based on the error kind and HTTP status, along with the trace ID. For non-API errors (plain `Error` instances, `Response` objects, or unknown values), a generic "Something went wrong" title is shown.
+
+## Examples
+
+### Network error
+
+Shown when the request never reached the server (e.g. the user is offline).
+
+<Canvas of={ErrorPanelStories.NetworkError} />
+
+### Server error
+
+Displayed for HTTP 5xx responses.
+
+<Canvas of={ErrorPanelStories.ServerError} />
+
+### Not found
+
+Displayed for HTTP 404 responses.
+
+<Canvas of={ErrorPanelStories.NotFound} />
+
+### Forbidden
+
+Displayed for HTTP 403 responses.
+
+<Canvas of={ErrorPanelStories.Forbidden} />
+
+### Parse error
+
+Shown when the server returned a response that could not be parsed.
+
+<Canvas of={ErrorPanelStories.ParseError} />
+
+### Unknown error
+
+For non-API errors the panel falls back to a generic title and omits the trace ID.
+
+<Canvas of={ErrorPanelStories.UnknownError} />
+
+### All variants
+
+<Canvas of={ErrorPanelStories.AllVariants} />
