@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.4.0](https://github.com/equinor/team-hermes-packages/compare/team-hermes-packages-react-v1.3.1...team-hermes-packages-react-v1.4.0) (2026-08-19)
+
+
+### Features
+
+* add ErrorPanel component and docs ([9d8ef2c](https://github.com/equinor/team-hermes-packages/commit/9d8ef2cbddaa069359a8b6a9d387ba7aa66f38aa))
+* add telemetry bootstrap code and docs ([520c261](https://github.com/equinor/team-hermes-packages/commit/520c2617d6ee066e364298216ecc46ede53d2c42))
+
+
+### Bug Fixes
+
+* ErrorPanel test ([d704201](https://github.com/equinor/team-hermes-packages/commit/d70420149fa1bf28df6cc98a1b107ca167cce095))
+
 ## [1.3.1](https://github.com/equinor/team-hermes-packages/compare/team-hermes-packages-react-v1.3.0...team-hermes-packages-react-v1.3.1) (2026-08-19)
 
 
