@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.3.0](https://github.com/equinor/team-hermes-packages/compare/team-hermes-packages-react-v1.2.0...team-hermes-packages-react-v1.3.0) (2026-08-19)
+
+
+### Features
+
+* add parameter to enable/disable dark mode toggle in NavBar ([493448c](https://github.com/equinor/team-hermes-packages/commit/493448cab3b5cf846d01a3643ebdcad7aeb5f537))
+* add parameter to enable/disable dark mode toggle in NavBar ([27480e6](https://github.com/equinor/team-hermes-packages/commit/27480e68c522b105ba7c4e8035558d6438c5a2e3))
+* npm publish, package rename + export more ([8f5be0e](https://github.com/equinor/team-hermes-packages/commit/8f5be0eb13af0545bf50363963a11df0205969ff))
+
+
+### Bug Fixes
+
+* add optional conditioning to value in menucheckboxlist ([974e9e1](https://github.com/equinor/team-hermes-packages/commit/974e9e1d669b7fba914126ccc33c2442bf9f990e))
+* update dependencies in package.json and pnpm-lock.yaml ([efeef1c](https://github.com/equinor/team-hermes-packages/commit/efeef1c13353ce308df7cad4656a49234a7fee02))
+* update dependencies in package.json and pnpm-lock.yaml ([4658c21](https://github.com/equinor/team-hermes-packages/commit/4658c21a46d028c20b0af8916e25b361937ffa26))
+
 ## [1.2.0](https://github.com/equinor/team-hermes-packages/compare/team-hermes-packages-react-v1.1.1...team-hermes-packages-react-v1.2.0) (2026-08-06)
 
 
