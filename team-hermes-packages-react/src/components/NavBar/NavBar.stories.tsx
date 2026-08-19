@@ -87,6 +87,10 @@ const meta = {
       description: 'Callback function to log out the user.',
       control: false,
     },
+    showColorSchemeToggle: {
+      description: 'Whether the light/dark mode toggle is shown.',
+      control: 'boolean',
+    },
   },
 } satisfies Meta<typeof NavBar>
 
@@ -123,5 +127,11 @@ export const WithApplicationConfig: Story = {
       serviceNowLink: 'https://equinor.service-now.com',
       githubRepoName: 'equinor/team-hermes-packages',
     },
+  },
+}
+
+export const WithoutColorSchemeToggle: Story = {
+  args: {
+    showColorSchemeToggle: false,
   },
 }
