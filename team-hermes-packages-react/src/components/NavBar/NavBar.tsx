@@ -45,10 +45,14 @@ type NavBarProps = {
    * Callback function to log out the user. This is required if the `user` prop is provided, as it will be used in the user popover to log out the user.
    */
   logOut?: () => void
+  /**
+   * Whether the light/dark mode toggle is shown. Defaults to `true`.
+   */
+  showColorSchemeToggle?: boolean
 }
 
 export function NavBar(props: NavBarProps) {
-  const { categories, LinkComponent, applicationConfig } = props
+  const { categories, LinkComponent, applicationConfig, showColorSchemeToggle = true } = props
   const { colorScheme, toggleColorScheme } = useColorScheme()
   const groupPath = location.pathname.split('/')[1] // Get the first segment of the path
 
@@ -81,13 +85,15 @@ export function NavBar(props: NavBarProps) {
         ))}
       </NavigationMenu.List>
       <div className="flex items-center gap-2">
-        <Button variant="ghost_icon" onClick={toggleColorScheme}>
-          <Icon
-            className={colorScheme === 'light' ? '' : 'rotate-180'}
-            data={colorScheme === 'light' ? lightbulb : light}
-            size={18}
-          />
-        </Button>
+        {showColorSchemeToggle && (
+          <Button variant="ghost_icon" onClick={toggleColorScheme}>
+            <Icon
+              className={colorScheme === 'light' ? '' : 'rotate-180'}
+              data={colorScheme === 'light' ? lightbulb : light}
+              size={18}
+            />
+          </Button>
+        )}
         {props.user && (
           <UserPopover
             APPLICATION_ROLES_LIST={props.applicationConfig?.roles}
