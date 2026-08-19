@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.1](https://github.com/equinor/team-hermes-packages/compare/team-hermes-packages-react-v1.4.0...team-hermes-packages-react-v1.4.1) (2026-08-19)
+
+
+### Bug Fixes
+
+* actually export telemetry, ErrorPanel and isApiError ([245068f](https://github.com/equinor/team-hermes-packages/commit/245068f05608d52d35dc7d2963e65fa2a0c51662))
+
 ## [1.4.0](https://github.com/equinor/team-hermes-packages/compare/team-hermes-packages-react-v1.3.1...team-hermes-packages-react-v1.4.0) (2026-08-19)
 
 
