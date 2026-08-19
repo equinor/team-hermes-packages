@@ -1,0 +1,117 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Telemetry/Usage" />
+
+# Logging Events & Errors
+
+Once `TelemetryProvider` is in the tree, use these hooks to log telemetry from any component.
+
+---
+
+## `useTelemetry()`
+
+Returns the raw `Telemetry` object for direct calls:
+
+```tsx
+import { useTelemetry } from '@team-hermes/react-components'
+
+function DangerButton() {
+  const telemetry = useTelemetry()
+
+  const handleClick = () => {
+    telemetry.trackEvent('danger-button.clicked', { source: 'settings' })
+  }
+
+  return <button onClick={handleClick}>Do something dangerous</button>
+}
+```
+
+### `Telemetry` interface
+
+<table>
+  <thead>
+    <tr>
+      <th>Method</th>
+      <th>Signature</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`trackEvent`</td>
+      <td>`(name: string, props?: Record<string, unknown>) => void`</td>
+      <td>Log a custom event (button click, feature used, etc.).</td>
+    </tr>
+    <tr>
+      <td>`trackException`</td>
+      <td>`(err: unknown, ctx?: Record<string, unknown>) => void`</td>
+      <td>Log an error. Accepts any thrown value — non-`Error` values are converted automatically.</td>
+    </tr>
+    <tr>
+      <td>`setUser`</td>
+      <td>`(id: string | null) => void`</td>
+      <td>Associate telemetry with a user. Pass `null` to clear.</td>
+    </tr>
+  </tbody>
+</table>
+
+---
+
+## `useTrackEvent(name, baseProps?)`
+
+Returns a stable callback that fires a named event. Useful when you want to attach telemetry to an event handler without referencing the telemetry object directly:
+
+```tsx
+import { useTrackEvent } from '@team-hermes/react-components'
+
+function FilterPanel({ filterId }: { filterId: string }) {
+  const trackFilter = useTrackEvent('filter.applied', { filterId })
+
+  const handleApply = (value: string) => {
+    applyFilter(value)
+    trackFilter({ value })
+    // logs: { filterId, value }
+  }
+
+  return <button onClick={() => handleApply('active')}>Apply</button>
+}
+```
+
+`baseProps` are merged with any extra props passed at call time. The callback identity is stable across re-renders.
+
+---
+
+## `useTrackMount(name, props?)`
+
+Fires an event once when the component mounts. Use for "this view was opened" or "this dialog rendered" style tracking:
+
+```tsx
+import { useTrackMount } from '@team-hermes/react-components'
+
+function InspectionDetails({ id }: { id: string }) {
+  useTrackMount('inspection-details.viewed', { id })
+
+  return <div>...</div>
+}
+```
+
+---
+
+## Error tracking in event handlers
+
+React error boundaries only catch render-phase errors. For errors in event handlers or async code, catch and report them explicitly:
+
+```tsx
+const telemetry = useTelemetry()
+
+const handleSubmit = async () => {
+  try {
+    await submitForm()
+  } catch (err) {
+    telemetry.trackException(err, { action: 'form.submit' })
+    showErrorToast()
+  }
+}
+```
+
+Unhandled promise rejections and uncaught errors are automatically captured by `registerGlobalErrorHandlers`, but explicit tracking gives you richer context.
