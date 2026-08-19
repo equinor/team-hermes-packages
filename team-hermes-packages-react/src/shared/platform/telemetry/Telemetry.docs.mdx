@@ -1,0 +1,122 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Telemetry/Setup" />
+
+# Telemetry
+
+Pluggable telemetry with support for Azure Application Insights, console logging, and a no-op backend. The backend is selected at boot time and all downstream code uses the same `Telemetry` interface.
+
+---
+
+## 1. Bootstrap
+
+Wire telemetry into your app's entry point (`main.tsx` or similar):
+
+```tsx
+import {
+  createTelemetry,
+  registerGlobalErrorHandlers,
+  TelemetryErrorBoundary,
+  TelemetryProvider,
+} from '@team-hermes/react-components'
+
+try {
+  const telemetry = createTelemetry(ENV.telemetryBackend)
+  registerGlobalErrorHandlers(telemetry)
+
+  root.render(
+    <StrictMode>
+      {/* React 19's createRoot().render() does not synchronously rethrow
+          render-phase errors — the error boundary catches them instead.
+          The try/catch only guards synchronous bootstrap failures
+          (e.g. createTelemetry throwing). */}
+      <TelemetryErrorBoundary telemetry={telemetry} fallback={ApplicationError}>
+        <TelemetryProvider telemetry={telemetry}>
+          <App />
+        </TelemetryProvider>
+      </TelemetryErrorBoundary>
+    </StrictMode>
+  )
+} catch (error) {
+  // Bootstrap itself failed before any provider or boundary exists.
+  console.error('Bootstrap failed', error)
+  root.render(<ApplicationError error={error} />)
+}
+```
+
+### What each piece does
+
+<table>
+  <thead>
+    <tr>
+      <th>Export</th>
+      <th>Purpose</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`createTelemetry(backend)`</td>
+      <td>
+        Creates a `Telemetry` instance for the given backend. The AppInsights backend is dynamically imported
+        (code-split) and calls are buffered until it loads.
+      </td>
+    </tr>
+    <tr>
+      <td>`registerGlobalErrorHandlers(telemetry)`</td>
+      <td>
+        Attaches `window` listeners for `error` and `unhandledrejection`. Returns a cleanup function to remove them.
+      </td>
+    </tr>
+    <tr>
+      <td>`TelemetryErrorBoundary`</td>
+      <td>React error boundary that logs render-phase errors via `trackException` and renders a fallback UI.</td>
+    </tr>
+    <tr>
+      <td>`TelemetryProvider`</td>
+      <td>React context provider. Makes `useTelemetry()` available to the component tree.</td>
+    </tr>
+  </tbody>
+</table>
+
+---
+
+## 2. Validate the backend string
+
+Use `isTelemetryBackend` to validate user-supplied strings (e.g. from env variables) before passing them to `createTelemetry`:
+
+```ts
+import { isTelemetryBackend, TelemetryBackend } from '@team-hermes/react-components'
+
+const raw = import.meta.env.VITE_TELEMETRY ?? 'console'
+const backend = isTelemetryBackend(raw) ? raw : TelemetryBackend.Console
+```
+
+---
+
+## 3. Backends
+
+<table>
+  <thead>
+    <tr>
+      <th>Value</th>
+      <th>Behavior</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`appinsights`</td>
+      <td>
+        Azure Application Insights — ingestion is proxied through your BFF at `/api/monitoring/`, so no connection
+        string is needed in the SPA.
+      </td>
+    </tr>
+    <tr>
+      <td>`console`</td>
+      <td>Logs to `console.info` / `console.error`. Good for development.</td>
+    </tr>
+    <tr>
+      <td>`none`</td>
+      <td>No-op. All calls are silently discarded.</td>
+    </tr>
+  </tbody>
+</table>

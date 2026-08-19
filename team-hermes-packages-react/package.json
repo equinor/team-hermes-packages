@@ -42,6 +42,8 @@
     "@dnd-kit/modifiers": "^9.0.0",
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
+    "@microsoft/applicationinsights-react-js": "^19.4.1",
+    "@microsoft/applicationinsights-web": "^3.4.3",
     "@tanstack/react-table": "^8.21.3",
     "@tanstack/react-virtual": "^3.14.5",
     "nuqs": "^2.9.0",
