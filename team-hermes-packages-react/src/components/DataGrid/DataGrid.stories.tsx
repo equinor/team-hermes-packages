@@ -1,15 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import {
-  type ColumnDef,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from '@tanstack/react-table'
+import type { ColumnDef } from '@tanstack/react-table'
 import { useState } from 'react'
 import { AttributeType } from '@/shared/types'
 import { DataGrid } from './DataGrid'
-import { filterFn } from './DataGrid.utils'
+import { useDataGrid } from './useDataGrid'
 
 // ── Sample data types ────────────────────────────────────────────
 
@@ -83,14 +77,12 @@ const defaultColumns: ColumnDef<WellSample, any>[] = [
     accessorKey: 'depth',
     header: 'Depth (m)',
     meta: { dataType: AttributeType.NUMBER, editable: true, unit: 'm', isSortable: true },
-    filterFn,
   },
   {
     id: 'porosity',
     accessorKey: 'porosity',
     header: 'Porosity',
     meta: { dataType: AttributeType.NUMBER, editable: true, isSortable: true },
-    filterFn,
   },
   {
     id: 'status',
@@ -112,7 +104,6 @@ const defaultColumns: ColumnDef<WellSample, any>[] = [
       ],
       isSortable: true,
     },
-    filterFn,
   },
   {
     id: 'date',
@@ -189,13 +180,11 @@ function DataGridStory(props: {
 
   const [data, setData] = useState(initialData)
 
-  const table = useReactTable({
+  const { table } = useDataGrid({
     data,
     columns,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
     getRowId: (row) => row.uid,
+    enableValidationColumn: true,
     meta: {
       setData,
       validationErrors,
@@ -229,12 +218,9 @@ function DataGridStory(props: {
 function NestedDataGridStory() {
   const [data, setData] = useState(nestedData)
 
-  const table = useReactTable({
+  const { table } = useDataGrid({
     data,
     columns: nestedColumns,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
     getRowId: (row) => row.uid,
     meta: { setData },
   })
