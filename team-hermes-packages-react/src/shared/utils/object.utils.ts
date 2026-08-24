@@ -67,7 +67,7 @@ export function deleteByPath(obj: any, path: string): boolean {
  * @param defaultValue - The value to return if the path does not exist.
  * @returns The value at the specified path or the default value.
  */
-export const getNestedValue = (obj: any, path: string, defaultValue = null) => {
+export const getNestedValue = (obj: any, path: string, defaultValue: string | null = null) => {
   const keys = path.split('.') // Split the path string into an array of keys
   return (
     keys.reduce((currentObj, key) => {
