@@ -18,7 +18,7 @@ export type UseDataGridOptions<TData extends Record<string, any>> = Omit<
   getCoreRowModel?: TableOptions<TData>['getCoreRowModel']
   columnResizeMode?: TableOptions<TData>['columnResizeMode']
   columnResizeDirection?: TableOptions<TData>['columnResizeDirection']
-  /** Auto-inject a hidden validation_column when validation meta is provided. @default false */
+  /** Auto-inject a hidden validation_column and register `validationFilter` when set to `true`. */
   enableValidationColumn?: boolean
 }
 
@@ -53,22 +53,24 @@ export function useDataGrid<TData extends Record<string, any>>(options: UseDataG
     if (!hasValidation) return tableOptions.filterFns
 
     return {
-      validationFilter: (row: Row<TData>, _columnId: string, filterValue: ValidationFilterValue[]) => {
-        if (filterValue.length === 0) return true
-        const errors = validationErrors ?? {}
-        const warnings = validationWarnings ?? {}
-        const prefix = validationKeyPrefix === 'rowId' ? `[${row.id}]` : `[${row.index}]`
+      validationFilter: (() => {
+        const errorKeys = Object.keys(validationErrors ?? {})
+        const warningKeys = Object.keys(validationWarnings ?? {})
+        return (row: Row<TData>, _columnId: string, filterValue: ValidationFilterValue[]) => {
+          if (filterValue.length === 0) return true
+          const prefix = validationKeyPrefix === 'rowId' ? `[${row.id}]` : `[${row.index}]`
 
-        const rowHasError = Object.keys(errors).some((key) => key.startsWith(prefix))
-        const rowHasWarning = Object.keys(warnings).some((key) => key.startsWith(prefix))
-        const isSuccess = !rowHasError && !rowHasWarning
+          const rowHasError = errorKeys.some((key) => key.startsWith(prefix))
+          const rowHasWarning = warningKeys.some((key) => key.startsWith(prefix))
+          const isSuccess = !rowHasError && !rowHasWarning
 
-        return (
-          (rowHasError && filterValue.includes('error')) ||
-          (rowHasWarning && filterValue.includes('warning')) ||
-          (isSuccess && filterValue.includes('success'))
-        )
-      },
+          return (
+            (rowHasError && filterValue.includes('error')) ||
+            (rowHasWarning && filterValue.includes('warning')) ||
+            (isSuccess && filterValue.includes('success'))
+          )
+        }
+      })(),
       ...tableOptions.filterFns,
     } as typeof tableOptions.filterFns
   }, [hasValidation, validationErrors, validationWarnings, validationKeyPrefix, tableOptions.filterFns])

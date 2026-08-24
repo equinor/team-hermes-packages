@@ -9,15 +9,16 @@ export const formatFileSize = (bytes: number): string =>
   bytes >= 1024 * 1024 ? `${(bytes / (1024 * 1024)).toFixed(1)} MB` : `${(bytes / 1024).toFixed(1)} KB`
 
 /**
- * formats a number with spaces as thousand separators, and no decimal places. If the number is not an integer, it will be rounded to the nearest whole number before formatting.
- * @param n number to format¨
+ * Formats a number with spaces as thousand separators.
+ * @param n number to format
  * @param decimals number of decimal places to show (defaults to 0)
+ * @param locale locale to use for formatting (defaults to the runtime locale)
  * @returns formatted number as string
  */
-export function formatNumberToLocale(n: number | null | undefined, decimals: number = 0): string {
+export function formatNumberToLocale(n: number | null | undefined, decimals: number = 0, locale?: string): string {
   if (n == null) return ''
   return n
-    .toLocaleString(undefined, {
+    .toLocaleString(locale, {
       minimumFractionDigits: decimals,
       maximumFractionDigits: decimals,
     })
