@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.0](https://github.com/equinor/team-hermes-packages/compare/team-hermes-packages-react-v1.4.2...team-hermes-packages-react-v1.5.0) (2026-08-24)
+
+
+### Features
+
+* include datagrid types ([5a368ae](https://github.com/equinor/team-hermes-packages/commit/5a368aea94c5c6a0c06d1a2a4104bc421d9284ef))
+
 ## [1.4.2](https://github.com/equinor/team-hermes-packages/compare/team-hermes-packages-react-v1.4.1...team-hermes-packages-react-v1.4.2) (2026-08-24)
 
 
