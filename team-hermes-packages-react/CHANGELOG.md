@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.4.2](https://github.com/equinor/team-hermes-packages/compare/team-hermes-packages-react-v1.4.1...team-hermes-packages-react-v1.4.2) (2026-08-24)
+
+
+### Bug Fixes
+
+* address review comments ([4103d9c](https://github.com/equinor/team-hermes-packages/commit/4103d9c127361df913c76d2e1c208f4651d1eada))
+* various minor fixes and missing exports ([da2d1be](https://github.com/equinor/team-hermes-packages/commit/da2d1befbae40a19cf17068a70ac9251e2272fc1))
+
 ## [1.4.1](https://github.com/equinor/team-hermes-packages/compare/team-hermes-packages-react-v1.4.0...team-hermes-packages-react-v1.4.1) (2026-08-19)
 
 
