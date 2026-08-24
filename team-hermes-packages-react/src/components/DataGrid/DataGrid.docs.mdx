@@ -14,29 +14,80 @@ A feature-rich, editable data grid built on [TanStack Table](https://tanstack.co
 ## Quick start
 
 ```tsx
-import { DataGrid } from '@team-hermes/react-components'
-import { type ColumnDef, getCoreRowModel, useReactTable } from '@tanstack/react-table'
+import { DataGrid, useDataGrid } from '@team-hermes/react-components'
+import type { ColumnDef } from '@tanstack/react-table'
 
 type Row = { uid: string; name: string; depth: number }
 
 const columns: ColumnDef<Row>[] = [
-  { id: 'name', accessorKey: 'name', header: 'Name' },
-  { id: 'depth', accessorKey: 'depth', header: 'Depth' },
+  { id: 'name', accessorKey: 'name', header: 'Name', meta: { dataType: AttributeType.TEXT } },
+  { id: 'depth', accessorKey: 'depth', header: 'Depth', meta: { dataType: AttributeType.NUMBER } },
 ]
 
 function MyGrid() {
   const [data, setData] = useState<Row[]>(initialRows)
 
-  const table = useReactTable({
+  const { table } = useDataGrid({
     data,
     columns,
-    getCoreRowModel: getCoreRowModel(),
     getRowId: (row) => row.uid,
     meta: { setData },
   })
 
   return <DataGrid table={table} />
 }
+```
+
+### What `useDataGrid` provides automatically
+
+- `columnResizeMode: 'onChange'` and `columnResizeDirection: 'ltr'`
+- `getCoreRowModel()`, `getFilteredRowModel()`, `getFacetedUniqueValues()`, `getSortedRowModel()`
+- Attaches the built-in `filterFn` to every column that has `meta.dataType` set (unless a custom `filterFn` is already present)
+- Injects a hidden `validation_column` and registers the `validationFilter` when `meta.validationErrors` or `meta.validationWarnings` is provided
+
+All options are pass-through to TanStack Table, so you can still provide `manualFiltering`, `onSortingChange`, `state`, etc.
+
+### Server-side example
+
+```tsx
+const { table } = useDataGrid({
+  data: measurements,
+  columns,
+  getRowId: (row) => row.analysis_id,
+  manualFiltering: true,
+  manualPagination: true,
+  manualSorting: true,
+  rowCount: totalItems,
+  onColumnFiltersChange: setColumnFilters,
+  onSortingChange: setOrderBy,
+  onPaginationChange: setPagination,
+  state: { columnFilters, sorting: orderBy, pagination },
+  meta: { validationErrors: {} },
+})
+```
+
+### Advanced: raw `useReactTable`
+
+If you need full control, you can still pass a table instance directly. You are responsible for providing all row models, `filterFn` per column, and the validation column yourself:
+
+```tsx
+import { getCoreRowModel, getFilteredRowModel, useReactTable } from '@tanstack/react-table'
+import { filterFn } from '@team-hermes/react-components'
+
+const table = useReactTable({
+  data,
+  columns: columns.map((c) => ({ ...c, filterFn })),
+  columnResizeMode: 'onChange',
+  columnResizeDirection: 'ltr',
+  getCoreRowModel: getCoreRowModel(),
+  getFilteredRowModel: getFilteredRowModel(),
+  getSortedRowModel: getSortedRowModel(),
+  getFacetedUniqueValues: getFacetedUniqueValues(),
+  getRowId: (row) => row.uid,
+  meta: { setData },
+})
+
+<DataGrid table={table} />
 ```
 
 ## Props
@@ -47,7 +98,7 @@ See `DataGridProps` in `DataGrid.types.tsx` for full JSDoc descriptions.
 
 ## Table meta
 
-Supply these on `useReactTable({ meta: { ... } })`. All properties are documented with JSDoc in the `TableMeta` augmentation in `DataGrid.types.tsx`.
+Supply these on `useDataGrid({ meta: { ... } })` (or `useReactTable` if using the advanced API). All properties are documented with JSDoc in the `TableMeta` augmentation in `DataGrid.types.tsx`.
 
 ```tsx
 meta: {

@@ -41,14 +41,14 @@ export function DataGridFilter<TData extends Record<string, any>>(props: DataGri
           </button>
         }
         options={filterOptions}
-        value={filter?.value as string[]}
-        onChange={(newFilterValue) =>
+        value={(filter?.value as string[]) ?? []}
+        onChange={(newFilterValue) => {
           header.column.setFilterValue({
             operator: FilterOperator.eq,
             value: newFilterValue,
             dataType: AttributeType.TEXT,
           })
-        }
+        }}
       />
     )
   }
