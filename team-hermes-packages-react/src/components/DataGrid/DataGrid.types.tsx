@@ -152,14 +152,6 @@ export type PaginationConfig = {
   hasNextPage?: boolean
 }
 
-export type DefaultCellEditors =
-  | 'textEditor'
-  | 'numericEditor'
-  | 'boolEditor'
-  | 'dateEditor'
-  | 'textArrayEditor'
-  | 'numericArrayEditor'
-
 export enum ColumnPinningDirection {
   LEFT = 'left',
   RIGHT = 'right',
