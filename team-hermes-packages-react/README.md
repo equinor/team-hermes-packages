@@ -1,23 +1,3 @@
-# vite-plus-starter
+# @team-hermes/react-components
 
-A starter for creating a Vite Plus project.
-
-## Development
-
-- Install dependencies:
-
-```bash
-vp install
-```
-
-- Run the unit tests:
-
-```bash
-vp test
-```
-
-- Build the library:
-
-```bash
-vp pack
-```
+A shared React component library for Team Hermes projects. The library provides a set of reusable components and utilities that can be used across different applications within the team.

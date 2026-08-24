@@ -49,9 +49,9 @@ export function MenuCheckboxList(props: MenuCheckboxListProps) {
                     checked={value?.includes(option.value)}
                     onCheckedChange={(checked) => {
                       if (checked) {
-                        onChange([...value, option.value])
+                        onChange([...(value ?? []), option.value])
                       } else {
-                        onChange(value.filter((v) => v !== option.value))
+                        onChange((value ?? []).filter((v) => v !== option.value))
                       }
                     }}
                     className="grid grid-cols-[1rem_1fr] items-center gap-2 p-2 text-sm data-highlighted:relative cursor-pointer data-highlighted:bg-surface-hover"

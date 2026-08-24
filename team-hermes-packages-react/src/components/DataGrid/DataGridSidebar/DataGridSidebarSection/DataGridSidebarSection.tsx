@@ -49,8 +49,11 @@ export const DataGridSidebarSection = (props: DataGridSidebarSectionProps) => {
           </>
         )}
       </button>
-      <div className="manual-accordion-panel" aria-hidden={!showContent}>
-        <div className="manual-accordion-panel-content">{props.children}</div>
+      <div
+        className="grid grid-rows-[0fr] transition-[grid-template-rows] aria-[hidden=false]:grid-rows-[1fr]"
+        aria-hidden={!showContent}
+      >
+        <div className="overflow-hidden">{props.children}</div>
       </div>
     </Stack>
   )

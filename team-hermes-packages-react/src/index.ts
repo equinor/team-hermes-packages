@@ -15,8 +15,10 @@ export { ConfirmOperationDialog } from './components/ConfirmOperationDialog/Conf
 export { ContextMenu, type ContextMenuItem } from './components/ContextMenu/ContextMenu'
 // FEATURE COMPONENTS
 export { DataGrid } from './components/DataGrid/DataGrid'
+export type { DataGridCommentPreviewProps } from './components/DataGrid/DataGrid.types'
 export { DataGridPagination } from './components/DataGrid/DataGridPagination/DataGridPagination'
 export { filterFn } from './components/DataGrid/DataGrid.utils'
+export { useDataGrid, type UseDataGridOptions } from './components/DataGrid/useDataGrid'
 export { FacetOption } from './components/FacetOption/FacetOption'
 export { FileUploadInput } from './components/FileUploadInput/FileUploadInput'
 export { IconContainer } from './components/IconContainer/IconContainer'
