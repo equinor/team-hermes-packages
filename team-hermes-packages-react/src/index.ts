@@ -8,6 +8,7 @@ export { ActionListItem } from './components/ActionList/ActionListItem'
 export { ActionListPanel } from './components/ActionList/ActionListPanel'
 // UI COMPONENTS
 export { Chip } from './components/Chip/Chip'
+export { chip as chipStyles } from './components/Chip/Chip.styles'
 export { ErrorPanel } from './components/ErrorPanel/ErrorPanel'
 // FORM COMPONENTS
 export { Combobox, type ComboboxItem } from './components/Combobox/Combobox'
@@ -15,6 +16,7 @@ export { ConfirmOperationDialog } from './components/ConfirmOperationDialog/Conf
 export { ContextMenu, type ContextMenuItem } from './components/ContextMenu/ContextMenu'
 // FEATURE COMPONENTS
 export { DataGrid } from './components/DataGrid/DataGrid'
+export { DataGridSearchCell } from './components/DataGrid/DataGridFiltering/DataGridSearchCell'
 export type {
   DataGridCommentPreviewProps,
   DataGridCommentPopoverProps,
