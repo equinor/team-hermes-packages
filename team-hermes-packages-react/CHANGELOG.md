@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.1](https://github.com/equinor/team-hermes-packages/compare/team-hermes-packages-react-v1.5.0...team-hermes-packages-react-v1.5.1) (2026-08-25)
+
+
+### Bug Fixes
+
+* missing exports ([d14a355](https://github.com/equinor/team-hermes-packages/commit/d14a35549a5e81ba82db3a6ccb7f00a5d0118b2c))
+
 ## [1.5.0](https://github.com/equinor/team-hermes-packages/compare/team-hermes-packages-react-v1.4.2...team-hermes-packages-react-v1.5.0) (2026-08-24)
 
 
