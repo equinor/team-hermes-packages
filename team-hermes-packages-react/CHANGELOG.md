@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.0](https://github.com/equinor/team-hermes-packages/compare/team-hermes-packages-react-v1.5.1...team-hermes-packages-react-v1.6.0) (2026-08-31)
+
+
+### Features
+
+* **navbar:** support external links in dropdown menus ([ef50fe7](https://github.com/equinor/team-hermes-packages/commit/ef50fe79ca9450d61278f110f017341293e64fc8))
+
 ## [1.5.1](https://github.com/equinor/team-hermes-packages/compare/team-hermes-packages-react-v1.5.0...team-hermes-packages-react-v1.5.1) (2026-08-25)
 
 
