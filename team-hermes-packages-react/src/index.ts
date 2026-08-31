@@ -33,7 +33,8 @@ export { IconContainer } from './components/IconContainer/IconContainer'
 export { MenuCheckboxList } from './components/MenuCheckboxList/MenuCheckboxList'
 export { Message } from './components/Message/Message'
 // NAVIGATION COMPONENTS
-export { NavBar } from './components/NavBar/NavBar'
+export { NavBar, type ApplicationConfig } from './components/NavBar/NavBar'
+export type { NavLinkType } from './components/NavBar/components/NavListItem'
 export { Popover } from './components/Popover/Popover'
 // CALL-TO-ACTION COMPONENTS
 export { QuickAccessButton } from './components/QuickAccessButton/QuickAccessButton'
