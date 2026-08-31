@@ -1,4 +1,4 @@
-import { dashboard, home, settings, folder, notifications, category } from '@equinor/eds-icons'
+import { dashboard, home, settings, folder, notifications, category, library_books, world } from '@equinor/eds-icons'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { NavBar } from './NavBar'
 import type { NavLinkType } from './components/NavListItem'
@@ -21,6 +21,30 @@ const mockLinks: NavLinkType[] = [
     title: 'Notifications',
     description: 'Manage notification preferences and view alerts.',
     icon: notifications,
+  },
+]
+
+const mockExternalLinks: NavLinkType[] = [
+  {
+    href: '/overview',
+    title: 'Overview',
+    description: 'View the main dashboard and summary of all projects.',
+    icon: home,
+  },
+  {
+    href: 'https://eds.equinor.com',
+    title: 'Design System',
+    description: 'Browse the Equinor Design System documentation.',
+    icon: library_books,
+    external: true,
+  },
+  {
+    href: 'https://www.equinor.com',
+    title: 'Equinor.com',
+    description: 'Open the public Equinor website.',
+    icon: world,
+    variant: 'info',
+    external: true,
   },
 ]
 
@@ -133,5 +157,19 @@ export const WithApplicationConfig: Story = {
 export const WithoutColorSchemeToggle: Story = {
   args: {
     showColorSchemeToggle: false,
+  },
+}
+
+export const WithExternalLinks: Story = {
+  args: {
+    categories: [
+      {
+        title: 'Resources',
+        basePath: 'resources',
+        icon: category,
+        theme: 'info',
+        links: mockExternalLinks,
+      },
+    ],
   },
 }

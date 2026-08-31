@@ -25,7 +25,16 @@ import { NavBar } from '@team-hermes/react-components'
       basePath: 'dashboard',
       icon: dashboard,
       theme: 'success',
-      links: [{ href: '/overview', title: 'Overview', description: 'Main dashboard', icon: home }],
+      links: [
+        { href: '/overview', title: 'Overview', description: 'Main dashboard', icon: home },
+        {
+          href: 'https://eds.equinor.com',
+          title: 'Design System',
+          description: 'Browse the EDS documentation',
+          icon: library_books,
+          external: true,
+        },
+      ],
     },
   ]}
   LinkComponent={RouterLink}
@@ -48,6 +57,7 @@ import { NavBar } from '@team-hermes/react-components'
 
 - **Category navigation** — Groups links under collapsible dropdown menus.
 - **Active indicator** — Highlights the category matching the current route.
+- **External links** — Links marked with `external: true` open in a new tab and show the EDS external link icon.
 - **Color scheme toggle** — Switches between light and dark mode.
 - **User popover** — Displays user info and permissions when `user` is provided.
 - **Support section** — Shows help/support dialog with ServiceNow and GitHub links.
@@ -65,3 +75,12 @@ Displays the user popover with permissions and a sign-out button.
 Shows the support section with links to ServiceNow and GitHub.
 
 <Canvas of={NavBarStories.WithApplicationConfig} />
+
+### External links
+
+Set `external: true` on a link to render it as a plain anchor with `target="_blank"` and
+`rel="noopener noreferrer"`, bypassing `LinkComponent` so the router does not intercept the
+navigation. The chevron is replaced by the EDS external link icon, and screen readers announce
+"Opens in a new tab".
+
+<Canvas of={NavBarStories.WithExternalLinks} />
