@@ -118,6 +118,10 @@ const readOnlyColumns: ColumnDef<WellSample, any>[] = defaultColumns.map((c) => 
   meta: { ...c.meta, editable: false },
 }))
 
+const columnsWithNonSortable: ColumnDef<WellSample, any>[] = defaultColumns.map((c) =>
+  c.id === 'status' ? { ...c, enableSorting: false } : c
+)
+
 const nestedColumns: ColumnDef<NestedRow, any>[] = [
   {
     id: 'name',
@@ -304,4 +308,8 @@ export const NestedValues: Story = {
 
 export const ReadOnly: Story = {
   render: () => <DataGridStory columns={readOnlyColumns as ColumnDef<WellSample, any>[]} filterable={false} />,
+}
+
+export const NonSortableColumn: Story = {
+  render: () => <DataGridStory columns={columnsWithNonSortable} />,
 }

@@ -25,6 +25,7 @@ export function DataGridHeaderCellMenu<TData extends Record<string, any>>(props:
   const { header, table, cellActions } = props
   const isPinned = header.column.getIsPinned()
   const canHide = header.column.getCanHide()
+  const canSort = header.column.getCanSort()
   const hideStrategy = canHide && table.options?.meta?.removeColumn ? 'remove' : 'toggle'
   const [showDeleteConfirmationDialog, setShowDeleteConfirmationDialog] = useState(false)
 
@@ -70,18 +71,22 @@ export function DataGridHeaderCellMenu<TData extends Record<string, any>>(props:
                   {hideStrategy === 'remove' ? 'Remove column' : 'Hide column'}
                 </Menu.Item>
               )}
-              <Menu.Group>
-                <Menu.GroupLabel className="menu-group-label">Sort</Menu.GroupLabel>
-                <Menu.Item className="menu-item" onClick={() => header.column.toggleSorting(false)}>
-                  <Icon data={arrow_up} size={16} />
-                  Ascending
-                </Menu.Item>
-                <Menu.Item className="menu-item" onClick={() => header.column.toggleSorting(true)}>
-                  <Icon data={arrow_down} size={16} />
-                  Descending
-                </Menu.Item>
-              </Menu.Group>
-              <Menu.Separator className="h-px bg-stroke-subtle" />
+              {canSort && (
+                <>
+                  <Menu.Group>
+                    <Menu.GroupLabel className="menu-group-label">Sort</Menu.GroupLabel>
+                    <Menu.Item className="menu-item" onClick={() => header.column.toggleSorting(false)}>
+                      <Icon data={arrow_up} size={16} />
+                      Ascending
+                    </Menu.Item>
+                    <Menu.Item className="menu-item" onClick={() => header.column.toggleSorting(true)}>
+                      <Icon data={arrow_down} size={16} />
+                      Descending
+                    </Menu.Item>
+                  </Menu.Group>
+                  <Menu.Separator className="h-px bg-stroke-subtle" />
+                </>
+              )}
               <Menu.Group>
                 <Menu.GroupLabel className="menu-group-label">Pin</Menu.GroupLabel>
                 {isPinned && (
