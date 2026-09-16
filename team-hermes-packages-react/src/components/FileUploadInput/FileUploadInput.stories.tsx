@@ -45,3 +45,11 @@ export const ImageUpload: Story = {
     multiple: true,
   },
 }
+
+export const CustomAcceptMessage: Story = {
+  args: {
+    accept: 'image/png,image/jpeg,image/webp',
+    acceptString: 'PNG, JPEG, WEBP images',
+    multiple: true,
+  },
+}
