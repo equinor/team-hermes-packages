@@ -1,6 +1,5 @@
 import type { ColumnDef, ColumnFiltersState } from '@tanstack/react-table'
-import { AttributeType } from '../../shared/types'
-import type { FilterValue } from './useFilters.types'
+import { AttributeType, type FilterValue } from '../../shared/types'
 
 export const useFilters = () => {
   const createFiltersObjectFromURIString = (filterString: string | null): ColumnFiltersState => {

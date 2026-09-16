@@ -46,11 +46,11 @@ export { useColorScheme } from './hooks/useColorScheme/useColorScheme'
 export { useCopyToClipboard } from './hooks/useCopyToClipboard/useCopyToClipboard'
 export { useCustomToast } from './hooks/useCustomToast/useCustomToast'
 export { useFilterActions } from './hooks/useFilterActions/useFilterActions'
-export { FilterOperator, type FilterValue, useFilters } from './hooks/useFilters'
+export { useFilters } from './hooks/useFilters'
 export { useOutsideClick } from './hooks/useOutsideClick/useOutsideClick'
 export { useUrlPagination } from './hooks/useUrlPagination/useUrlPagination'
 export { useUrlSorting } from './hooks/useUrlSorting/useUrlSorting'
-export { AttributeType } from './shared/types'
+export { AttributeType, FilterOperator, type FilterValue } from './shared/types'
 export type { Theme } from './shared/types/themes.type'
 
 // UTILS
