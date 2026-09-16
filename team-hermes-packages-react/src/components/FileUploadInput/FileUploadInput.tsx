@@ -4,14 +4,19 @@ import type React from 'react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 export interface FileUploadProps {
+  /** Callback function invoked when the selected files change */
   onFileChange: (files: File[]) => void
+  /** Whether multiple files can be selected */
   multiple?: boolean
+  /** Optional string specifying the accepted file types, e.g., "image/*" */
   accept?: string
+  /** Optional human-readable string describing the accepted file types */
+  acceptString?: string
 }
 
 export type DropState = 'idle' | 'potentialDrop' | 'overTarget'
 
-export const FileUploadInput = ({ onFileChange, accept, multiple }: FileUploadProps) => {
+export const FileUploadInput = ({ onFileChange, accept, multiple, acceptString }: FileUploadProps) => {
   const [dropState, setDropState] = useState<DropState>('idle')
   const fileInputRef = useRef<HTMLInputElement>(null)
   const dragCounterRef = useRef(0)
@@ -99,7 +104,7 @@ export const FileUploadInput = ({ onFileChange, accept, multiple }: FileUploadPr
         >
           Click here to select file(s)
         </button>{' '}
-        or drop here <br /> ({accept})
+        or drop here <br /> ({acceptString ?? accept})
       </span>
       <input
         accept={accept}
