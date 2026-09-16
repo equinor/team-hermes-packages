@@ -6,18 +6,25 @@ type FacetOptionProps = {
   checked: boolean
   count?: number
   dimmed?: boolean
+  disabled?: boolean
   indented?: boolean
   onChange: (checked: boolean) => void
 }
 
 export function FacetOption(props: FacetOptionProps) {
-  const { label, checked, count, dimmed, indented, onChange } = props
+  const { label, checked, count, dimmed, indented, disabled, onChange } = props
 
   return (
     <label
-      className={`flex shrink-0 relative cursor-pointer items-center gap-1 py-1.5 px-3 rounded hover:bg-surface-hover overflow-hidden whitespace-pre-wrap focus-within:outline-(--focus-outline-color) focus-within:outline-2 focus-within:outline-dashed ${dimmed ? 'opacity-50' : ''} ${indented ? 'pl-8!' : ''}`}
+      className={`flex shrink-0 relative cursor-pointer items-center gap-1 py-1.5 px-3 rounded has-[input:disabled]:cursor-not-allowed hover:bg-surface-hover overflow-hidden whitespace-pre-wrap focus-within:outline-(--focus-outline-color) focus-within:outline-2 focus-within:outline-dashed ${dimmed ? 'opacity-50' : ''} ${indented ? 'pl-8!' : ''}`}
     >
-      <input type="checkbox" className="sr-only" checked={checked} onChange={(e) => onChange(e.target.checked)} />
+      <input
+        type="checkbox"
+        className="sr-only"
+        checked={checked}
+        disabled={disabled}
+        onChange={(e) => onChange(e.target.checked)}
+      />
       <Icon
         data={checked ? checkbox : checkbox_outline}
         size={18}

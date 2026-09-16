@@ -74,6 +74,18 @@ export const Dimmed: Story = {
   },
 }
 
+export const Disabled: Story = {
+  render: ({ onChange: _, checked: __, ...args }) => {
+    const [checked, setChecked] = useState(false)
+    return <FacetOption {...args} checked={checked} onChange={setChecked} />
+  },
+  args: {
+    label: 'Disabled option',
+    count: 0,
+    disabled: true,
+  },
+}
+
 export const Indented: Story = {
   render: ({ onChange: _, checked: __, ...args }) => {
     const [checked, setChecked] = useState(false)
@@ -104,7 +116,14 @@ export const FacetList: Story = {
         <FacetOption label="PDF" count={412} checked={selected.has('pdf')} onChange={toggle('pdf')} />
         <FacetOption label="Word" count={238} checked={selected.has('word')} onChange={toggle('word')} />
         <FacetOption label="Excel" count={95} checked={selected.has('excel')} onChange={toggle('excel')} />
-        <FacetOption label="Other" count={0} dimmed checked={selected.has('other')} onChange={toggle('other')} />
+        <FacetOption
+          label="Other"
+          count={0}
+          dimmed
+          disabled
+          checked={selected.has('other')}
+          onChange={toggle('other')}
+        />
       </div>
     )
   },
