@@ -1,26 +1,7 @@
-import type { Theme } from '@/shared/types'
-import type { IconData } from '@equinor/eds-icons'
 import { Icon } from '@equinor/eds-core-react'
 import { chevron_right, external_link } from '@equinor/eds-icons'
 import { IconContainer } from '@/components'
-
-export type NavLinkType = {
-  href: string
-  title: string
-  description: string
-  icon: IconData
-  variant?: Theme
-  /**
-   * Optional access predicate. If omitted, the link is always visible.
-   * Return `'loading'` to delay rendering until the user data resolves.
-   */
-  canAccess?: (hasPermission: any) => boolean | 'loading'
-  /**
-   * Marks the link as external. External links bypass `LinkComponent` and are rendered
-   * as a plain anchor that opens in a new tab with an external link icon.
-   */
-  external?: boolean
-}
+import type { NavLinkType } from '../NavBar.types'
 
 const linkClassName =
   'group flex items-center gap-4 px-5 py-3 duration-150 hover:bg-surface-hover rounded [.active]:opacity-50'

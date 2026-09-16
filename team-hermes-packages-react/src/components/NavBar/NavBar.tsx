@@ -1,58 +1,16 @@
 import { NavigationMenu } from '@base-ui/react/navigation-menu'
 import { Button, Icon } from '@equinor/eds-core-react'
-import type { IconData } from '@equinor/eds-icons'
-import { type NavLinkType, NavListItem } from './components/NavListItem'
+import { NavListItem } from './components/NavListItem'
 import { chevron_down, light, lightbulb } from '@equinor/eds-icons'
 import { useColorScheme } from '@/hooks'
 import { navbar } from './NavBar.styles'
 import { SupportSection } from './components/SupportSection'
 import { UserPopover } from './components/UserPopover'
-import type { Theme } from '@/shared/types'
-
-export type ApplicationConfig = {
-  /** The application name displayed in the navbar. */
-  name: string
-  /** List of application roles used to display permissions in the user popover. */
-  roles?: { value: string; label: string }[]
-  /** URL to ServiceNow for reporting issues. Shown in the support dialog. */
-  serviceNowLink?: string
-  /** GitHub repository name (e.g. "equinor/my-repo"). Shown in the support dialog. */
-  githubRepoName?: string
-}
-
-type NavBarProps = {
-  /** Navigation categories, each with a title, base path, icon, theme, and list of links. */
-  categories: {
-    title: string
-    basePath: string
-    icon: IconData
-    theme: Theme
-    links: NavLinkType[]
-  }[]
-  /** A router-aware link component (e.g. from react-router or Next.js). Must accept a `to` prop. */
-  LinkComponent: React.ComponentType<React.ComponentProps<'a'> & { to: string }>
-  /** Application configuration including name, support links, and role definitions. */
-  applicationConfig?: ApplicationConfig
-  /**
-   * Optional user information to display in the user popover. If omitted, the user popover will not be rendered.
-   */
-  user?: {
-    name: string
-    email: string
-    roles: string[]
-  }
-  /**
-   * Callback function to log out the user. This is required if the `user` prop is provided, as it will be used in the user popover to log out the user.
-   */
-  logOut?: () => void
-  /**
-   * Whether the light/dark mode toggle is shown. Defaults to `true`.
-   */
-  showColorSchemeToggle?: boolean
-}
+import type { NavBarProps } from './NavBar.types'
+import { Chip } from '../Chip/Chip'
 
 export function NavBar(props: NavBarProps) {
-  const { categories, LinkComponent, applicationConfig, showColorSchemeToggle = true } = props
+  const { categories, LinkComponent, applicationConfig, showColorSchemeToggle = true, environment } = props
   const { colorScheme, toggleColorScheme } = useColorScheme()
   const groupPath = location.pathname.split('/')[1] // Get the first segment of the path
 
@@ -60,9 +18,13 @@ export function NavBar(props: NavBarProps) {
 
   return (
     <NavigationMenu.Root className={navbarStyles.root()} data-testid="navbar">
-      <LinkComponent to="/">
-        <span className="text-lg font-semibold tracking-wide">{props.applicationConfig?.name}</span>
-      </LinkComponent>
+      <div className="flex items-center gap-4">
+        {props.applicationIcon && <span>{props.applicationIcon}</span>}
+        <LinkComponent to="/">
+          <span className="text-lg font-semibold tracking-wide">{props.applicationConfig?.name}</span>
+        </LinkComponent>
+        {environment && <Chip fontSize="xs">{environment}</Chip>}
+      </div>
       <NavigationMenu.List className="relative flex gap-8 p-2">
         {categories.map((nav_item) => (
           <NavigationMenu.Item key={nav_item.title}>
