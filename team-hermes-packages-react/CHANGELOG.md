@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.7.0](https://github.com/equinor/team-hermes-packages/compare/team-hermes-packages-react-v1.6.0...team-hermes-packages-react-v1.7.0) (2026-09-17)
+
+
+### Features
+
+* completely disable sorting when enableSorting is false ([552325e](https://github.com/equinor/team-hermes-packages/commit/552325efd0d8c6dbb16f81ab97d394450664a4cb))
+* completely disable sorting when enableSorting is false ([27016d8](https://github.com/equinor/team-hermes-packages/commit/27016d82b9d282eb29c15dd71e50dd47c336f43f))
+
+
+### Bug Fixes
+
+* add acceptString to FileUploadInput ([0f46b15](https://github.com/equinor/team-hermes-packages/commit/0f46b15a5b239b304ec2d3ae16408345ef50ff95))
+* add disabled prop to FacetOption ([a7e27b3](https://github.com/equinor/team-hermes-packages/commit/a7e27b307e5617d19a6bc0346a4ff13700dcaade))
+* ApplicationConfig import path ([6545c37](https://github.com/equinor/team-hermes-packages/commit/6545c37bad50d06f335db005769d21bf257914f4))
+* combine FilterOperator enums causing discrepency ([073a581](https://github.com/equinor/team-hermes-packages/commit/073a581405240a33494a7866e569720e24357c87))
+* navbar types export ([8bc1491](https://github.com/equinor/team-hermes-packages/commit/8bc1491619e2fc680ca71bf6c4fcb31faf47cbb5))
+
 ## [1.6.0](https://github.com/equinor/team-hermes-packages/compare/team-hermes-packages-react-v1.5.1...team-hermes-packages-react-v1.6.0) (2026-08-31)
 
 
