@@ -2,7 +2,7 @@ import { Button, Dialog, Icon, Tooltip, Typography } from '@equinor/eds-core-rea
 import { close, info_circle, report_bug } from '@equinor/eds-icons'
 import { useState } from 'react'
 import { Stack } from '@/components'
-import type { ApplicationConfig } from '../NavBar'
+import type { ApplicationConfig } from '../NavBar.types'
 import { VersionText } from './VersionText'
 
 export const SupportSection = ({ applicationConfig }: { applicationConfig?: ApplicationConfig }) => {
