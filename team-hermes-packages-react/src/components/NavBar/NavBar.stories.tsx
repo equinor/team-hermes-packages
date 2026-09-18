@@ -265,3 +265,62 @@ export const WithEnvironmentAndLogo: Story = {
     applicationIcon: <div className="size-10 flex items-center justify-center">{testApplicationIcon}</div>,
   },
 }
+
+export const WithHiddenLinks: Story = {
+  args: {
+    categories: [
+      {
+        title: 'Dashboard',
+        basePath: 'dashboard',
+        icon: dashboard,
+        theme: 'success',
+        links: [
+          mockLinks[0],
+          { ...mockLinks[1], hidden: true },
+          mockLinks[2],
+          {
+            href: '/hidden-admin',
+            title: 'Admin (hidden)',
+            description: 'Only visible when the user has admin permissions.',
+            icon: settings,
+            hidden: true,
+          },
+        ],
+      },
+    ],
+  },
+}
+
+export const WithLockedLinks: Story = {
+  args: {
+    categories: [
+      {
+        title: 'Dashboard',
+        basePath: 'dashboard',
+        icon: dashboard,
+        theme: 'success',
+        links: [
+          mockLinks[0],
+          {
+            ...mockLinks[1],
+            locked: true,
+          },
+          {
+            ...mockLinks[2],
+            locked: true,
+            lockedReason: 'Requires admin role',
+          },
+          {
+            href: 'https://eds.equinor.com',
+            title: 'Design System',
+            description: 'External link that is currently locked.',
+            icon: library_books,
+            external: true,
+            locked: true,
+            lockedReason: 'Coming soon',
+          },
+        ],
+      },
+    ],
+  },
+}
