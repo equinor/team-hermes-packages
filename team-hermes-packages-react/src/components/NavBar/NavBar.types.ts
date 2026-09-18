@@ -8,10 +8,17 @@ export type NavLinkType = {
   icon: IconData
   variant?: Theme
   /**
-   * Optional access predicate. If omitted, the link is always visible.
-   * Return `'loading'` to delay rendering until the user data resolves.
+   * Whether the link is hidden from the navigation menu. For easy conditional rendering based on user permissions or other criteria.
    */
-  canAccess?: (hasPermission: any) => boolean | 'loading'
+  hidden?: boolean
+  /**
+   * Whether the link is locked. Locked links are visible but not clickable.
+   */
+  locked?: boolean
+  /**
+   * Reason why the link is locked. Displayed as a Chip component.
+   */
+  lockedReason?: string
   /**
    * Marks the link as external. External links bypass `LinkComponent` and are rendered
    * as a plain anchor that opens in a new tab with an external link icon.
