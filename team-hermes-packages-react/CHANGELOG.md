@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.1](https://github.com/equinor/team-hermes-packages/compare/team-hermes-packages-react-v1.7.0...team-hermes-packages-react-v1.7.1) (2026-09-18)
+
+
+### Bug Fixes
+
+* locked and hidden links in navbar ([8ae2804](https://github.com/equinor/team-hermes-packages/commit/8ae2804b9375e05b9effb391ed35676bf3ed6107))
+
 ## [1.7.0](https://github.com/equinor/team-hermes-packages/compare/team-hermes-packages-react-v1.6.0...team-hermes-packages-react-v1.7.0) (2026-09-17)
 
 
