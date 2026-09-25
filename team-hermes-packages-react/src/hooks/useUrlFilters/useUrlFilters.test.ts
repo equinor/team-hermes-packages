@@ -1,4 +1,4 @@
-import { FilterOperator } from '@team-hermes/react-components'
+import { FilterOperator } from '@/shared/types'
 import { act, renderHook } from '@testing-library/react'
 import { withNuqsTestingAdapter } from 'nuqs/adapters/testing'
 import { describe, expect, it, vi } from 'vitest'
