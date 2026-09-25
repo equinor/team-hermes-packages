@@ -2,15 +2,23 @@ import type { ColumnDef, ColumnFiltersState } from '@tanstack/react-table'
 import { AttributeType, type FilterValue } from '../../shared/types'
 
 // URI format: `id*op*prop1|prop2^op2*prop3~otherId*op*prop`.
-// `~`, `|`, `^` are picked because they rarely appear in filter values (unlike `,` `;`) and because
-// `+` was ambiguous — `application/x-www-form-urlencoded` decoding turns literal `+` into a space.
+// `~`, `|`, `^` are picked because they rarely appear in filter values (unlike `,` `;`).
+// `+` is escaped even though it isn't a delimiter: `application/x-www-form-urlencoded` decoding
+// turns a literal `+` in a query string into a space, which would otherwise break round-tripping.
 const COLUMN_SEP = '~'
 const OPERATOR_SEP = '^'
 const PROPERTY_SEP = '|'
 const FIELD_SEP = '*'
 
-const RESERVED_CHARS = /[*~|^%]/g
-const RESERVED_ENC: Record<string, string> = { '*': '%2A', '~': '%7E', '|': '%7C', '^': '%5E', '%': '%25' }
+const RESERVED_CHARS = /[*~|^%+]/g
+const RESERVED_ENC: Record<string, string> = {
+  '*': '%2A',
+  '~': '%7E',
+  '|': '%7C',
+  '^': '%5E',
+  '%': '%25',
+  '+': '%2B',
+}
 const encodePart = (s: string) => s.replace(RESERVED_CHARS, (c) => RESERVED_ENC[c])
 const decodePart = (s: string) => {
   try {

@@ -152,11 +152,15 @@ describe('useFilters', () => {
     it('escapes delimiter characters found inside id / operator / properties', () => {
       const { createURIStringFromFiltersObject } = setup()
 
+      // `+` isn't a delimiter but is escaped so it survives `application/x-www-form-urlencoded` decoding.
       expect(
         createURIStringFromFiltersObject([
-          { id: 'status', value: [{ operator: FilterOperator.eq, properties: ['a|b', 'c~d', 'e^f', 'g*h', '50%'] }] },
+          {
+            id: 'status',
+            value: [{ operator: FilterOperator.eq, properties: ['a|b', 'c~d', 'e^f', 'g*h', '50%', 'foo+bar'] }],
+          },
         ])
-      ).toBe('status*eq*a%7Cb|c%7Ed|e%5Ef|g%2Ah|50%25')
+      ).toBe('status*eq*a%7Cb|c%7Ed|e%5Ef|g%2Ah|50%25|foo%2Bbar')
     })
   })
 
