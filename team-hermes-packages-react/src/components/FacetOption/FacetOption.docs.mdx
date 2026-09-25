@@ -1,5 +1,6 @@
 import { Meta, Primary, Controls, Canvas, ArgTypes } from '@storybook/addon-docs/blocks'
 import * as FacetOptionStories from './FacetOption.stories'
+import { Message } from '../Message/Message'
 
 <Meta of={FacetOptionStories} />
 
@@ -34,6 +35,17 @@ Displays a result count on the right side of the label.
 
 <Canvas of={FacetOptionStories.WithCount} />
 
+### Radio
+
+Displays a radio button option instead of a checkbox. Semantically it is also rendered as a radio input.
+
+<Message>
+  Semantically, it would also be correct to pass the "value" prop when using radio buttons, as it represents the value
+  of the selected option.
+</Message>
+
+<Canvas of={FacetOptionStories.Radio} />
+
 ### Dimmed
 
 Reduces opacity to visually de-emphasise options, typically used for options with zero results.
@@ -58,6 +70,12 @@ Adds extra left padding for nested or hierarchical facets.
 Multiple options composed into a typical filter list with interactive state.
 
 <Canvas of={FacetOptionStories.FacetList} />
+
+### Radio list
+
+Displays a list of radio button options, allowing only one selection at a time.
+
+<Canvas of={FacetOptionStories.RadioList} />
 
 ## Props
 
