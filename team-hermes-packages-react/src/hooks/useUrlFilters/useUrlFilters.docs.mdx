@@ -64,11 +64,13 @@ removeFilterValue('review_status', FilterOperator.eq, 'DRAFT')
 // Flip presence — handy for facet checkboxes
 toggleFilterValue('review_status', FilterOperator.eq, 'DRAFT')
 
-// Swap operator or value in-place — handy for a "between → gte" edit in a popover
+// Swap operator or value in-place — handy for a "between → gte" edit in a popover.
+// `properties` mirrors `FilterValue.properties`, so compound values like a `between` range
+// are removed / added element-wise.
 updateFilterValue(
   'created_at',
-  { operator: FilterOperator.between, value: [start, end] },
-  { operator: FilterOperator.gte, value: start }
+  { operator: FilterOperator.between, properties: [start, end] },
+  { operator: FilterOperator.gte, properties: [start] }
 )
 
 // Cheap check for a facet checkbox's `checked` prop
@@ -200,8 +202,8 @@ Returns an object with:
     </tr>
     <tr>
       <td>`updateFilterValue`</td>
-      <td>`(columnId, from: { operator, value }, to: { operator, value }) => Promise<URLSearchParams>`</td>
-      <td>Removes `from` and adds `to` in a single URL update. Handy when a popover edits an existing entry.</td>
+      <td>`(columnId, from: { operator, properties }, to: { operator, properties }) => Promise<URLSearchParams>`</td>
+      <td>Removes `from` and adds `to` in a single URL update. `properties` mirrors `FilterValue.properties`, so compound values (e.g. `between`'s `[start, end]`) are removed / added element-wise.</td>
     </tr>
   </tbody>
 </table>
