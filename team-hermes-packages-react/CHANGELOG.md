@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.8.0](https://github.com/equinor/team-hermes-packages/compare/team-hermes-packages-react-v1.7.1...team-hermes-packages-react-v1.8.0) (2026-09-25)
+
+
+### Features
+
+* type radio support for FacetOption ([757eeb3](https://github.com/equinor/team-hermes-packages/commit/757eeb32c6979d4cc01a92c38477f1c0914b1d0b))
+
+
+### Bug Fixes
+
+* decode plus sign for roundtripping ([60700a0](https://github.com/equinor/team-hermes-packages/commit/60700a0a44a71378987e269e4afbe3bf769f09dc))
+* internal reference to type ([9496468](https://github.com/equinor/team-hermes-packages/commit/94964680553cdf20ac9678e4f66f792b12b1153b))
+
 ## [1.7.1](https://github.com/equinor/team-hermes-packages/compare/team-hermes-packages-react-v1.7.0...team-hermes-packages-react-v1.7.1) (2026-09-18)
 
 
