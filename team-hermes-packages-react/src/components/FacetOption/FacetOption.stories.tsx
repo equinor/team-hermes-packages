@@ -51,6 +51,17 @@ export const Default: Story = {
   },
 }
 
+export const Radio: Story = {
+  render: ({ onChange: _, checked: __, ...args }) => {
+    const [checked, setChecked] = useState(false)
+    return <FacetOption {...args} checked={checked} onChange={setChecked} />
+  },
+  args: {
+    type: 'radio',
+    count: 32,
+  },
+}
+
 export const WithCount: Story = {
   render: ({ onChange: _, checked: __, ...args }) => {
     const [checked, setChecked] = useState(false)
@@ -123,6 +134,33 @@ export const FacetList: Story = {
           disabled
           checked={selected.has('other')}
           onChange={toggle('other')}
+        />
+      </div>
+    )
+  },
+}
+
+export const RadioList: Story = {
+  render: () => {
+    const [selected, setSelected] = useState<string | null>('pdf')
+
+    const select = (key: string) => (checked: boolean) => {
+      if (checked) setSelected(key)
+    }
+
+    return (
+      <div role="radiogroup">
+        <FacetOption type="radio" label="PDF" count={412} checked={selected === 'pdf'} onChange={select('pdf')} />
+        <FacetOption type="radio" label="Word" count={238} checked={selected === 'word'} onChange={select('word')} />
+        <FacetOption type="radio" label="Excel" count={95} checked={selected === 'excel'} onChange={select('excel')} />
+        <FacetOption
+          type="radio"
+          label="Other"
+          count={0}
+          dimmed
+          disabled
+          checked={selected === 'other'}
+          onChange={select('other')}
         />
       </div>
     )
