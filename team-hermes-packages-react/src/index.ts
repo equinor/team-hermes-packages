@@ -43,8 +43,9 @@ export { QuickAccessButton } from './components/QuickAccessButton/QuickAccessBut
 export { SortingButton } from './components/SortingButton/SortingButton'
 export { Tab, TabPanel, TabsList, TabsRoot, type TabValue } from './components/Tabs/Tabs'
 // HOOKS
-export { useColorScheme } from './hooks/useColorScheme/useColorScheme'
+export { useColorScheme, initColorScheme } from './hooks/useColorScheme/useColorScheme'
 export { useCopyToClipboard } from './hooks/useCopyToClipboard/useCopyToClipboard'
+export { useUrlFilters } from './hooks/useUrlFilters/useUrlFilters'
 export { useCustomToast } from './hooks/useCustomToast/useCustomToast'
 export { useFilterActions } from './hooks/useFilterActions/useFilterActions'
 export { useFilters } from './hooks/useFilters'
