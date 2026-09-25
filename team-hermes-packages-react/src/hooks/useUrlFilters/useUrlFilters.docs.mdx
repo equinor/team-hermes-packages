@@ -1,0 +1,207 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Tanstack Table/useUrlFilters" />
+
+# useUrlFilters
+
+A hook that stores TanStack Table column filter state in the URL via [nuqs](https://nuqs.47ng.com/), so that facet / chip / popover filter state survives page reloads and is shareable via the address bar.
+
+Each URL entry is a compound `ColumnFilter` — `{ id, value: FilterValue }` — where `FilterValue` is an array of `{ operator, properties }` pairs. This lets a single column carry several operators at once (e.g. an `eq` set of allowed statuses alongside a `like` search string).
+
+## Usage
+
+```tsx
+import { useUrlFilters, useUrlPagination, FilterOperator } from '@team-hermes/react-components'
+import { useReactTable, getCoreRowModel } from '@tanstack/react-table'
+
+function MyTable() {
+  const { resetPage, pagination, setPagination } = useUrlPagination()
+  const { filters, setFilters, toggleFilterValue } = useUrlFilters({ onFiltersChange: resetPage })
+
+  const table = useReactTable({
+    data,
+    columns,
+    state: { columnFilters: filters, pagination },
+    onColumnFiltersChange: setFilters,
+    onPaginationChange: setPagination,
+    getCoreRowModel: getCoreRowModel(),
+    manualFiltering: true,
+    manualPagination: true,
+  })
+
+  return (
+    <>
+      <button onClick={() => toggleFilterValue('review_status', FilterOperator.eq, 'DRAFT')}>Draft</button>
+      {/* render table */}
+    </>
+  )
+}
+```
+
+### Resetting pagination on filter change
+
+Use the `onFiltersChange` callback to send the user back to the first page whenever the filter set changes:
+
+```tsx
+const { resetPage } = useUrlPagination()
+const { filters, setFilters } = useUrlFilters({ onFiltersChange: resetPage })
+```
+
+### Per-column helpers
+
+Prefer the helpers over splicing `FilterValue` arrays by hand at call sites — they take care of creating / pruning columns and de-duplicating properties.
+
+```tsx
+const { addFilterValue, removeFilterValue, toggleFilterValue, updateFilterValue, hasFilterValue, resetFilters } =
+  useUrlFilters()
+
+// Add "DRAFT" to review_status eq — creates the column if missing
+addFilterValue('review_status', FilterOperator.eq, 'DRAFT')
+
+// Remove "DRAFT" — prunes the column entirely if it was the last value
+removeFilterValue('review_status', FilterOperator.eq, 'DRAFT')
+
+// Flip presence — handy for facet checkboxes
+toggleFilterValue('review_status', FilterOperator.eq, 'DRAFT')
+
+// Swap operator or value in-place — handy for a "between → gte" edit in a popover
+updateFilterValue(
+  'created_at',
+  { operator: FilterOperator.between, value: [start, end] },
+  { operator: FilterOperator.gte, value: start }
+)
+
+// Cheap check for a facet checkbox's `checked` prop
+const isActive = hasFilterValue('review_status', FilterOperator.eq, 'DRAFT')
+
+// Clear everything
+resetFilters()
+```
+
+### Reading the current value
+
+`getFilterValue(columnId)` returns the full `FilterValue` for a column, or `undefined` if it isn't filtered. Passing an operator narrows the result to that operator's entry:
+
+```tsx
+const { getFilterValue } = useUrlFilters()
+
+const allReviewStatus = getFilterValue('review_status')
+// → [{ operator: 'eq', properties: ['DRAFT'] }] | undefined
+
+const eqEntry = getFilterValue('review_status', FilterOperator.eq)
+// → { operator: 'eq', properties: ['DRAFT'] } | undefined
+```
+
+### Prefixed params for multiple tables
+
+Use the `prefix` option when a page contains more than one filtered table to avoid URL param collisions:
+
+```tsx
+const orders = useUrlFilters({ prefix: 'orders' })
+// → URL param: orders_filters
+
+const items = useUrlFilters({ prefix: 'items' })
+// → URL param: items_filters
+```
+
+## API
+
+### `useUrlFilters(options?)`
+
+Accepts an optional options object:
+
+<table>
+  <thead>
+    <tr>
+      <th>Option</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`defaultFilters`</td>
+      <td>`ColumnFiltersState`</td>
+      <td>`[]`</td>
+      <td>Initial filter state used when the URL param is absent.</td>
+    </tr>
+    <tr>
+      <td>`history`</td>
+      <td>`'push' | 'replace'`</td>
+      <td>`'push'`</td>
+      <td>How URL changes are recorded in browser history.</td>
+    </tr>
+    <tr>
+      <td>`prefix`</td>
+      <td>`string`</td>
+      <td>—</td>
+      <td>Optional prefix for the URL param name (e.g. `"orders"` → `orders_filters`).</td>
+    </tr>
+    <tr>
+      <td>`onFiltersChange`</td>
+      <td>`() => void`</td>
+      <td>—</td>
+      <td>Called after any filter mutation — use to reset pagination.</td>
+    </tr>
+  </tbody>
+</table>
+
+Returns an object with:
+
+<table>
+  <thead>
+    <tr>
+      <th>Property</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`filters`</td>
+      <td>`ColumnFiltersState`</td>
+      <td>Current filter state, compatible with TanStack Table's `state.columnFilters`.</td>
+    </tr>
+    <tr>
+      <td>`setFilters`</td>
+      <td>`(updater: Updater<ColumnFiltersState>) => Promise<URLSearchParams>`</td>
+      <td>State setter to pass to TanStack Table's `onColumnFiltersChange`. Also fires `onFiltersChange`.</td>
+    </tr>
+    <tr>
+      <td>`resetFilters`</td>
+      <td>`() => Promise<URLSearchParams>`</td>
+      <td>Clears all filters.</td>
+    </tr>
+    <tr>
+      <td>`getFilterValue`</td>
+      <td>`(columnId: string, operator?: FilterOperator) => FilterValue | FilterValue[number] | undefined`</td>
+      <td>Reads a column's `FilterValue`, or a specific operator entry within it.</td>
+    </tr>
+    <tr>
+      <td>`hasFilterValue`</td>
+      <td>`(columnId: string, operator: FilterOperator, value: unknown) => boolean`</td>
+      <td>Returns `true` when `value` is present in that column/operator entry.</td>
+    </tr>
+    <tr>
+      <td>`addFilterValue`</td>
+      <td>`(columnId: string, operator: FilterOperator, value: unknown) => Promise<URLSearchParams>`</td>
+      <td>Appends `value`. Creates the column and operator entry as needed. No-op if the value is already present.</td>
+    </tr>
+    <tr>
+      <td>`removeFilterValue`</td>
+      <td>`(columnId: string, operator: FilterOperator, value: unknown) => Promise<URLSearchParams>`</td>
+      <td>Removes `value`. Prunes empty operator entries and empty columns.</td>
+    </tr>
+    <tr>
+      <td>`toggleFilterValue`</td>
+      <td>`(columnId: string, operator: FilterOperator, value: unknown) => Promise<URLSearchParams>`</td>
+      <td>Adds or removes `value` depending on whether it is currently present.</td>
+    </tr>
+    <tr>
+      <td>`updateFilterValue`</td>
+      <td>`(columnId, from: { operator, value }, to: { operator, value }) => Promise<URLSearchParams>`</td>
+      <td>Removes `from` and adds `to` in a single URL update. Handy when a popover edits an existing entry.</td>
+    </tr>
+  </tbody>
+</table>
