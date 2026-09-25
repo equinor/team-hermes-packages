@@ -1,21 +1,47 @@
 import type { ColumnDef, ColumnFiltersState } from '@tanstack/react-table'
 import { AttributeType, type FilterValue } from '../../shared/types'
 
+// URI format: `id*op*prop1|prop2^op2*prop3~otherId*op*prop`.
+// `~`, `|`, `^` are picked because they rarely appear in filter values (unlike `,` `;`) and because
+// `+` was ambiguous — `application/x-www-form-urlencoded` decoding turns literal `+` into a space.
+const COLUMN_SEP = '~'
+const OPERATOR_SEP = '^'
+const PROPERTY_SEP = '|'
+const FIELD_SEP = '*'
+
+const RESERVED_CHARS = /[*~|^%]/g
+const RESERVED_ENC: Record<string, string> = { '*': '%2A', '~': '%7E', '|': '%7C', '^': '%5E', '%': '%25' }
+const encodePart = (s: string) => s.replace(RESERVED_CHARS, (c) => RESERVED_ENC[c])
+const decodePart = (s: string) => {
+  try {
+    return decodeURIComponent(s)
+  } catch {
+    return s
+  }
+}
+
 export const useFilters = () => {
   const createFiltersObjectFromURIString = (filterString: string | null): ColumnFiltersState => {
-    if (!filterString || filterString === '') return []
+    if (!filterString) return []
     const filterList: ColumnFiltersState = []
-    for (const filter of filterString.split(';')) {
-      const filterValue = []
-      const filterSplitIndex = filter.indexOf('*')
-      const filterName = filter.substring(0, filterSplitIndex)
+    for (const filter of filterString.split(COLUMN_SEP)) {
+      if (!filter) continue
+      const filterSplitIndex = filter.indexOf(FIELD_SEP)
+      if (filterSplitIndex <= 0) continue
+      const filterName = decodePart(filter.substring(0, filterSplitIndex))
       const subFilters = filter.substring(filterSplitIndex + 1)
-      for (const subFilter of subFilters.split('+')) {
-        const [operator, properties] = subFilter.split('*')
-        const propertyList = properties.split(',').map((val) => val.trim())
+      const filterValue = []
+      for (const subFilter of subFilters.split(OPERATOR_SEP)) {
+        const subSplitIndex = subFilter.indexOf(FIELD_SEP)
+        if (subSplitIndex <= 0) continue
+        const operator = decodePart(subFilter.substring(0, subSplitIndex))
+        const propertyList = subFilter
+          .substring(subSplitIndex + 1)
+          .split(PROPERTY_SEP)
+          .map((val) => decodePart(val.trim()))
         filterValue.push({ operator, properties: propertyList })
       }
-      filterList.push({ id: filterName, value: filterValue })
+      if (filterValue.length > 0) filterList.push({ id: filterName, value: filterValue })
     }
     return filterList
   }
@@ -24,17 +50,16 @@ export const useFilters = () => {
     const filterStrings = []
     for (const filter of filters) {
       const { id, value } = filter
-      const filterId = `${String(id)}*`
+      if (!value || (value as unknown[])?.length === 0) continue
       const subFilters = []
-      if (!value || (value as string[])?.length === 0) continue
       for (const subFilter of value as FilterValue) {
         const { operator, properties } = subFilter
-        const normalizedProperties = properties.map((val) => (val === null ? 'null' : String(val)))
-        subFilters.push(`${operator}*${normalizedProperties.join(',')}`)
+        const normalizedProperties = properties.map((val) => encodePart(val === null ? 'null' : String(val)))
+        subFilters.push(`${encodePart(String(operator))}${FIELD_SEP}${normalizedProperties.join(PROPERTY_SEP)}`)
       }
-      filterStrings.push(filterId + subFilters.join('+'))
+      filterStrings.push(`${encodePart(String(id))}${FIELD_SEP}${subFilters.join(OPERATOR_SEP)}`)
     }
-    return filterStrings.join(';')
+    return filterStrings.join(COLUMN_SEP)
   }
 
   const createRequestString = <TData extends Record<string, unknown>>(

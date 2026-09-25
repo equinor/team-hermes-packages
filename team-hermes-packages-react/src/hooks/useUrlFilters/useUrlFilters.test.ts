@@ -1,7 +1,7 @@
 import { FilterOperator } from '@/shared/types'
 import { act, renderHook } from '@testing-library/react'
 import { withNuqsTestingAdapter } from 'nuqs/adapters/testing'
-import { describe, expect, it, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vite-plus/test'
 import { useUrlFilters } from './useUrlFilters'
 
 const wrapperWith = (searchParams: string = '') => withNuqsTestingAdapter({ searchParams, hasMemory: true })
@@ -15,7 +15,7 @@ describe('useUrlFilters', () => {
 
   it('hydrates from the URL on mount', () => {
     const { result } = renderHook(() => useUrlFilters(), {
-      wrapper: wrapperWith('?filters=review_status*eq*DRAFT,IN_REVIEW'),
+      wrapper: wrapperWith('?filters=review_status*eq*DRAFT|IN_REVIEW'),
     })
 
     expect(result.current.filters).toEqual([
@@ -66,7 +66,7 @@ describe('useUrlFilters', () => {
 
   it('removeFilterValue keeps siblings on the same operator', () => {
     const { result } = renderHook(() => useUrlFilters(), {
-      wrapper: wrapperWith('?filters=review_status*eq*DRAFT,IN_REVIEW'),
+      wrapper: wrapperWith('?filters=review_status*eq*DRAFT|IN_REVIEW'),
     })
 
     act(() => {
@@ -96,14 +96,14 @@ describe('useUrlFilters', () => {
 
   it('updateFilterValue swaps operator + value while preserving other columns', () => {
     const { result } = renderHook(() => useUrlFilters(), {
-      wrapper: wrapperWith('?filters=review_status*eq*DRAFT;submitted_by*ilike*Ola'),
+      wrapper: wrapperWith('?filters=review_status*eq*DRAFT~submitted_by*ilike*Ola'),
     })
 
     act(() => {
       void result.current.updateFilterValue(
         'review_status',
-        { operator: FilterOperator.eq, value: 'DRAFT' },
-        { operator: FilterOperator.neq, value: 'APPROVED' }
+        { operator: FilterOperator.eq, properties: ['DRAFT'] },
+        { operator: FilterOperator.neq, properties: ['APPROVED'] }
       )
     })
 
@@ -111,6 +111,52 @@ describe('useUrlFilters', () => {
       { id: 'review_status', value: [{ operator: FilterOperator.neq, properties: ['APPROVED'] }] },
       { id: 'submitted_by', value: [{ operator: FilterOperator.ilike, properties: ['Ola'] }] },
     ])
+  })
+
+  it('updateFilterValue removes compound `between` bounds element-wise', () => {
+    const start = '2026-01-01'
+    const end = '2026-01-31'
+    const { result } = renderHook(() => useUrlFilters(), {
+      wrapper: wrapperWith(`?filters=created_at*between*${start}|${end}`),
+    })
+
+    act(() => {
+      void result.current.updateFilterValue(
+        'created_at',
+        { operator: FilterOperator.between, properties: [start, end] },
+        { operator: FilterOperator.gte, properties: [start] }
+      )
+    })
+
+    expect(result.current.filters).toEqual([
+      { id: 'created_at', value: [{ operator: FilterOperator.gte, properties: [start] }] },
+    ])
+  })
+
+  it('ignores malformed URL entries instead of throwing', () => {
+    const { result } = renderHook(() => useUrlFilters(), {
+      wrapper: wrapperWith('?filters=foo~review_status*eq*DRAFT~bar*'),
+    })
+
+    expect(result.current.filters).toEqual([
+      { id: 'review_status', value: [{ operator: FilterOperator.eq, properties: ['DRAFT'] }] },
+    ])
+  })
+
+  it('round-trips values containing structural delimiters and reserved chars', () => {
+    const { result } = renderHook(() => useUrlFilters(), { wrapper: wrapperWith() })
+
+    // Include the new delimiters (`~`, `|`, `^`), the field sep (`*`), the old delimiters (`,`, `;`, `+`),
+    // and `%` so the encode / decode round-trip covers every reserved char.
+    const tricky = 'A|B^C~D*E,F;G+H%I'
+    act(() => {
+      void result.current.addFilterValue('review_status', FilterOperator.eq, tricky)
+    })
+
+    expect(result.current.filters).toEqual([
+      { id: 'review_status', value: [{ operator: FilterOperator.eq, properties: [tricky] }] },
+    ])
+    expect(result.current.hasFilterValue('review_status', FilterOperator.eq, tricky)).toBe(true)
   })
 
   it('resetFilters clears everything', () => {
@@ -126,9 +172,8 @@ describe('useUrlFilters', () => {
   })
 
   it('getFilterValue returns the full FilterValue or a single operator entry', () => {
-    // '+' would be decoded as a space by URLSearchParams, so escape the sub-filter separator.
     const { result } = renderHook(() => useUrlFilters(), {
-      wrapper: wrapperWith('?filters=review_status*eq*DRAFT%2Bilike*rev'),
+      wrapper: wrapperWith('?filters=review_status*eq*DRAFT^ilike*rev'),
     })
 
     expect(result.current.getFilterValue('review_status')).toEqual([
@@ -144,7 +189,7 @@ describe('useUrlFilters', () => {
 
   it('hasFilterValue reports whether a property is present for an operator', () => {
     const { result } = renderHook(() => useUrlFilters(), {
-      wrapper: wrapperWith('?filters=review_status*eq*DRAFT,IN_REVIEW'),
+      wrapper: wrapperWith('?filters=review_status*eq*DRAFT|IN_REVIEW'),
     })
 
     expect(result.current.hasFilterValue('review_status', FilterOperator.eq, 'DRAFT')).toBe(true)

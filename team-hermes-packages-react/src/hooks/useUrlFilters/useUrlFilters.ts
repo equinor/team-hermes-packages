@@ -94,16 +94,26 @@ export const useUrlFilters = (options: UseUrlFiltersOptions = {}) => {
       )
     })
 
-  /** Removes `from` and adds `to` in a single URL update. Use when a popover edits an existing entry. */
+  /**
+   * Removes `from` and adds `to` in a single URL update. Use when a popover edits an existing entry.
+   * `properties` mirrors `FilterValue.properties`, so compound values like `between`'s `[start, end]`
+   * are removed / added element-wise.
+   */
   const updateFilterValue = (
     columnId: string,
-    from: { operator: FilterOperator; value: unknown },
-    to: { operator: FilterOperator; value: unknown }
+    from: { operator: FilterOperator; properties: unknown[] },
+    to: { operator: FilterOperator; properties: unknown[] }
   ) =>
     setFilters((prev) =>
       editColumnFilter(prev, columnId, (fv) => {
-        const removed = dropFromFilterValue(fv, from.operator, from.value)
-        return mergeIntoFilterValue(removed, to.operator, to.value)
+        const removed = from.properties.reduce<FilterValue>(
+          (acc, value) => dropFromFilterValue(acc, from.operator, value),
+          fv
+        )
+        return to.properties.reduce<FilterValue>(
+          (acc, value) => mergeIntoFilterValue(acc, to.operator, value),
+          removed
+        )
       })
     )
 
