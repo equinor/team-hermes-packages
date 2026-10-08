@@ -64,6 +64,39 @@ import { NavBar } from '@team-hermes/react-components'
 
 ## Examples
 
+### Custom left content
+
+Pass `leftContent` to replace the application icon, name link, and environment label.
+The content retains the navbar's left-section layout. Omit the prop or pass `null`
+to use the defaults; pass `false` to leave the section empty. Navigation and
+right-side controls are unchanged.
+
+```tsx
+<NavBar
+  categories={categories}
+  LinkComponent={RouterLink}
+  leftContent={<RouterLink to="/workspace">My workspace</RouterLink>}
+/>
+```
+
+<Canvas of={NavBarStories.WithCustomLeftContent} />
+
+### Custom actions
+
+Pass `customActions` to append actions after the color scheme toggle, user popover,
+and support control. Each built-in control retains its existing prop-based
+visibility. Custom actions also render when all built-in controls are hidden.
+
+```tsx
+<NavBar
+  categories={categories}
+  LinkComponent={RouterLink}
+  customActions={<RouterLink to="/notifications">Notifications</RouterLink>}
+/>
+```
+
+<Canvas of={NavBarStories.WithCustomActions} />
+
 ### With user information
 
 Displays the user popover with permissions and a sign-out button.
