@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { WhatsNewPanel } from './WhatsNewPanel'
 import type { Release } from './WhatsNewPanel.types'
-import { parseReleaseNotes } from './WhatsNewPanel.utils'
+import { parseReleaseNotes, toIsoDate } from './WhatsNewPanel.utils'
 
 const MockLink = ({ to, children, ...rest }: React.ComponentProps<'a'> & { to: string }) => (
   <a href={to} onClick={(e) => e.preventDefault()} {...rest}>
@@ -9,7 +9,7 @@ const MockLink = ({ to, children, ...rest }: React.ComponentProps<'a'> & { to: s
   </a>
 )
 
-const today = new Date().toISOString().slice(0, 10)
+const today = toIsoDate(new Date())
 
 const releaseNotesMarkdown = `# What's New
 
