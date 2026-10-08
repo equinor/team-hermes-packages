@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react'
 import { describe, expect, test } from 'vite-plus/test'
 import { WhatsNewPanel } from './WhatsNewPanel'
 import type { Release } from './WhatsNewPanel.types'
-import { isRecentRelease, parseReleaseNotes } from './WhatsNewPanel.utils'
+import { isRecentRelease, parseReleaseNotes, toIsoDate } from './WhatsNewPanel.utils'
 
 const MockLink = ({ to, children, ...rest }: React.ComponentProps<'a'> & { to: string }) => (
   <a href={to} {...rest}>
@@ -94,7 +94,8 @@ describe('parseReleaseNotes', () => {
 })
 
 describe('isRecentRelease', () => {
-  const now = Date.parse('2026-01-10T12:00:00Z')
+  // Local time, matching how isRecentRelease interprets YYYY-MM-DD
+  const now = new Date(2026, 0, 10, 12).getTime()
 
   test('is true within the threshold', () => {
     expect(isRecentRelease('2026-01-08', 3, now)).toBe(true)
@@ -128,7 +129,7 @@ describe('WhatsNewPanel', () => {
   })
 
   test('shows "New release" chip for a recent release', () => {
-    const recent = { ...release, date: new Date().toISOString().slice(0, 10) }
+    const recent = { ...release, date: toIsoDate(new Date()) }
     render(<WhatsNewPanel {...baseProps} releases={[recent]} />)
     expect(screen.getByText('New release')).toBeInTheDocument()
   })
