@@ -3,6 +3,7 @@ import { parseAsString, parseAsStringLiteral, useQueryStates } from 'nuqs'
 import { useMemo } from 'react'
 
 type UseUrlSortingOptions = {
+  defaultSortColumn?: string
   defaultSortOrder?: 'asc' | 'desc'
   history?: 'push' | 'replace'
   /** Called after the sort state changes — use to reset pagination. */
@@ -16,14 +17,14 @@ type UseUrlSortingOptions = {
  * URL via nuqs. Supports a single sorted column (TanStack's default).
  */
 export function useUrlSorting(options: UseUrlSortingOptions = {}) {
-  const { defaultSortOrder = 'asc', history = 'push', onSortChange } = options
+  const { defaultSortColumn, defaultSortOrder = 'asc', history = 'push', onSortChange } = options
 
   const sortingParams = useMemo(
     () => ({
-      sort_by: parseAsString,
+      sort_by: defaultSortColumn === undefined ? parseAsString : parseAsString.withDefault(defaultSortColumn),
       sort_order: parseAsStringLiteral(['asc', 'desc'] as const).withDefault(defaultSortOrder),
     }),
-    [defaultSortOrder]
+    [defaultSortColumn, defaultSortOrder]
   )
 
   const [params, setParams] = useQueryStates(sortingParams, { history })
