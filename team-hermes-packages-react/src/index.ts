@@ -42,6 +42,10 @@ export { QuickAccessButton } from './components/QuickAccessButton/QuickAccessBut
 // TanStack Table Components
 export { SortingButton } from './components/SortingButton/SortingButton'
 export { Tab, TabPanel, TabsList, TabsRoot, type TabValue } from './components/Tabs/Tabs'
+export { WhatsNewPanel } from './components/WhatsNewPanel/WhatsNewPanel'
+export { ReleaseCard } from './components/WhatsNewPanel/ReleaseCard'
+export { parseReleaseNotes } from './components/WhatsNewPanel/WhatsNewPanel.utils'
+export type { Release, WhatsNewPanelProps } from './components/WhatsNewPanel/WhatsNewPanel.types'
 // HOOKS
 export { useColorScheme, initColorScheme } from './hooks/useColorScheme/useColorScheme'
 export { useCopyToClipboard } from './hooks/useCopyToClipboard/useCopyToClipboard'

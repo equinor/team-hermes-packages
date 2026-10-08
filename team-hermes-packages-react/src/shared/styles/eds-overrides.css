@@ -1,10 +1,10 @@
 :root {
   /* Backgrounds */
-  --eds_ui_background__default: var(--bg-default);
-  --eds_ui_background__light: var(--bg-default-hover);
-  --eds_ui_background__medium: var(--bg-layout);
+  --eds_ui_background__default: var(--bg-default, var(--eds-color-bg-floating));
+  --eds_ui_background__light: var(--bg-default-hover, light-dark(#818f9019, #ade2e619));
+  --eds_ui_background__medium: var(--bg-layout, light-dark(#f9f9f9, #1a1a1a));
 
-  --eds_ui__accordion_header_color: var(--text-primary-color);
+  --eds_ui__accordion_header_color: var(--text-primary-color, var(--eds-color-text-strong));
   --eds_primary: var(--eds-color-bg-accent-fill-emphasis-default);
   --eds_primary_resting: var(--eds-color-bg-accent-fill-emphasis-subtle);
   --eds_text__static_icons__primary_white: var(--eds-color-text-strong-on-emphasis);
@@ -23,30 +23,30 @@
   --eds_interactive_secondary__link_hover: var(--eds-color-bg-neutral-fill-emphasis-hover);
   --eds_interactive_secondary__highlight: var(--eds-color-bg-neutral-fill-muted-hover);
 
-  --eds_interactive_table__header__fill_resting: var(--bg-default);
-  --eds_interactive_table__cell__fill_resting: var(--bg-default);
+  --eds_interactive_table__header__fill_resting: var(--bg-default, var(--eds-color-bg-floating));
+  --eds_interactive_table__cell__fill_resting: var(--bg-default, var(--eds-color-bg-floating));
 
   /* Interactive components  text */
-  --eds_navigation__menu_title_color: var(--text-primary-color);
-  --eds_navigation__menu_tabs_color: var(--text-primary-color);
+  --eds_navigation__menu_title_color: var(--text-primary-color, var(--eds-color-text-strong));
+  --eds_navigation__menu_tabs_color: var(--text-primary-color, var(--eds-color-text-strong));
 
   /* Text colors*/
-  --eds_paragraph__body_short_color: var(--text-primary-color);
-  --eds_paragraph__body_long_color: var(--text-primary-color);
-  --eds_heading__h1_color: var(--text-primary-color);
-  --eds_heading__h2_color: var(--text-primary-color);
-  --eds_heading__h3_color: var(--text-primary-color);
-  --eds_heading__h4_color: var(--text-primary-color);
-  --eds_heading__h5_color: var(--text-primary-color);
-  --eds_heading__h6_color: var(--text-primary-color);
-  --eds_paragraph__overline_color: var(--text-secondary-color);
-  --eds_paragraph__caption_color: var(--text-secondary-color);
-  --eds_paragraph__meta_color: var(--text-secondary-color);
-  --eds_navigation__button_color: var(--text-primary-color);
-  --eds_text__static_icons__tertiary: var(--text-tertiary-color);
-  --eds_input__label_color: var(--text-tertiary-color);
+  --eds_paragraph__body_short_color: var(--text-primary-color, var(--eds-color-text-strong));
+  --eds_paragraph__body_long_color: var(--text-primary-color, var(--eds-color-text-strong));
+  --eds_heading__h1_color: var(--text-primary-color, var(--eds-color-text-strong));
+  --eds_heading__h2_color: var(--text-primary-color, var(--eds-color-text-strong));
+  --eds_heading__h3_color: var(--text-primary-color, var(--eds-color-text-strong));
+  --eds_heading__h4_color: var(--text-primary-color, var(--eds-color-text-strong));
+  --eds_heading__h5_color: var(--text-primary-color, var(--eds-color-text-strong));
+  --eds_heading__h6_color: var(--text-primary-color, var(--eds-color-text-strong));
+  --eds_paragraph__overline_color: var(--text-secondary-color, var(--eds-color-text-subtle));
+  --eds_paragraph__caption_color: var(--text-secondary-color, var(--eds-color-text-subtle));
+  --eds_paragraph__meta_color: var(--text-secondary-color, var(--eds-color-text-subtle));
+  --eds_navigation__button_color: var(--text-primary-color, var(--eds-color-text-strong));
+  --eds_text__static_icons__tertiary: var(--text-tertiary-color, var(--eds-color-text-subtle));
+  --eds_input__label_color: var(--text-tertiary-color, var(--eds-color-text-subtle));
   --eds_paragraph__body_short_link_color: var(--eds-color-text-link);
-  --eds_text__static_icons__default: var(--text-secondary-color);
+  --eds_text__static_icons__default: var(--text-secondary-color, var(--eds-color-text-subtle));
 
   /* Loading indicator */
   --eds_infographic_primary__moss_green_13: var(--eds_interactive_primary__hover_alt);

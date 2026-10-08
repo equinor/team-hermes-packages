@@ -3,6 +3,7 @@
 @import './shared/styles/eds-overrides.css';
 @import './shared/styles/dialog.css';
 @import './shared/styles/menu.css';
+@import './shared/styles/accordion.css';
 
 @source "./**/*.{ts,tsx}";
 
@@ -36,7 +37,7 @@
   --color-theme-warning-bg: var(--eds-color-bg-warning-surface);
   --color-theme-danger-fg: var(--eds-color-bg-danger-fill-emphasis-default);
   --color-theme-danger-bg: var(--eds-color-bg-danger-surface);
-  --color-theme-neutral-fg: var(--text-secondary-color);
+  --color-theme-neutral-fg: var(--text-secondary-color, var(--eds-color-text-subtle));
   --color-theme-neutral-bg: light-dark(#818f9019, #ade2e619);
 }
 
@@ -89,8 +90,18 @@ a {
   }
 }
 
+/* Mirrors the EDS 2.0 (beta) Link component: underline stays, color shifts to text-strong on hover */
 .text-link {
-  @apply text-(--link-color) underline hover:no-underline;
+  color: var(--link-color, var(--eds-color-text-link));
+  text-decoration: underline;
+  text-decoration-thickness: var(--eds-sizing-stroke-thin);
+  text-underline-offset: var(--eds-spacing-vertical-4xs);
+  transition: color 150ms ease-in-out;
+}
+
+.text-link:hover,
+.text-link:focus-visible {
+  color: var(--eds-color-text-strong);
 }
 
 .text-overline {

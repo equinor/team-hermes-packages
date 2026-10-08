@@ -1,0 +1,79 @@
+import { Meta, Primary, Controls, Canvas } from '@storybook/addon-docs/blocks'
+import * as WhatsNewPanelStories from './WhatsNewPanel.stories'
+
+<Meta of={WhatsNewPanelStories} />
+
+# WhatsNewPanel
+
+A collapsible homepage panel that highlights the latest release of an application and links to the full release notes. When the latest release is recent (3 days by default) a "New release" chip is shown in the header.
+
+<Primary />
+
+<Controls />
+
+## Usage
+
+```tsx
+import { WhatsNewPanel, parseReleaseNotes } from '@team-hermes/react-components'
+import { NavLink } from 'react-router-dom'
+import releaseNotesMd from './release-notes.md?raw'
+
+const releases = parseReleaseNotes(releaseNotesMd)
+
+<WhatsNewPanel
+  appName="WellCoreDB"
+  releases={releases}
+  releaseNotesHref="/docs/release-notes"
+  LinkComponent={NavLink}
+/>
+```
+
+The app owns the release data. `parseReleaseNotes` converts a markdown document in the format below into `Release[]`; releases without any entries are dropped and the order in the document is preserved (newest first is expected).
+
+```md
+## v1.40.0 (2026-10-01)
+
+### New Features
+
+- Added something
+
+### Bug Fixes
+
+- Fixed something
+```
+
+## ReleaseCard
+
+`ReleaseCard` renders a single release (date, version chip, feature and bug-fix lists). It is used inside the panel and can be reused on a dedicated release notes page. `headingLevel` (default `2`) sets the heading level of the date; section headings use the next level down.
+
+```tsx
+import { ReleaseCard } from '@team-hermes/react-components'
+
+{
+  releases.map((release) => <ReleaseCard key={release.version} release={release} headingLevel={2} />)
+}
+```
+
+## Examples
+
+### Collapsed
+
+<Canvas of={WhatsNewPanelStories.Collapsed} />
+
+### Older release
+
+No "New release" chip when the latest release is older than the threshold.
+
+<Canvas of={WhatsNewPanelStories.OlderRelease} />
+
+### Loading
+
+<Canvas of={WhatsNewPanelStories.Loading} />
+
+### Error
+
+<Canvas of={WhatsNewPanelStories.WithError} />
+
+### No releases
+
+<Canvas of={WhatsNewPanelStories.NoReleases} />
