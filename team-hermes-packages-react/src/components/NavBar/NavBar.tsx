@@ -19,11 +19,15 @@ export function NavBar(props: NavBarProps) {
   return (
     <NavigationMenu.Root className={navbarStyles.root()} data-testid="navbar">
       <div className="flex items-center gap-4">
-        {props.applicationIcon && <span>{props.applicationIcon}</span>}
-        <LinkComponent to="/">
-          <span className="text-lg font-semibold tracking-wide">{props.applicationConfig?.name}</span>
-        </LinkComponent>
-        {environment && <Chip fontSize="xs">{environment}</Chip>}
+        {props.leftContent ?? (
+          <>
+            {props.applicationIcon && <span>{props.applicationIcon}</span>}
+            <LinkComponent to="/">
+              <span className="text-lg font-semibold tracking-wide">{props.applicationConfig?.name}</span>
+            </LinkComponent>
+            {environment && <Chip fontSize="xs">{environment}</Chip>}
+          </>
+        )}
       </div>
       <NavigationMenu.List className="relative flex gap-8 p-2">
         {categories.map((nav_item) => (
@@ -66,6 +70,7 @@ export function NavBar(props: NavBarProps) {
         {(applicationConfig?.githubRepoName || applicationConfig?.serviceNowLink) && (
           <SupportSection applicationConfig={props.applicationConfig} />
         )}
+        {props.customActions}
       </div>
 
       <NavigationMenu.Portal data-testid="navbar-portal">

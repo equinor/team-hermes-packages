@@ -31,6 +31,10 @@ export type ApplicationConfig = {
 }
 
 export type NavBarProps = {
+  /** Custom left content replacing the application icon, name, and environment label. Null or undefined uses the defaults. */
+  leftContent?: React.ReactNode
+  /** Custom actions appended after the color scheme, user, and support controls. */
+  customActions?: React.ReactNode
   /** Optional icon to display for the application in the navbar. */
   applicationIcon?: React.ReactNode
   /** Application configuration including name, support links, and role definitions. */

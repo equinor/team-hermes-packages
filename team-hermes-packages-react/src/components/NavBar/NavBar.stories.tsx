@@ -1,4 +1,5 @@
 import { dashboard, home, settings, folder, notifications, category, library_books, world } from '@equinor/eds-icons'
+import { Button, Icon } from '@equinor/eds-core-react'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { NavBar } from './NavBar'
 import type { NavLinkType } from './NavBar.types'
@@ -174,6 +175,14 @@ const meta = {
     },
   },
   argTypes: {
+    leftContent: {
+      description: 'Custom left content replacing the application icon, name, and environment label.',
+      control: false,
+    },
+    customActions: {
+      description: 'Custom actions appended after the color scheme, user, and support controls.',
+      control: false,
+    },
     categories: {
       description: 'Array of navigation categories, each with a title, icon, theme, and links.',
       control: false,
@@ -207,6 +216,17 @@ type Story = StoryObj<typeof meta>
 
 export const Default: Story = {}
 
+export const WithCustomLeftContent: Story = {
+  args: {
+    leftContent: (
+      <>
+        <MockLink to="/">Hermes</MockLink>
+        <span className="text-sm">Workspace</span>
+      </>
+    ),
+  },
+}
+
 export const WithUser: Story = {
   args: {
     user: {
@@ -225,6 +245,17 @@ export const WithUser: Story = {
       serviceNowLink: 'https://equinor.service-now.com',
       githubRepoName: 'equinor/team-hermes-packages',
     },
+  },
+}
+
+export const WithCustomActions: Story = {
+  args: {
+    ...WithUser.args,
+    customActions: (
+      <Button as="a" href="/notifications" variant="ghost_icon" aria-label="Notifications" title="Notifications">
+        <Icon data={notifications} size={18} />
+      </Button>
+    ),
   },
 }
 
