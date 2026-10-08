@@ -42,7 +42,15 @@ export function parseReleaseNotes(markdown: string): Release[] {
       section = 'bugFixes'
       continue
     }
-    if (line.startsWith('### ') || line.startsWith('## ')) {
+    if (line.startsWith('## ')) {
+      // Non-version level-2 heading ends the current release so later
+      // "### New Features" blocks are not attributed to it.
+      releases.push(current)
+      current = null
+      section = null
+      continue
+    }
+    if (line.startsWith('### ')) {
       section = null
       continue
     }
@@ -58,8 +66,18 @@ export function parseReleaseNotes(markdown: string): Release[] {
   return releases.filter((r) => r.features.length > 0 || r.bugFixes.length > 0)
 }
 
+const ISO_DATE = /^(\d{4})-(\d{2})-(\d{2})$/
+
+/** Parses `YYYY-MM-DD` as local midnight so a release dated today is never "in the future". */
+function parseReleaseDate(date: string): number {
+  const match = date.match(ISO_DATE)
+  if (!match) return Date.parse(date)
+  return new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3])).getTime()
+}
+
 export function isRecentRelease(date: string, thresholdDays: number, now: number = Date.now()): boolean {
-  const releaseTime = Date.parse(date)
+  const releaseTime = parseReleaseDate(date)
   if (Number.isNaN(releaseTime)) return false
-  return (now - releaseTime) / MS_PER_DAY <= thresholdDays
+  const ageInDays = (now - releaseTime) / MS_PER_DAY
+  return ageInDays >= 0 && ageInDays <= thresholdDays
 }

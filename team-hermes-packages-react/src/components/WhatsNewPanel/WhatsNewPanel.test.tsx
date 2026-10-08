@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react'
-import { describe, expect, test } from 'vitest'
+import { describe, expect, test } from 'vite-plus/test'
 import { WhatsNewPanel } from './WhatsNewPanel'
 import type { Release } from './WhatsNewPanel.types'
 import { isRecentRelease, parseReleaseNotes } from './WhatsNewPanel.utils'
@@ -73,6 +73,24 @@ describe('parseReleaseNotes', () => {
   test('returns an empty array for empty input', () => {
     expect(parseReleaseNotes('')).toEqual([])
   })
+
+  test('does not attribute sections after a non-version heading to the previous release', () => {
+    const md = `## v1.0.0 (2026-01-01)
+
+### New Features
+
+- Real feature
+
+## Upcoming
+
+### New Features
+
+- Not released yet
+`
+    expect(parseReleaseNotes(md)).toEqual([
+      { version: '1.0.0', date: '2026-01-01', features: ['Real feature'], bugFixes: [] },
+    ])
+  })
 })
 
 describe('isRecentRelease', () => {
@@ -82,8 +100,16 @@ describe('isRecentRelease', () => {
     expect(isRecentRelease('2026-01-08', 3, now)).toBe(true)
   })
 
+  test('is true for a release dated today', () => {
+    expect(isRecentRelease('2026-01-10', 3, now)).toBe(true)
+  })
+
   test('is false outside the threshold', () => {
     expect(isRecentRelease('2026-01-01', 3, now)).toBe(false)
+  })
+
+  test('is false for future-dated releases', () => {
+    expect(isRecentRelease('2026-01-12', 3, now)).toBe(false)
   })
 
   test('is false for invalid dates', () => {
