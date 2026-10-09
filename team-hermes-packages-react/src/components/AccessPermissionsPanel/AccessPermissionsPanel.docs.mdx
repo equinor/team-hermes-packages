@@ -1,0 +1,61 @@
+import { Meta, Primary, Controls, Canvas } from '@storybook/addon-docs/blocks'
+import * as AccessPermissionsPanelStories from './AccessPermissionsPanel.stories'
+
+<Meta of={AccessPermissionsPanelStories} />
+
+# AccessPermissionsPanel
+
+A homepage panel that shows which application roles the current user has, with one chip per role. Granted roles get a success chip and a check icon, missing roles a neutral chip and a block icon. When the user has no roles, the panel links to the access documentation.
+
+<Primary />
+
+<Controls />
+
+## Usage
+
+```tsx
+import { AccessPermissionsPanel, type AccessRole } from '@team-hermes/react-components'
+import { Link } from 'react-router-dom'
+
+const roles: AccessRole[] = [
+  { value: 'regularuser', label: 'Regular User' },
+  { value: 'admin', label: 'Admin' },
+]
+
+<AccessPermissionsPanel
+  roles={roles}
+  userRoles={user?.roles}
+  isLoading={!user}
+  helpHref="/help-and-faq/access-and-roles"
+  LinkComponent={Link}
+/>
+```
+
+### Props
+
+- `roles`: every role the application defines, in display order. Each role has a `value` (matched against `userRoles`) and a `label` (shown on the chip).
+- `userRoles`: the values of the roles granted to the current user. Missing roles are treated as no access.
+- `isLoading`: shows skeleton chips instead of the role chips. Pass `true` until the user's roles are known, so users don't briefly see "No access".
+- `title`, `headingLevel`: heading text (default "Your Access & Permissions") and its level (default `3`).
+- `helpHref`, `helpLinkLabel`, `LinkComponent`: link to the access documentation. The app resolves the URL itself, and `LinkComponent` is needed for client-side routing. Without `helpHref` no link is shown.
+- `showHelpLink`: overrides when the link is shown. By default it is only shown when the user has none of the roles.
+
+## Examples
+
+### No access
+
+Users without any role see the help link.
+
+<Canvas of={AccessPermissionsPanelStories.NoAccess} />
+
+### Full access
+
+<Canvas of={AccessPermissionsPanelStories.FullAccess} />
+
+### Help link with access
+
+<Canvas of={AccessPermissionsPanelStories.ShowHelpLinkWithAccess} />
+
+### Loading
+
+<Canvas of={AccessPermissionsPanelStories.Loading} />

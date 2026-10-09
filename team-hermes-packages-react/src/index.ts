@@ -39,6 +39,12 @@ export type { ApplicationConfig, NavLinkType } from './components/NavBar/NavBar.
 export { Popover } from './components/Popover/Popover'
 // CALL-TO-ACTION COMPONENTS
 export { QuickAccessButton } from './components/QuickAccessButton/QuickAccessButton'
+// HOMEPAGE PANELS
+export { AccessPermissionsPanel } from './components/AccessPermissionsPanel/AccessPermissionsPanel'
+export type {
+  AccessPermissionsPanelProps,
+  AccessRole,
+} from './components/AccessPermissionsPanel/AccessPermissionsPanel.types'
 // TanStack Table Components
 export { SortingButton } from './components/SortingButton/SortingButton'
 export { Tab, TabPanel, TabsList, TabsRoot, type TabValue } from './components/Tabs/Tabs'
