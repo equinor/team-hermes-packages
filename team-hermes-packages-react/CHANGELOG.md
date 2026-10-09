@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.9.0](https://github.com/equinor/team-hermes-packages/compare/team-hermes-packages-react-v1.8.0...team-hermes-packages-react-v1.9.0) (2026-10-09)
+
+
+### Features
+
+* **access:** add permissions panel ([3f48da8](https://github.com/equinor/team-hermes-packages/commit/3f48da876744fe82684664f75ecf131f4384fb03))
+* add WhatsNewPanel, ReleaseCard and parseReleaseNotes ([f55d8be](https://github.com/equinor/team-hermes-packages/commit/f55d8be26aeee2db8a089fcc5fc79afaff530bf5))
+* allow for custom content in navbar ([75aadb2](https://github.com/equinor/team-hermes-packages/commit/75aadb28abe6761b278e85ac09fb6a7f62e76d2c))
+
+
+### Bug Fixes
+
+* **access-permissions:** match skeletons to roles ([076bea6](https://github.com/equinor/team-hermes-packages/commit/076bea6860d3a796d84824f7793e88eb87e80929))
+* **WhatsNewPanel:** harden release parsing and recency check ([e877f4b](https://github.com/equinor/team-hermes-packages/commit/e877f4bb6eeea4906e975b836880124927fffb09))
+* **WhatsNewPanel:** use local calendar dates in story and tests ([04e7a50](https://github.com/equinor/team-hermes-packages/commit/04e7a503b16e891b0dd472c81aeb7d79a794a409))
+
 ## [1.8.0](https://github.com/equinor/team-hermes-packages/compare/team-hermes-packages-react-v1.7.1...team-hermes-packages-react-v1.8.0) (2026-09-25)
 
 
