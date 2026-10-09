@@ -35,7 +35,7 @@ const roles: AccessRole[] = [
 
 - `roles`: every role the application defines, in display order. Each role has a `value` (matched against `userRoles`) and a `label` (shown on the chip).
 - `userRoles`: the values of the roles granted to the current user. Missing roles are treated as no access.
-- `isLoading`: shows skeleton chips instead of the role chips. Pass `true` until the user's roles are known, so users don't briefly see "No access".
+- `isLoading`: shows one skeleton chip per configured role instead of the role chips. Pass `true` until the user's roles are known, so users don't briefly see "No access".
 - `title`, `headingLevel`: heading text (default "Your Access & Permissions") and its level (default `3`).
 - `helpHref`, `helpLinkLabel`, `LinkComponent`: link to the access documentation. The app resolves the URL itself, and `LinkComponent` is needed for client-side routing. Without `helpHref` no link is shown.
 - `showHelpLink`: overrides when the link is shown. By default it is only shown when the user has none of the roles.

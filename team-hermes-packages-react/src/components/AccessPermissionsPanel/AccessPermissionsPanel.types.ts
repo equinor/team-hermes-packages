@@ -10,7 +10,7 @@ export type AccessPermissionsPanelProps = {
   roles: readonly AccessRole[]
   /** Values of the roles granted to the current user. */
   userRoles?: readonly string[]
-  /** Shows skeleton chips instead of the role chips while the user's roles are loading. Defaults to `false`. */
+  /** Shows one skeleton chip per configured role while the user's roles are loading. Defaults to `false`. */
   isLoading?: boolean
   /** Panel heading. Defaults to "Your Access & Permissions". */
   title?: string
