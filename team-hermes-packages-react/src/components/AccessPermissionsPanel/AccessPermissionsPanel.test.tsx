@@ -43,12 +43,12 @@ describe('AccessPermissionsPanel', () => {
     expect(screen.getByText('Regular User: No access')).toBeInTheDocument()
   })
 
-  test('shows two skeleton chips instead of role chips while loading', () => {
+  test('shows one skeleton chip per configured role instead of role chips while loading', () => {
     const { container } = render(<AccessPermissionsPanel {...baseProps} isLoading />)
 
     expect(screen.queryByText('Admin: Access')).not.toBeInTheDocument()
     expect(screen.queryByText('Regular User: No access')).not.toBeInTheDocument()
-    expect(container.querySelectorAll('.animate-pulse')).toHaveLength(2)
+    expect(container.querySelectorAll('.animate-pulse')).toHaveLength(roles.length)
     expect(screen.getByRole('region', { name: 'Your Access & Permissions' })).toHaveAttribute('aria-busy', 'true')
   })
 

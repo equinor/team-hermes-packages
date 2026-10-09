@@ -4,7 +4,6 @@ import { useId } from 'react'
 import { Chip } from '../Chip/Chip'
 import type { AccessPermissionsPanelProps } from './AccessPermissionsPanel.types'
 
-// Two placeholders, as most users have two roles.
 const skeletonChipWidths = ['w-36', 'w-44']
 
 const DefaultLink = ({ to, ...rest }: React.ComponentProps<'a'> & { to: string }) => <a href={to} {...rest} />
@@ -43,9 +42,11 @@ export function AccessPermissionsPanel(props: AccessPermissionsPanelProps) {
 
       {isLoading ? (
         <ul aria-hidden="true" className="flex flex-wrap gap-3 m-0 p-0 list-none">
-          {skeletonChipWidths.map((width) => (
-            <li key={width}>
-              <div className={`${width} h-6.5 rounded-full bg-(--eds-color-bg-fill-muted-default) animate-pulse`} />
+          {roles.map((role, index) => (
+            <li key={role.value}>
+              <div
+                className={`${skeletonChipWidths[index % skeletonChipWidths.length]} h-6.5 rounded-full bg-(--eds-color-bg-fill-muted-default) animate-pulse`}
+              />
             </li>
           ))}
         </ul>
