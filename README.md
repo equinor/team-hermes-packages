@@ -4,7 +4,7 @@ Shared libraries for Team Hermes projects.
 
 ## 🌟 Highlights
 
-- Reusable React components and a foundation for shared Python code.
+- Reusable React components and Python code.
 - Separate packages, so projects install only what they need.
 
 ## ℹ️ Overview
@@ -36,8 +36,13 @@ npm install @team-hermes/react-components
 
 ### Python
 
-The project configuration targets Python 3.13+. The implementation and installation
-instructions will be added in a follow-up pull request.
+Requires Python 3.13+ and uv. Install into a virtual environment:
+
+```sh
+uv pip install "team-hermes-packages @ git+https://github.com/equinor/team-hermes-packages.git@main#subdirectory=team-hermes-packages-python"
+```
+
+Replace `main` with a tag or commit SHA to pin the version.
 
 ## 💭 Feedback and Contributing
 

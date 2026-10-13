@@ -1,0 +1,54 @@
+name: "team-hermes-packages-python: test and build"
+on:
+  workflow_dispatch:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.13", "3.14"]
+    defaults:
+      run:
+        working-directory: team-hermes-packages-python
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c # v4.3.0
+        timeout-minutes: 5
+      - name: Test
+        run: uv run --python "${{ matrix.python }}" --locked pytest
+      - name: Lint
+        run: |
+          uv run --python "${{ matrix.python }}" --locked ruff check .
+          uv run --python "${{ matrix.python }}" --locked ruff format --check .
+      - name: Typecheck
+        run: uv run --python "${{ matrix.python }}" --locked pyrefly check
+      - name: Build wheel through source archive
+        run: uv build --no-sources
+
+  isolated-install:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.13", "3.14"]
+    defaults:
+      run:
+        working-directory: team-hermes-packages-python
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c # v4.3.0
+        timeout-minutes: 5
+      - name: Build and install artifact without development dependencies
+        run: |
+          uv build --no-sources
+          uv venv --python "${{ matrix.python }}" .artifact-venv
+          wheel=$(find dist -maxdepth 1 -name '*.whl' -print -quit)
+          uv pip install --python .artifact-venv/bin/python "$wheel"
+          uv pip check --python .artifact-venv/bin/python
+          .artifact-venv/bin/python -I tests/artifact_smoke.py

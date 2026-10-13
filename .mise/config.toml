@@ -35,3 +35,26 @@ run = "vp pack"
 depends = ["team-hermes-packages-react:dependencies"]
 dir = "{{config_root}}/team-hermes-packages-react"
 run = "vp exec storybook build"
+
+[tasks."team-hermes-packages-python:dependencies"]
+dir = "{{config_root}}/team-hermes-packages-python"
+run = "uv sync --locked"
+
+[tasks."team-hermes-packages-python:check"]
+depends = ["team-hermes-packages-python:typecheck"]
+dir = "{{config_root}}/team-hermes-packages-python"
+run = ["uv run --locked ruff check .", "uv run --locked ruff format --check ."]
+
+[tasks."team-hermes-packages-python:typecheck"]
+depends = ["team-hermes-packages-python:dependencies"]
+dir = "{{config_root}}/team-hermes-packages-python"
+run = "uv run --locked pyrefly check"
+
+[tasks."test:unit:team-hermes-packages-python"]
+depends = ["team-hermes-packages-python:dependencies"]
+dir = "{{config_root}}/team-hermes-packages-python"
+run = "uv run --locked pytest"
+
+[tasks."team-hermes-packages-python:pack"]
+dir = "{{config_root}}/team-hermes-packages-python"
+run = "uv build --no-sources"

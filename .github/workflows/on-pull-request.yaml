@@ -15,3 +15,6 @@ jobs:
 
   react-test-and-build:
     uses: ./.github/workflows/react-test-and-build.yaml
+
+  python-test-and-build:
+    uses: ./.github/workflows/python-test-and-build.yaml

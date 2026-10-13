@@ -9,7 +9,7 @@ description = "Shared Python code for Team Hermes projects"
 readme = "README.md"
 license-files = ["LICENSE.md"]
 requires-python = ">=3.13"
-dependencies = ["pydantic>=2,<3", "elasticsearch>=8,<9"]
+dependencies = ["pydantic>=2,<3", "elasticsearch>=8.18,<9"]
 classifiers = [
   "Intended Audience :: Developers",
   "Programming Language :: Python :: 3",
