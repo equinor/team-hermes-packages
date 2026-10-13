@@ -3,11 +3,14 @@ oxfmt = "0.54.0"
 node = "24.16.0"
 prek = { version = "0.4.4", postinstall = "prek install" }
 python = "3.14.6"
-uv = "0.11.21"
+uv = "0.13.5"
 hadolint = "2.14.0"
 
 [settings]
 python.uv_venv_auto = "source"
+
+[vars]
+python_workspace_dir = "{{env.PYTHON_WORKSPACE_DIR | default(value='team-hermes-packages-python')}}"
 
 [tasks."format:oxlint"]
 run = "oxfmt --no-error-on-unmatched-pattern"
@@ -35,3 +38,29 @@ run = "vp pack"
 depends = ["team-hermes-packages-react:dependencies"]
 dir = "{{config_root}}/team-hermes-packages-react"
 run = "vp exec storybook build"
+
+[tasks."python:dependencies"]
+alias = "team-hermes-packages-python:dependencies"
+dir = "{{config_root}}/{{vars.python_workspace_dir}}"
+run = "uv sync --locked --all-packages"
+
+[tasks."python:lint"]
+dir = "{{config_root}}/{{vars.python_workspace_dir}}"
+depends = ["python:dependencies"]
+run = ["uv run --no-sync ruff check .", "uv run --no-sync ruff format --check ."]
+
+[tasks."python:typecheck"]
+dir = "{{config_root}}/{{vars.python_workspace_dir}}"
+depends = ["python:dependencies"]
+run = "uv run --no-sync pyrefly check"
+
+[tasks."python:test"]
+dir = "{{config_root}}/{{vars.python_workspace_dir}}"
+alias = "test:unit:team-hermes-packages-python"
+depends = ["python:dependencies"]
+run = "uv run --no-sync pytest -W default::DeprecationWarning"
+
+[tasks."python:pack"]
+dir = "{{config_root}}/{{vars.python_workspace_dir}}"
+alias = "team-hermes-packages-python:pack"
+run = "uv build --all-packages --no-sources --out-dir dist"

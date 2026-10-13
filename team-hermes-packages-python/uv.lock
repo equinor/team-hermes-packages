@@ -2,6 +2,19 @@ version = 1
 revision = 3
 requires-python = ">=3.13"
 
+[manifest]
+members = [
+    "team-hermes-core",
+    "team-hermes-elasticsearch",
+]
+
+[manifest.dependency-groups]
+dev = [
+    { name = "pyrefly", specifier = ">=1.2.0,<1.4" },
+    { name = "pytest", specifier = ">=9.1,<10" },
+    { name = "ruff", specifier = ">=0.15.16" },
+]
+
 [[package]]
 name = "annotated-doc"
 version = "0.0.5"
@@ -390,9 +403,14 @@ wheels = [
 ]
 
 [[package]]
-name = "team-hermes-packages"
+name = "team-hermes-core"
 version = "0.1.0"
-source = { editable = "." }
+source = { editable = "core" }
+
+[[package]]
+name = "team-hermes-elasticsearch"
+version = "0.1.0"
+source = { editable = "elasticsearch" }
 dependencies = [
     { name = "elasticsearch" },
     { name = "pydantic" },
@@ -402,15 +420,12 @@ dependencies = [
 dev = [
     { name = "fastapi" },
     { name = "hypothesis" },
-    { name = "pyrefly" },
-    { name = "pytest" },
     { name = "pytest-mock" },
-    { name = "ruff" },
 ]
 
 [package.metadata]
 requires-dist = [
-    { name = "elasticsearch", specifier = ">=8,<9" },
+    { name = "elasticsearch", specifier = ">=8.18,<9" },
     { name = "pydantic", specifier = ">=2,<3" },
 ]
 
@@ -418,10 +433,7 @@ requires-dist = [
 dev = [
     { name = "fastapi", specifier = ">=0.141.1,<0.142" },
     { name = "hypothesis", specifier = ">=6.151.9,<7" },
-    { name = "pyrefly", specifier = ">=1.2.0,<1.4" },
-    { name = "pytest", specifier = ">=9.1,<10" },
     { name = "pytest-mock", specifier = ">=3.14.1,<4" },
-    { name = "ruff", specifier = ">=0.15.16" },
 ]
 
 [[package]]

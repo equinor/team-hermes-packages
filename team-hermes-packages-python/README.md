@@ -1,9 +1,43 @@
-# team-hermes-packages (Python)
+# 🐍 Team Hermes Python Packages
 
-Shared Python code for Team Hermes projects.
+Independent Python 3.13+ libraries sharing a uv workspace and lockfile.
 
-## Project Setup
+## 📦 Packages
 
-The project configuration targets Python 3.13+ and uses uv, Hatchling, pytest,
-Ruff, and Pyrefly. The implementation, tests, and installation instructions will
-be added in a follow-up pull request.
+- [🔍 Elasticsearch](elasticsearch/README.md): typed search, filtering, pagination, and aggregations.
+- [🧩 Core](core/README.md): reserved for future shared code; no public functionality yet.
+
+See each package's README for installation and usage.
+
+## 🛠️ Development
+
+Install [mise](https://mise.jdx.dev/getting-started.html), then run from the repository root:
+
+```shell
+mise install
+```
+
+Dependencies are installed automatically by the check tasks:
+
+```shell
+mise run python:test
+mise run python:lint
+mise run python:typecheck
+mise run python:pack
+```
+
+Target tests and a Python version:
+
+```shell
+UV_PYTHON=3.15 mise run python:test -- elasticsearch/tests
+```
+
+Build output: `team-hermes-packages-python/dist/`.
+
+After changing dependencies, run `uv lock` from `team-hermes-packages-python/`
+and commit the updated lockfile.
+
+## 💭 Feedback and Contributing
+
+[Open an issue](https://github.com/equinor/team-hermes-packages/issues) to report a bug
+or suggest an improvement. See the [repository guide](../README.md) for contributing.

@@ -11,7 +11,12 @@ permissions:
 
 jobs:
   linting-and-checks:
-    uses: ./.github/workflows/linting-and-checks.yaml
+    uses: $/.github/workflows/linting-and-checks.yaml
 
   react-test-and-build:
-    uses: ./.github/workflows/react-test-and-build.yaml
+    uses: $/.github/workflows/react-test-and-build.yaml
+
+  python-test-and-build:
+    uses: $/.github/workflows/python-test-and-build.yaml
+    with:
+      workspace-directory: team-hermes-packages-python
