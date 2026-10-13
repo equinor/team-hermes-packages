@@ -1,0 +1,14 @@
+target-version = "py313"
+line-length = 119
+
+[lint]
+select = [
+  "E", # pycodestyle errors
+  "W", # pycodestyle warnings
+  "F", # pyflakes
+  "I", # isort
+  "S", # flake8-bandit
+  "C4", # flake8-comprehensions
+  "B", # flake8-bugbear
+  "UP", # automatically upgrade syntax for newer versions of the language
+]
