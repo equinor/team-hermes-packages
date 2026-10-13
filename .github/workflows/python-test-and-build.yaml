@@ -1,0 +1,40 @@
+name: "Python: test and build"
+on:
+  workflow_dispatch:
+    inputs:
+      workspace-directory:
+        description: Python uv workspace directory relative to the repository root
+        type: string
+        default: team-hermes-packages-python
+        required: true
+  workflow_call:
+    inputs:
+      workspace-directory:
+        description: Python uv workspace directory relative to the repository root
+        type: string
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    name: ${{ matrix.task }} (Python ${{ matrix.python }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { task: test, python: "3.13" }
+          - { task: test, python: "3.14" }
+          - { task: test, python: "3.15" }
+          - { task: typecheck, python: "3.13" }
+    env:
+      PYTHON_WORKSPACE_DIR: ${{ inputs.workspace-directory }}
+      UV_PYTHON: ${{ matrix.python }}
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c # v4.3.0
+        timeout-minutes: 5
+      - name: Run check
+        run: mise run python:${{ matrix.task }}

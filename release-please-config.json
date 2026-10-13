@@ -6,14 +6,25 @@
       "release-type": "node",
       "component": "team-hermes-packages-react"
     },
-    "team-hermes-packages-python": {
+    "team-hermes-packages-python/elasticsearch": {
       "release-type": "python",
-      "component": "team-hermes-packages-python",
+      "component": "team-hermes-elasticsearch",
       "extra-files": [
         {
           "type": "toml",
-          "path": "uv.lock",
-          "jsonpath": "$.package[?(@.name.value == 'team-hermes-packages')].version"
+          "path": "/team-hermes-packages-python/uv.lock",
+          "jsonpath": "$.package[?(@.name.value == 'team-hermes-elasticsearch')].version"
+        }
+      ]
+    },
+    "team-hermes-packages-python/core": {
+      "release-type": "python",
+      "component": "team-hermes-core",
+      "extra-files": [
+        {
+          "type": "toml",
+          "path": "/team-hermes-packages-python/uv.lock",
+          "jsonpath": "$.package[?(@.name.value == 'team-hermes-core')].version"
         }
       ]
     }

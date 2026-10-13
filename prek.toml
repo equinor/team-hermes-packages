@@ -27,15 +27,23 @@ repo = "local"
 hooks = [
   { id = "format", name = "format", language = "system", entry = "mise tasks run format:oxlint", exclude = "^team-hermes-packages-react/" },
   { id = "vp-check", name = "vp check (web)", language = "system", entry = "mise tasks run team-hermes-packages-react:check", files = "^team-hermes-packages-react/", pass_filenames = false },
+  { id = "pyrefly-typecheck", name = "Typecheck Python workspace", language = "system", entry = "mise tasks run python:typecheck", files = "^team-hermes-packages-python/(.*\\.py|(.*/)?pyproject\\.toml|uv\\.lock)$", pass_filenames = false },
+  { id = "ruff-check", name = "ruff check", language = "system", entry = "mise exec -- uv run --project team-hermes-packages-python --locked --only-group dev ruff check --force-exclude", args = [
+    "--fix",
+  ], types_or = [
+    "python",
+    "pyi",
+    "jupyter",
+  ] },
+  { id = "ruff-format", name = "ruff format", language = "system", entry = "mise exec -- uv run --project team-hermes-packages-python --locked --only-group dev ruff format --force-exclude", types_or = [
+    "python",
+    "pyi",
+    "jupyter",
+  ] },
   { id = "dclint", name = "Lint Docker Compose files", language = "node", additional_dependencies = [
     "dclint@3.1.0",
   ], entry = "dclint", files = "(docker-)?compose(.[a-z]+)?\\.ya?ml$" },
 ]
-
-[[repos]]
-repo = "https://github.com/astral-sh/ruff-pre-commit"
-rev = "22f0422809455ec89ffdcf5a00170ba816e42ddb" # frozen: v0.15.16
-hooks = [{ id = "ruff-check", args = ["--fix"] }, { id = "ruff-format" }]
 
 [[repos]]
 repo = "https://github.com/compilerla/conventional-pre-commit"

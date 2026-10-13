@@ -24,9 +24,7 @@ jobs:
           node-manager: false
           run-install: false
 
-      - name: "Setup: Install react dependencies"
-        working-directory: team-hermes-packages-react
-        run: vp install --frozen-lockfile
-
       - name: "Run pre commit checks"
         uses: j178/prek-action@bdca6f102f98e2b4c7029491a53dfd366469e33d # v2.0.4
+        with:
+          extra-args: --all-files --skip pyrefly-typecheck
