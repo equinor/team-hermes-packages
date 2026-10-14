@@ -28,7 +28,28 @@ export { DataGridPagination } from './components/DataGrid/DataGridPagination/Dat
 export { filterFn } from './components/DataGrid/DataGrid.utils'
 export { useDataGrid, type UseDataGridOptions } from './components/DataGrid/useDataGrid'
 export { FacetOption } from './components/FacetOption/FacetOption'
+export { CollapsableSection, type CollapsableSectionProps } from './components/CollapsableSection/CollapsableSection'
+export { FacetSidebar, type FacetSidebarProps } from './components/FacetSidebar/FacetSidebar'
+export { SidebarFacet, type SidebarFacetProps } from './components/FacetSidebar/SidebarFacet'
+export { ActiveFilters } from './components/FacetSidebar/ActiveFilters'
+export type { Facet, RangeFacet, TermFacet } from './shared/types/facet.types'
 export { ScrollArea, type ScrollAreaProps } from './components/ScrollArea/ScrollArea'
+export {
+  GroupedFacetPicker,
+  type FacetPickerGroup,
+  type FacetPickerItem,
+  type GroupedFacetPickerProps,
+} from './components/GroupedFacetPicker/GroupedFacetPicker'
+export { TermFilter, type TermFilterBucket, type TermFilterProps } from './components/TermFilter/TermFilter'
+export { HistogramFilter } from './components/HistogramFilter/HistogramFilter'
+export type {
+  HistogramBucket,
+  HistogramBucketType,
+  HistogramData,
+  HistogramFilterProps,
+  HistogramRangeBounds,
+  HistogramRangeChange,
+} from './components/HistogramFilter/HistogramFilter.types'
 export { FileUploadInput } from './components/FileUploadInput/FileUploadInput'
 export { IconContainer } from './components/IconContainer/IconContainer'
 export { MenuCheckboxList } from './components/MenuCheckboxList/MenuCheckboxList'
@@ -62,6 +83,10 @@ export { useFilterActions } from './hooks/useFilterActions/useFilterActions'
 export { useFilters } from './hooks/useFilters'
 export { useOutsideClick } from './hooks/useOutsideClick/useOutsideClick'
 export { useUrlPagination } from './hooks/useUrlPagination/useUrlPagination'
+export { useFilterQueryState } from './hooks/useFilterQueryState/useFilterQueryState'
+export { useFinderPagination } from './hooks/useFinderPagination/useFinderPagination'
+export { useRangeFilters, type RangeFiltering } from './hooks/useRangeFilters/useRangeFilters'
+export { useTermFilters, type TermFiltering } from './hooks/useTermFilters/useTermFilters'
 export { useUrlSorting } from './hooks/useUrlSorting/useUrlSorting'
 export { AttributeType, FilterOperator, type FilterValue } from './shared/types'
 export type { Theme } from './shared/types/themes.type'
