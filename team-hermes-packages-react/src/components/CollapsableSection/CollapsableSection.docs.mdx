@@ -1,0 +1,54 @@
+import { Meta, Primary, Controls, Canvas, ArgTypes } from '@storybook/addon-docs/blocks'
+import * as CollapsableSectionStories from './CollapsableSection.stories'
+
+<Meta of={CollapsableSectionStories} />
+
+# CollapsableSection
+
+An accordion section that wraps a facet filter ([TermFilter](?path=/docs/facet-termfilter--docs), [HistogramFilter](?path=/docs/facet-histogramfilter--docs)). The header shows the title, an optional count chip and stats label, and an optional remove button.
+
+<Primary />
+
+<Controls />
+
+## Usage
+
+- Must be rendered inside a Base UI `Accordion.Root`; that root controls which sections are open.
+- `title` is also the accordion item value unless `value` is provided. Use `value` when titles are not unique.
+- Set `isActive` when the facet has a selection to highlight the border, and `chipCount` to show how many selections.
+- Provide `onRemove` to let users remove the filter entirely.
+
+```tsx
+import { Accordion } from '@base-ui/react/accordion'
+import { CollapsableSection } from '@team-hermes/react-components'
+```
+
+```tsx
+<Accordion.Root multiple>
+  <CollapsableSection title="Data type" chipCount={selected.length} isActive={selected.length > 0}>
+    <TermFilter label="Data type" buckets={buckets} selectedValues={selected} onToggle={toggle} />
+  </CollapsableSection>
+</Accordion.Root>
+```
+
+## Examples
+
+### With chip count
+
+<Canvas of={CollapsableSectionStories.WithChipCount} />
+
+### With stats label
+
+<Canvas of={CollapsableSectionStories.WithStatsLabel} />
+
+### Removable
+
+<Canvas of={CollapsableSectionStories.Removable} />
+
+### Multiple sections
+
+<Canvas of={CollapsableSectionStories.MultipleSections} />
+
+## Props
+
+<ArgTypes of={CollapsableSectionStories} />
