@@ -1,0 +1,57 @@
+import { Meta, Primary, Controls, Canvas, ArgTypes } from '@storybook/addon-docs/blocks'
+import * as HistogramFilterStories from './HistogramFilter.stories'
+
+<Meta of={HistogramFilterStories} />
+
+# HistogramFilter
+
+A facet filter for numeric or date ranges. It shows a bar chart of bucket counts, a dual-handle slider that snaps to bucket boundaries, and min/max inputs for precise values.
+
+<Primary />
+
+<Controls />
+
+## Usage
+
+- Use for range facets in a search sidebar, typically inside a collapsible facet section.
+- The component is controlled: pass the active selection as `range` and store the result of `onRangeChange`.
+- `onRangeChange` fires when the slider is released or an input loses focus. Empty inputs produce `null` bounds (open-ended).
+- Bars within the selected range are highlighted; others are dimmed.
+- Renders nothing if `data.buckets` is empty.
+
+```tsx
+import { HistogramFilter } from '@team-hermes/react-components'
+```
+
+```tsx
+<HistogramFilter
+  facetKey="Depth"
+  bucketType="number"
+  unit="m"
+  data={{ buckets, min: 100, max: 650, mean: 342.5 }}
+  range={range}
+  onRangeChange={({ from, to }) => setRange({ from, to })}
+/>
+```
+
+## Examples
+
+### Selected range
+
+<Canvas of={HistogramFilterStories.WithSelectedRange} />
+
+### Dates
+
+With `bucketType="date"`, bucket keys are ISO date strings and axis labels show the year. Bounds are returned as strings.
+
+<Canvas of={HistogramFilterStories.Dates} />
+
+### Without mean
+
+The mean is only shown when `data.mean` is provided.
+
+<Canvas of={HistogramFilterStories.WithoutMean} />
+
+## Props
+
+<ArgTypes of={HistogramFilterStories} />
