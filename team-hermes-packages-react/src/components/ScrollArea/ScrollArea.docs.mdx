@@ -1,0 +1,38 @@
+import { Meta, Primary, Controls, Canvas, ArgTypes } from '@storybook/addon-docs/blocks'
+import * as ScrollAreaStories from './ScrollArea.stories'
+
+<Meta of={ScrollAreaStories} />
+
+# ScrollArea
+
+A scrollable container with a thin overlay scrollbar that fades in on hover or while scrolling. Built on Base UI's `ScrollArea`.
+
+<Primary />
+
+<Controls />
+
+## Usage
+
+- The component fills its parent (`h-full w-full`), so give the parent a bounded height.
+- Content is laid out in a flex column.
+- Any other Base UI `ScrollArea.Root` props are forwarded.
+
+```tsx
+import { ScrollArea } from '@team-hermes/react-components'
+```
+
+```tsx
+<div className="h-64">
+  <ScrollArea>{items}</ScrollArea>
+</div>
+```
+
+## Examples
+
+### Short content
+
+<Canvas of={ScrollAreaStories.ShortContent} />
+
+## Props
+
+<ArgTypes of={ScrollAreaStories} />
