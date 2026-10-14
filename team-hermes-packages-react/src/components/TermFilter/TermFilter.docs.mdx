@@ -1,0 +1,42 @@
+import { Meta, Primary, Controls, Canvas, ArgTypes } from '@storybook/addon-docs/blocks'
+import * as TermFilterStories from './TermFilter.stories'
+
+<Meta of={TermFilterStories} />
+
+# TermFilter
+
+A facet filter listing selectable terms with result counts, built from [FacetOption](?path=/docs/ui-facetoption--docs).
+
+<Primary />
+
+<Controls />
+
+## Usage
+
+- The component is controlled: pass `selectedValues` and update them in `onToggle`.
+- Only the first 8 terms are shown; a "Show N more" button reveals the rest.
+- When there are more than 8 terms a search field appears. While searching, selected terms are listed first and "Show more" is hidden.
+
+```tsx
+import { TermFilter } from '@team-hermes/react-components'
+```
+
+```tsx
+<TermFilter label="Data type" buckets={buckets} selectedValues={selected} onToggle={toggle} />
+```
+
+## Examples
+
+### With selection
+
+<Canvas of={TermFilterStories.WithSelection} />
+
+### Many terms
+
+Shows the search field and the "Show more" toggle.
+
+<Canvas of={TermFilterStories.ManyTerms} />
+
+## Props
+
+<ArgTypes of={TermFilterStories} />
