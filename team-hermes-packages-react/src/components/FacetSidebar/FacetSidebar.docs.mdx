@@ -1,0 +1,64 @@
+import { Meta, Primary, Controls, Canvas, ArgTypes } from '@storybook/addon-docs/blocks'
+import * as FacetSidebarStories from './FacetSidebar.stories'
+
+<Meta of={FacetSidebarStories} />
+
+# FacetSidebar
+
+A ready-made filter sidebar. It combines active filter chips, a [CollapsableSection](?path=/docs/facet-components-collapsablesection--docs) per facet containing a [TermFilter](?path=/docs/facet-components-termfilter--docs) or [HistogramFilter](?path=/docs/facet-components-histogramfilter--docs), and a [GroupedFacetPicker](?path=/docs/facet-components-groupedfacetpicker--docs) for adding facets.
+
+For the full setup including data fetching, see the [Facet overview](?path=/docs/facet-overview--docs).
+
+<Primary />
+
+<Controls />
+
+## How it works
+
+- **Filter state** comes from [useTermFilters](?path=/docs/facet-hooks-usetermfilters--docs) and [useRangeFilters](?path=/docs/facet-hooks-userangefilters--docs). Create them once in your page and pass their return values down as `termFiltering` and `rangeFiltering`. The sidebar calls their actions but has no filter logic of its own. A nuqs adapter must be mounted.
+- **Data** is not fetched by the sidebar. You pass the results in as props.
+- The sidebar has no border or fixed width; size and frame it from the outside.
+
+```tsx
+const { resetPage } = useFinderPagination()
+const termFiltering = useTermFilters({ onFilterChange: resetPage })
+const rangeFiltering = useRangeFilters({ onFilterChange: resetPage })
+
+<FacetSidebar
+  termFiltering={termFiltering}
+  rangeFiltering={rangeFiltering}
+  facets={facets}
+  enabledFacets={enabledFacets}
+  pickerGroups={pickerGroups}
+  isFetching={isFetching}
+  pinnedFacets={['country', 'field']}
+  facetUnits={{ depth: 'm' }}
+  parseFacetLabel={measurementName}
+/>
+```
+
+## Props
+
+- `termFiltering: TermFiltering` (required): the return value of `useTermFilters`.
+- `rangeFiltering: RangeFiltering` (required): the return value of `useRangeFilters`.
+- `facets: Facet[]` (required): facets the active search aggregated. Each needs `kind` (`'term'` or `'range'`) plus `buckets` or `histogram`.
+- `enabledFacets: string[]` (required): keys shown as sections, in order. Usually the pinned facets plus every key with an active filter.
+- `pickerGroups: FacetPickerGroup<Facet>[]` (required): addable facets for the picker, grouped as `{ value: 'Group name', items }`. You own the grouping.
+- `isFetching?: boolean`: shows a spinner in sections whose facet data has not arrived. Without it they show "No filters available".
+- `pinnedFacets?: string[]`: keys that cannot be removed.
+- `facetUnits?: Record<string, string | undefined>`: unit labels for range inputs, keyed by the output of `parseFacetLabel`.
+- `parseFacetLabel?: (key: string) => string`: key to display label. Defaults to the key.
+
+## Label parsing
+
+Pass `parseFacetLabel` to turn a key into a display label, for example to strip a prefix. It is used for section headers, filter chips, the picker and the unit lookup.
+
+<Canvas of={FacetSidebarStories.WithLabelParser} />
+
+## Loading
+
+<Canvas of={FacetSidebarStories.Loading} />
+
+## Props reference
+
+<ArgTypes of={FacetSidebarStories} />

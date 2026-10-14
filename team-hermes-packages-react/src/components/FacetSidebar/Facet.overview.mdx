@@ -1,0 +1,276 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Facet/Overview" />
+
+# Facet feature
+
+Building blocks for a faceted search page: a filter sidebar, URL-backed filter state, and helpers for turning that state into API requests. The library does not fetch data. Your app owns the API, the query layer and the views, and passes results to the sidebar.
+
+## How the pieces fit
+
+```
+URL (nuqs)  ◄──►  useTermFilters / useRangeFilters  (created once, in your page)
+                          │
+                          ▼
+        Your app, two requests:
+          1. search request        ──► result rows (your views) + facets
+          2. facet catalog request ──► every addable facet (picker)
+                          │
+                          ▼
+     <FacetSidebar termFiltering rangeFiltering facets enabledFacets pickerGroups ... />
+                          │
+                          ▼
+        calls the hooks' actions, which write to the URL
+```
+
+- **Filter state** lives in the URL query string (`terms`, `ranges`), so filters survive reloads and can be shared as links. Create `useTermFilters` and `useRangeFilters` **once** in your page and pass their return values to the sidebar as `termFiltering` and `rangeFiltering`. The sidebar has no filter logic of its own.
+- **Resetting the page**: both hooks take `onFilterChange`, the same idea as `onSortChange` in `useUrlSorting`. Pass `resetPage` and any filter change, from the sidebar or from your own code, resets paging. No effect needed.
+- **Search request**: one per view. Send the active filters and ask it to aggregate the enabled facets. The response holds the result rows for your views and the `facets` for the sidebar.
+- **Facet catalog request**: a separate, slower request listing every facet the user could add. It should never block the results. It is used to build `pickerGroups`.
+- **FacetSidebar** needs no provider. The filter hooks' state and the fetched data come in as props. If you prefer a React context in your app, wrap those values in your own and pass them down.
+
+## Full working example
+
+See [Examples/Finder page](?path=/story/facet-examples-finder-page--default): three views sharing one sidebar against an in-memory mock API. The source is in `FacetSidebar/example/` (`FinderExample.tsx` holds the page, `mockApi.ts` the backend stand-in).
+
+## Parts
+
+- [FacetSidebar](?path=/docs/facet-components-facetsidebar--docs): the ready-made sidebar. Also exports `SidebarFacet` and `ActiveFilters`.
+- [HistogramFilter](?path=/docs/facet-components-histogramfilter--docs), [TermFilter](?path=/docs/facet-components-termfilter--docs), [CollapsableSection](?path=/docs/facet-components-collapsablesection--docs), [GroupedFacetPicker](?path=/docs/facet-components-groupedfacetpicker--docs): the pieces it is built from.
+- [useTermFilters](?path=/docs/facet-hooks-usetermfilters--docs), [useRangeFilters](?path=/docs/facet-hooks-userangefilters--docs), [useFinderPagination](?path=/docs/facet-hooks-usefinderpagination--docs): URL-backed state.
+- [urlFilterCodecs](?path=/docs/facet-utils-urlfiltercodecs--docs): how filters are encoded in the URL.
+
+## 1. Set up nuqs
+
+All filter hooks use [nuqs](https://nuqs.dev). Mount the adapter for your router once, above everything else.
+
+```tsx
+import { NuqsAdapter } from 'nuqs/adapters/react-router/v7'
+;<NuqsAdapter>
+  <App />
+</NuqsAdapter>
+```
+
+## 2. Know the Facet shape
+
+A `Facet` is one self-describing filterable field. Map your API response to this shape.
+
+- `key`: the field name. Used as the filter key in the URL and as the default label.
+- `kind`: `'term'` (list of values with counts, field `buckets`) or `'range'` (numeric or date, field `histogram`).
+- `value_type`: `'string'`, `'number'` or `'date'`. Date histograms use date buckets.
+- `source`: non-null for nested facets such as measurements, `null` for top-level fields. Useful for grouping in the picker.
+- `count`: how many documents have a value.
+- `aggregated`: true when this search aggregated the facet, meaning it has bucket data to display.
+
+## 3. Create the filter hooks once
+
+Instantiate the hooks in your page, wiring `resetPage` so any filter change goes back to the first page.
+
+```tsx
+const { pagination, resetPage } = useFinderPagination()
+const termFiltering = useTermFilters({ onFilterChange: resetPage })
+const rangeFiltering = useRangeFilters({ onFilterChange: resetPage })
+const { termFilters } = termFiltering
+const { rangeFilters } = rangeFiltering
+```
+
+Pass `termFiltering` and `rangeFiltering` to `FacetSidebar` (step 7). Do not call the hooks again inside child components; pass the state down instead.
+
+## Understand the filter state
+
+The hooks return the URL state as plain objects keyed by facet key. It is **not** your API's request format, and it is not a list of facet names. Both are derived from it.
+
+- `termFilters`: `Record<string, string[]>`, for example `{ country: ['Norway', 'UK'], status: [] }`. An empty array means the facet is active but has nothing selected.
+- `rangeFilters`: `Record<string, { from?, to? }>`, for example `{ total_depth: { from: 1500, to: 3000 }, spud_date: { from: '1990-01-01' } }`. Bounds are numbers or date strings, and either side can be missing.
+
+You need two transforms:
+
+- **Filter names** for `enabledFacets` and `aggregate_facets`: `Object.keys(termFilters)` and `Object.keys(rangeFilters)`.
+- **Request payload** for filtering: map the objects to what your API expects. Drop empty term lists, rename `from`/`to` to your bounds (for example `min`/`max`), convert numbers or dates by the facet's `value_type`, and use `null` for a missing bound.
+
+```tsx
+function toApiTerms(terms: TermFilters) {
+  return Object.fromEntries(Object.entries(terms).filter(([, values]) => values.length > 0))
+}
+
+function toApiRanges(ranges: RangeFilters) {
+  return Object.fromEntries(
+    Object.entries(ranges).map(([attribute, { from, to }]) => [attribute, { min: from ?? null, max: to ?? null }])
+  )
+}
+```
+
+## 4. Decide which facets are enabled
+
+`enabledFacets` is the list of keys the sidebar shows as sections. A common rule is the view's pinned facets plus every facet that has an active filter. The names come from the keys of the filter state (see above).
+
+```tsx
+const enabledFacets = useMemo(
+  () => Array.from(new Set([...PINNED_FACETS[view], ...Object.keys(termFilters), ...Object.keys(rangeFilters)])),
+  [view, termFilters, rangeFilters]
+)
+```
+
+## 5. Fetch the search
+
+Ask your API to aggregate exactly the enabled facets and send the active filters along. The filter state must be transformed first (see above); do not send it as is.
+
+```tsx
+const request = useMemo(
+  () => ({
+    page: pagination.pageIndex + 1,
+    per_page: pagination.pageSize,
+    terms: toApiTerms(termFilters),
+    ranges: toApiRanges(rangeFilters),
+    aggregate_facets: enabledFacets,
+    q: searchQuery,
+  }),
+  [pagination, termFilters, rangeFilters, enabledFacets, searchQuery]
+)
+
+const search = useQuery({
+  queryKey: ['search', view, request],
+  queryFn: () => searchApi(view, request),
+})
+
+const facets = search.data?.facets ?? []
+```
+
+Reset paging whenever filters, search text or view change. `useFinderPagination().resetPage` resets both offset and cursor paging.
+
+## 6. Fetch the picker catalog
+
+`pickerGroups` are the facets the user can still add. They typically come from a separate request returning every available facet, minus the enabled ones. You decide the grouping.
+
+```tsx
+const pickerGroups = useMemo(() => {
+  const addable = (catalog.data ?? []).filter((facet) => !enabledFacets.includes(facet.key))
+  return [
+    { value: 'Site', items: addable.filter((facet) => facet.source === null) },
+    { value: 'Measurements', items: addable.filter((facet) => facet.source !== null) },
+  ].filter((group) => group.items.length > 0)
+}, [catalog.data, enabledFacets])
+```
+
+## 7. Render
+
+```tsx
+<FacetSidebar
+  termFiltering={termFiltering}
+  rangeFiltering={rangeFiltering}
+  facets={facets}
+  enabledFacets={enabledFacets}
+  pickerGroups={pickerGroups}
+  isFetching={search.isFetching}
+  pinnedFacets={PINNED_FACETS[view]}
+  facetUnits={FACET_UNITS}
+  parseFacetLabel={parseLabel}
+/>
+```
+
+## Example: multiple views
+
+One search page with several views (tabs), each backed by its own endpoint, sharing one sidebar. The view is stored in the URL, each view has its own pinned facets, and switching view drops filters that do not apply to the new one.
+
+```tsx
+import { useQueryState } from 'nuqs'
+import { FacetSidebar, useFinderPagination, useRangeFilters, useTermFilters } from '@team-hermes/react-components'
+
+type View = 'wells' | 'samples' | 'reports'
+
+const PINNED_FACETS: Record<View, string[]> = {
+  wells: ['country', 'field'],
+  samples: ['country', 'field', 'sample_type'],
+  reports: ['report_type'],
+}
+
+// Filters that make sense in every view survive a view switch
+const GLOBAL_FACETS = ['country', 'field']
+
+const FACET_UNITS = { depth: 'm', porosity: '%' }
+
+const searchByView = { wells: searchWells, samples: searchSamples, reports: searchReports }
+
+function FinderPage() {
+  const [view, setView] = useQueryState('view', { defaultValue: 'wells', history: 'push' })
+  const { pagination, resetPage } = useFinderPagination()
+  const termFiltering = useTermFilters({ onFilterChange: resetPage })
+  const rangeFiltering = useRangeFilters({ onFilterChange: resetPage })
+  const { termFilters, setTermFilters } = termFiltering
+  const { rangeFilters, setRangeFilters } = rangeFiltering
+
+  const enabledFacets = useMemo(
+    () =>
+      Array.from(new Set([...PINNED_FACETS[view as View], ...Object.keys(termFilters), ...Object.keys(rangeFilters)])),
+    [view, termFilters, rangeFilters]
+  )
+
+  const request = {
+    page: pagination.pageIndex + 1,
+    per_page: pagination.pageSize,
+    terms: toApiTerms(termFilters),
+    ranges: toApiRanges(rangeFilters),
+    aggregate_facets: enabledFacets,
+  }
+
+  // One query per view, keyed by view so each keeps its own cache.
+  const search = useQuery({
+    queryKey: ['search', view, request],
+    queryFn: () => searchByView[view as View](request),
+  })
+
+  // Slower request listing every facet the user could add. Never blocks the results.
+  const catalog = useQuery({
+    queryKey: ['facet-catalog', view, termFilters, rangeFilters],
+    queryFn: () => fetchFacetCatalog(view, { terms: toApiTerms(termFilters), ranges: toApiRanges(rangeFilters) }),
+  })
+
+  const pickerGroups = useMemo(
+    () => groupForPicker((catalog.data ?? []).filter((facet) => !enabledFacets.includes(facet.key))),
+    [catalog.data, enabledFacets]
+  )
+
+  function changeView(next: View) {
+    // Keep only filters that apply to every view, then start from the first page.
+    setRangeFilters(null)
+    setTermFilters((previous) =>
+      Object.fromEntries(Object.entries(previous ?? {}).filter(([key]) => GLOBAL_FACETS.includes(key)))
+    )
+    resetPage()
+    void setView(next)
+  }
+
+  return (
+    <div className="grid grid-cols-[360px_1fr] h-full">
+      <FacetSidebar
+        termFiltering={termFiltering}
+        rangeFiltering={rangeFiltering}
+        facets={search.data?.facets ?? []}
+        enabledFacets={enabledFacets}
+        pickerGroups={pickerGroups}
+        isFetching={search.isFetching}
+        pinnedFacets={PINNED_FACETS[view as View]}
+        facetUnits={FACET_UNITS}
+      />
+      <main>
+        <Tabs value={view} onValueChange={changeView} />
+        {view === 'wells' && <WellsTable data={search.data} />}
+        {view === 'samples' && <SamplesTable data={search.data} />}
+        {view === 'reports' && <ReportsList data={search.data} />}
+      </main>
+    </div>
+  )
+}
+```
+
+Things to notice:
+
+- `enabledFacets` is built from the filter names, while the request gets transformed copies of the filters (`toApiTerms`, `toApiRanges` from step 3).
+- The hooks are created once in the page and passed down. `onFilterChange: resetPage` replaces any effect that watches the filters.
+- Filter state is shared across views because it is in the URL, which is why the view switch explicitly drops the filters that do not apply.
+- Each view has its own endpoint and results component. Only the facets, picker groups and pinned keys feed the sidebar.
+- Keep `FacetSidebar` mounted when switching views if you want to preserve which sections are open. Open state resets when it unmounts.
+
+## Building your own layout
+
+`FacetSidebar` is optional. Compose [CollapsableSection](?path=/docs/facet-components-collapsablesection--docs), [TermFilter](?path=/docs/facet-components-termfilter--docs), [HistogramFilter](?path=/docs/facet-components-histogramfilter--docs) and [GroupedFacetPicker](?path=/docs/facet-components-groupedfacetpicker--docs) into a different layout, driving them with the state from `useTermFilters` and `useRangeFilters`.
