@@ -2,6 +2,7 @@ import { Icon } from '@equinor/eds-core-react'
 import { upload } from '@equinor/eds-icons'
 import type React from 'react'
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { isAccepted } from './isAccepted'
 
 export interface FileUploadProps {
   /** Callback function invoked when the selected files change */
@@ -75,10 +76,11 @@ export const FileUploadInput = ({ onFileChange, accept, multiple, acceptString }
       event.preventDefault()
       dragCounterRef.current = 0
       setDropState('idle')
-      const files = Array.from(event.dataTransfer.files)
+      let files = Array.from(event.dataTransfer.files).filter((file) => isAccepted(file, accept))
+      if (!multiple) files = files.slice(0, 1)
       if (files.length > 0) onFileChange(files)
     },
-    [onFileChange]
+    [onFileChange, accept, multiple]
   )
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
