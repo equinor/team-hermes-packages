@@ -2,7 +2,7 @@ import type { PaginationState } from '@tanstack/react-table'
 import { parseAsInteger, useQueryStates } from 'nuqs'
 import { useMemo } from 'react'
 
-type UseUrlPaginationOptions = {
+export type UseUrlPaginationOptions = {
   defaultPageSize?: number
   defaultPageIndex?: number
   history?: 'push' | 'replace'
