@@ -28,6 +28,7 @@ export { DataGridPagination } from './components/DataGrid/DataGridPagination/Dat
 export { filterFn } from './components/DataGrid/DataGrid.utils'
 export { useDataGrid, type UseDataGridOptions } from './components/DataGrid/useDataGrid'
 export { FacetOption } from './components/FacetOption/FacetOption'
+export { ScrollArea, type ScrollAreaProps } from './components/ScrollArea/ScrollArea'
 export { FileUploadInput } from './components/FileUploadInput/FileUploadInput'
 export { IconContainer } from './components/IconContainer/IconContainer'
 export { MenuCheckboxList } from './components/MenuCheckboxList/MenuCheckboxList'
