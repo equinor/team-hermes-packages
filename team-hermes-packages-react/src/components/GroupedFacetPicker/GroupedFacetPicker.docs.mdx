@@ -1,0 +1,42 @@
+import { Meta, Primary, Controls, Canvas, ArgTypes } from '@storybook/addon-docs/blocks'
+import * as GroupedFacetPickerStories from './GroupedFacetPicker.stories'
+
+<Meta of={GroupedFacetPickerStories} />
+
+# GroupedFacetPicker
+
+An "Add filter" button that opens a searchable dialog with options organised into collapsible categories.
+
+<Primary />
+
+<Controls />
+
+## Usage
+
+- Clicking an item applies it immediately through `onSubmit`.
+- "Select multiple" switches to checkboxes; picked items are applied together with "Add filters".
+- Searching expands all categories.
+- Items need a unique `key` and a `kind` (`term` items get a "text" chip). The component is generic, so richer item types are passed back unchanged to `onSubmit`.
+- Items are labelled with their `key` by default. Pass `parseItemLabel` to customise the label, e.g. to strip a prefix. The parsed label is also used for search.
+
+```tsx
+import { GroupedFacetPicker } from '@team-hermes/react-components'
+```
+
+```tsx
+<GroupedFacetPicker groups={groups} onSubmit={addFacets} parseItemLabel={(item) => measurementName(item.key)} />
+```
+
+## Examples
+
+### Custom label parser
+
+<Canvas of={GroupedFacetPickerStories.CustomLabelParser} />
+
+### Custom button label
+
+<Canvas of={GroupedFacetPickerStories.CustomButtonLabel} />
+
+## Props
+
+<ArgTypes of={GroupedFacetPickerStories} />
