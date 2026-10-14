@@ -1,0 +1,13 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Facet/Hooks/useFinderPagination" />
+
+# useFinderPagination
+
+Extends [useUrlPagination](?path=/docs/tanstack-table-useurlpagination--docs) (default page size 100) with a `cursor` URL parameter for cursor-based paging.
+
+`resetPage()` resets the page index and clears the cursor in the same nuqs batch, and should be called whenever the search or filters change. Pass it as `onFilterChange` to [useTermFilters](?path=/docs/facet-hooks-usetermfilters--docs) and [useRangeFilters](?path=/docs/facet-hooks-userangefilters--docs), the way `onSortChange` works for [useUrlSorting](?path=/docs/tanstack-table-useurlsorting--docs).
+
+```tsx
+const { pagination, cursor, setCursor, resetPage } = useFinderPagination()
+```

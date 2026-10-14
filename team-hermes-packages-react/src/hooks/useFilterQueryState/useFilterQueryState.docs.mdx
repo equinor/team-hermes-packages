@@ -1,0 +1,22 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Facet/Hooks/useFilterQueryState" />
+
+# useFilterQueryState
+
+Low-level hook behind [useTermFilters](?path=/docs/facet-hooks-usetermfilters--docs) and [useRangeFilters](?path=/docs/facet-hooks-userangefilters--docs). It keeps a keyed filter record in the `terms` or `ranges` URL parameter using a parse/serialize codec.
+
+- Pushes a history entry on every change and removes the parameter when the record is empty.
+- Calls `onFilterChange` after every update. Use it to reset pagination, like `onSortChange` in [useUrlSorting](?path=/docs/tanstack-table-useurlsorting--docs).
+- Updater functions always see the latest value, even for several updates in the same event.
+
+```tsx
+const [filters, setFilters] = useFilterQueryState(
+  'terms',
+  {
+    parse: parseTermFilterString,
+    serialize: serializeTermFilters,
+  },
+  { onFilterChange: resetPage }
+)
+```
