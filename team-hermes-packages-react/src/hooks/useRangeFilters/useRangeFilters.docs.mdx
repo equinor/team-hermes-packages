@@ -1,0 +1,44 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Facet/Hooks/useRangeFilters" />
+
+# useRangeFilters
+
+Stores numeric or date range facet selections in the `ranges` URL parameter via [nuqs](https://nuqs.47ng.com/). Pass `onFilterChange` to run code after every edit, typically `resetPage` from [useFinderPagination](?path=/docs/facet-hooks-usefinderpagination--docs).
+
+The URL format is `ranges=attribute:from~to`, where an open bound is left empty (`depth:10~`). See [urlFilterCodecs](?path=/docs/facet-utils-urlfiltercodecs--docs).
+
+## Usage
+
+```tsx
+import { HistogramFilter, useRangeFilters } from '@team-hermes/react-components'
+
+function Facet() {
+  const { rangeFilters, toggleRange } = useRangeFilters()
+  return (
+    <HistogramFilter
+      facetKey="depth"
+      bucketType="number"
+      data={histogram}
+      range={rangeFilters.depth}
+      onRangeChange={toggleRange}
+    />
+  )
+}
+```
+
+## Options
+
+- `onFilterChange?: () => void`: called after every change to the filters.
+
+Create the hook once per page and pass its return value down (for example to `FacetSidebar` as `rangeFiltering`). The `RangeFiltering` type describes that value.
+
+## Returns
+
+- `rangeFilters`: `Record<string, { from?, to? }>` per attribute.
+- `setRangeFilters`: Replace the filters. Accepts a value or an updater function.
+- `addRangeFilters(filters)`: Set the range for each `{ attribute, from, to }`.
+- `toggleRange(filter)`: Set the range for one attribute.
+- `removeRangeFilter(attr)`: Remove the attribute entirely.
+
+Requires a nuqs adapter (e.g. `NuqsAdapter`) above the component.
