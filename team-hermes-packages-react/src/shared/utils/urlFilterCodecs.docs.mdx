@@ -1,0 +1,21 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Facet/Utils/urlFilterCodecs" />
+
+# urlFilterCodecs
+
+Parse and serialize facet filters to compact URL strings. Used by [useTermFilters](?path=/docs/facet-hooks-usetermfilters--docs) and [useRangeFilters](?path=/docs/facet-hooks-userangefilters--docs).
+
+- `serializeTermFilters(filters)`: produces `attr:a|b,attr2:c`.
+- `parseTermFilterString(value)`: parses the same format. Repeated attributes are merged and de-duplicated.
+- `serializeRangeFilters(filters)`: produces `attr:from~to,attr2:~to`. Open bounds are empty.
+- `parseRangeFilterString(value)`: parses the same format. Repeated attributes: the last range replaces earlier ones.
+
+Entries are split on the first colon, so date bounds may contain time components.
+
+```ts
+parseTermFilterString('type:RCA|XRD,lab:A') // { type: ['RCA', 'XRD'], lab: ['A'] }
+serializeRangeFilters({ depth: { from: 10, to: null } }) // 'depth:10~'
+```
+
+Exported types: `TermFilters`, `TermFilterEntry`, `RangeBounds`, `RangeFilters`, `RangeFilter`.
