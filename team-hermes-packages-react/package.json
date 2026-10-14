@@ -1,6 +1,6 @@
 {
   "name": "@team-hermes/react-components",
-  "version": "1.9.0",
+  "version": "1.10.0",
   "description": "Shared React components for Team Hermes.",
   "homepage": "https://github.com/equinor/team-hermes-packages#readme",
   "bugs": {
