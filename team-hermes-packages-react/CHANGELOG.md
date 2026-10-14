@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.10.0](https://github.com/equinor/team-hermes-packages/compare/team-hermes-packages-react-v1.9.0...team-hermes-packages-react-v1.10.0) (2026-10-14)
+
+
+### Features
+
+* **scroll-area:** add ScrollArea component ([6827d70](https://github.com/equinor/team-hermes-packages/commit/6827d7057071d8e5675c2f21f2696a30f6a133fa))
+
+
+### Bug Fixes
+
+* filter dropped files in FileUploadInput by accept ([59eba17](https://github.com/equinor/team-hermes-packages/commit/59eba17e444f2ad2411c9ddebf38b0157816d496))
+
 ## [1.9.0](https://github.com/equinor/team-hermes-packages/compare/team-hermes-packages-react-v1.8.0...team-hermes-packages-react-v1.9.0) (2026-10-09)
 
 
