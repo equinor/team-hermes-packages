@@ -1,0 +1,44 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Facet/Hooks/useTermFilters" />
+
+# useTermFilters
+
+Stores selected term (categorical) facet values in the `terms` URL parameter via [nuqs](https://nuqs.47ng.com/), so selections survive reloads and are shareable. Pass `onFilterChange` to run code after every edit, typically `resetPage` from [useFinderPagination](?path=/docs/facet-hooks-usefinderpagination--docs).
+
+The URL format is `terms=attribute:valueA|valueB,other:value`, handled by [urlFilterCodecs](?path=/docs/facet-utils-urlfiltercodecs--docs).
+
+## Usage
+
+```tsx
+import { TermFilter, useTermFilters } from '@team-hermes/react-components'
+
+function Facet() {
+  const { resetPage } = useFinderPagination()
+  const { termFilters, toggleTermFilterValue } = useTermFilters({ onFilterChange: resetPage })
+  return (
+    <TermFilter
+      label="Formation"
+      buckets={buckets}
+      selectedValues={termFilters.formation ?? []}
+      onToggle={(value) => toggleTermFilterValue('formation', value)}
+    />
+  )
+}
+```
+
+## Options
+
+- `onFilterChange?: () => void`: called after every change to the filters.
+
+Create the hook once per page and pass its return value down (for example to `FacetSidebar` as `termFiltering`). The `TermFiltering` type describes that value.
+
+## Returns
+
+- `termFilters`: `Record<string, string[]>` of selected values per attribute.
+- `setTermFilters`: Replace the filters. Accepts a value or an updater function.
+- `addTermFilters(filters)`: Set the selection for each `{ attribute, value }`, replacing its previous values.
+- `toggleTermFilterValue(attr, value)`: Add the value if absent, remove it if present.
+- `removeTermFilter(attr)`: Remove the attribute entirely.
+
+Requires a nuqs adapter (e.g. `NuqsAdapter`) above the component.
