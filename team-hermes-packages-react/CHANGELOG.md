@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.1](https://github.com/equinor/team-hermes-packages/compare/team-hermes-packages-react-v1.10.0...team-hermes-packages-react-v1.10.1) (2026-10-15)
+
+
+### Bug Fixes
+
+* validate picked files against accept and report rejected files ([beb30a4](https://github.com/equinor/team-hermes-packages/commit/beb30a47a1471cc0053bb7df88cb2b02d5f2f612))
+
 ## [1.10.0](https://github.com/equinor/team-hermes-packages/compare/team-hermes-packages-react-v1.9.0...team-hermes-packages-react-v1.10.0) (2026-10-14)
 
 
