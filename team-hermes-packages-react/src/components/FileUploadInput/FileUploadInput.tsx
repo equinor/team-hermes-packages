@@ -7,6 +7,8 @@ import { isAccepted } from './isAccepted'
 export interface FileUploadProps {
   /** Callback function invoked when the selected files change */
   onFileChange: (files: File[]) => void
+  /** Callback function invoked with files that do not match `accept` (from both picker and drop) */
+  onRejectedFileChange?: (files: File[]) => void
   /** Whether multiple files can be selected */
   multiple?: boolean
   /** Optional string specifying the accepted file types, e.g., "image/*" */
@@ -17,7 +19,13 @@ export interface FileUploadProps {
 
 export type DropState = 'idle' | 'potentialDrop' | 'overTarget'
 
-export const FileUploadInput = ({ onFileChange, accept, multiple, acceptString }: FileUploadProps) => {
+export const FileUploadInput = ({
+  onFileChange,
+  onRejectedFileChange,
+  accept,
+  multiple,
+  acceptString,
+}: FileUploadProps) => {
   const [dropState, setDropState] = useState<DropState>('idle')
   const fileInputRef = useRef<HTMLInputElement>(null)
   const dragCounterRef = useRef(0)
@@ -71,21 +79,34 @@ export const FileUploadInput = ({ onFileChange, accept, multiple, acceptString }
     }
   }, [])
 
+  // Some platforms (e.g. Windows) let users pick files outside `accept`, so validate manually
+  const processFiles = useCallback(
+    (incoming: File[]) => {
+      const accepted: File[] = []
+      const rejected: File[] = []
+      for (const file of incoming) {
+        if (isAccepted(file, accept)) accepted.push(file)
+        else rejected.push(file)
+      }
+      const files = multiple ? accepted : accepted.slice(0, 1)
+      if (files.length > 0) onFileChange(files)
+      if (rejected.length > 0) onRejectedFileChange?.(rejected)
+    },
+    [onFileChange, onRejectedFileChange, accept, multiple]
+  )
+
   const handleDrop = useCallback(
     (event: React.DragEvent) => {
       event.preventDefault()
       dragCounterRef.current = 0
       setDropState('idle')
-      let files = Array.from(event.dataTransfer.files).filter((file) => isAccepted(file, accept))
-      if (!multiple) files = files.slice(0, 1)
-      if (files.length > 0) onFileChange(files)
+      processFiles(Array.from(event.dataTransfer.files))
     },
-    [onFileChange, accept, multiple]
+    [processFiles]
   )
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(event.currentTarget.files ?? [])
-    if (files) onFileChange(files)
+    processFiles(Array.from(event.currentTarget.files ?? []))
     if (fileInputRef.current) fileInputRef.current.value = ''
   }
 

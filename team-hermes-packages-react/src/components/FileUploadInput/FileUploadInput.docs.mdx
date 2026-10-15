@@ -16,6 +16,7 @@ A drop zone for file uploads that supports both click-to-browse and drag-and-dro
 - Use `FileUploadInput` when users need to upload one or more files.
 - The component handles both click-to-browse (via a hidden file input) and native drag-and-drop.
 - Accepted file types are displayed to the user and enforced on the file input.
+- Files are also validated manually against `accept` (some platforms, e.g. Windows, allow picking non-matching files). Non-matching files from either the picker or a drop are passed to the optional `onRejectedFileChange` callback instead of `onFileChange`.
 
 ```tsx
 import { FileUploadInput } from '@team-hermes/react-components'

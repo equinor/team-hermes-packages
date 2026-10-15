@@ -38,3 +38,38 @@ describe('FileUploadInput drop', () => {
     expect(onFileChange).toHaveBeenCalledWith([png, pdf])
   })
 })
+
+describe('FileUploadInput rejected files', () => {
+  it('calls onRejectedFileChange for dropped files not matching accept', () => {
+    const onFileChange = vi.fn()
+    const onRejectedFileChange = vi.fn()
+    const { container } = render(
+      <FileUploadInput
+        onFileChange={onFileChange}
+        onRejectedFileChange={onRejectedFileChange}
+        accept="image/*"
+        multiple
+      />
+    )
+    drop(container, [png, pdf])
+    expect(onFileChange).toHaveBeenCalledWith([png])
+    expect(onRejectedFileChange).toHaveBeenCalledWith([pdf])
+  })
+
+  it('validates files picked via the file input', () => {
+    const onFileChange = vi.fn()
+    const onRejectedFileChange = vi.fn()
+    const { container } = render(
+      <FileUploadInput
+        onFileChange={onFileChange}
+        onRejectedFileChange={onRejectedFileChange}
+        accept="image/*"
+        multiple
+      />
+    )
+    const input = container.querySelector('input[type="file"]')!
+    fireEvent.change(input, { target: { files: [png, pdf] } })
+    expect(onFileChange).toHaveBeenCalledWith([png])
+    expect(onRejectedFileChange).toHaveBeenCalledWith([pdf])
+  })
+})
