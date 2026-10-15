@@ -1,4 +1,5 @@
 export * from './dateTime.utils'
+export * from './file.utils'
 export * from './number.utils'
 export * from './object.utils'
 export * from './string.utils'

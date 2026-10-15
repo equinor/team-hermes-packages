@@ -1,0 +1,82 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Utils/File" />
+
+# File Utils
+
+Utility functions for working with files.
+
+---
+
+## `formatFileSize`
+
+Formats a byte count as a human-readable file size string in KB or MB.
+
+```ts
+import { formatFileSize } from '@team-hermes/react-components'
+
+formatFileSize(512) // "0.5 KB"
+formatFileSize(1048576) // "1.0 MB"
+formatFileSize(2621440) // "2.5 MB"
+```
+
+### Parameters
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`bytes`</td>
+      <td>`number`</td>
+      <td>The file size in bytes.</td>
+    </tr>
+  </tbody>
+</table>
+
+**Returns** `string` — e.g. `"1.5 MB"` or `"256.0 KB"`.
+
+---
+
+## `isAcceptedFileType`
+
+Checks whether a file matches an `accept` string. Mirrors the native `accept` attribute matching (extensions, MIME types, wildcards). Returns `true` when `accept` is empty.
+
+```ts
+import { isAcceptedFileType } from '@team-hermes/react-components'
+
+isAcceptedFileType(file, '.pdf') // true if the name ends with .pdf
+isAcceptedFileType(file, 'image/*, .pdf') // wildcard MIME types and extensions
+isAcceptedFileType(file) // true
+```
+
+### Parameters
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`file`</td>
+      <td>`File`</td>
+      <td>The file to check.</td>
+    </tr>
+    <tr>
+      <td>`accept`</td>
+      <td>`string \| undefined`</td>
+      <td>Comma separated list of extensions, MIME types or wildcards.</td>
+    </tr>
+  </tbody>
+</table>
+
+**Returns** `boolean`
