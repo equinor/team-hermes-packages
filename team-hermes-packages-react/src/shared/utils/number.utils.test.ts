@@ -1,23 +1,5 @@
 import { describe, expect, it } from 'vite-plus/test'
-import { formatFileSize, formatNumberToLocale } from './number.utils'
-
-describe('formatFileSize', () => {
-  it('formats bytes below 1 MB as KB', () => {
-    expect(formatFileSize(1024)).toBe('1.0 KB')
-    expect(formatFileSize(512)).toBe('0.5 KB')
-    expect(formatFileSize(1536)).toBe('1.5 KB')
-  })
-
-  it('formats bytes at or above 1 MB as MB', () => {
-    expect(formatFileSize(1024 * 1024)).toBe('1.0 MB')
-    expect(formatFileSize(1.5 * 1024 * 1024)).toBe('1.5 MB')
-    expect(formatFileSize(10 * 1024 * 1024)).toBe('10.0 MB')
-  })
-
-  it('formats 0 bytes as KB', () => {
-    expect(formatFileSize(0)).toBe('0.0 KB')
-  })
-})
+import { formatNumberToLocale } from './number.utils'
 
 describe('formatNumberToLocale', () => {
   it('returns empty string for null or undefined', () => {

@@ -2,7 +2,7 @@ import { Icon } from '@equinor/eds-core-react'
 import { upload } from '@equinor/eds-icons'
 import type React from 'react'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { isAccepted } from './isAccepted'
+import { isAcceptedFileType } from '../../shared/utils/file.utils'
 
 export interface FileUploadProps {
   /** Callback function invoked when the selected files change */
@@ -85,7 +85,7 @@ export const FileUploadInput = ({
       const accepted: File[] = []
       const rejected: File[] = []
       for (const file of incoming) {
-        if (isAccepted(file, accept)) accepted.push(file)
+        if (isAcceptedFileType(file, accept)) accepted.push(file)
         else rejected.push(file)
       }
       const files = multiple ? accepted : accepted.slice(0, 1)
