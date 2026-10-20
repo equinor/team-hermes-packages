@@ -5,6 +5,17 @@
     "team-hermes-packages-react": {
       "release-type": "node",
       "component": "team-hermes-packages-react"
+    },
+    "team-hermes-packages-python": {
+      "release-type": "python",
+      "component": "team-hermes-packages-python",
+      "extra-files": [
+        {
+          "type": "toml",
+          "path": "uv.lock",
+          "jsonpath": "$.package[?(@.name.value == 'team-hermes-packages')].version"
+        }
+      ]
     }
   }
 }
