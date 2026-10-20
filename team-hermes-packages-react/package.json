@@ -76,7 +76,7 @@
     "styled-components": "^6.4.3",
     "tailwindcss": "^4.3.1",
     "typescript": "^6.0.3",
-    "vite-plus": "^0.1.20",
+    "vite-plus": "^1.1.0",
     "vitest": "npm:@voidzero-dev/vite-plus-test@^0.1.24"
   },
   "peerDependencies": {
