@@ -1,0 +1,32 @@
+{
+  "name": "hermes-faceted-search-demo",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build:library": "cd ../../team-hermes-packages-react && vp run build",
+    "dev:api": "uv run --directory backend --locked uvicorn app:app --host 127.0.0.1 --port 8000",
+    "dev:web": "vp dev --config frontend/vite.config.ts",
+    "build": "vp build --config frontend/vite.config.ts",
+    "check": "vp exec tsc --noEmit && vp lint",
+    "test:e2e": "vp exec playwright test",
+    "check:api": "uv run --directory backend --locked ruff check . && uv run --directory backend --locked ruff format --check . && uv run --directory backend --locked pyrefly check"
+  },
+  "dependencies": {
+    "@equinor/eds-core-react": "^2.6.1",
+    "@equinor/eds-icons": "^1.5.1",
+    "@equinor/eds-tokens": "^2.3.1",
+    "@team-hermes/react-components": "link:../../team-hermes-packages-react",
+    "nuqs": "^2.9.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.61.0",
+    "@types/node": "^25.6.2",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "typescript": "^6.0.3",
+    "vite-plus": "0.1.24"
+  },
+  "packageManager": "pnpm@11.9.0"
+}

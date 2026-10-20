@@ -11,6 +11,9 @@ Start with the README for your package:
 - [React components](team-hermes-packages-react/README.md)
 - [Python packages](team-hermes-packages-python/README.md)
 
+For a working example using both packages with Elasticsearch, see the
+[faceted search demo](demo/faceted-search/README.md).
+
 ## ⬇️ Installation
 
 ### React

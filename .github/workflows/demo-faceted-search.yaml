@@ -1,0 +1,51 @@
+name: "Faceted search demo: integration"
+on:
+  workflow_dispatch:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: demo/faceted-search
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c # v4.3.0
+        timeout-minutes: 5
+      - uses: voidzero-dev/setup-vp@9fd26ff49f9b5e6276c2b493da4454ad4527f7f4 # v1.20.0
+        with:
+          version: "0.2.1"
+          node-manager: false
+          run-install: false
+      - name: Build local React package
+        working-directory: team-hermes-packages-react
+        run: |
+          vp install --frozen-lockfile
+          vp run build
+      - name: Install demo
+        run: |
+          vp install --frozen-lockfile
+          uv sync --directory backend --locked
+          vp exec playwright install --with-deps chromium
+      - name: Check and build
+        run: |
+          vp run check
+          vp fmt --check
+          vp run check:api
+          vp test
+          vp run build
+      - name: Start Elasticsearch
+        run: docker compose up -d --wait
+      - name: Test both packages together
+        run: vp run test:e2e
+      - name: Elasticsearch logs on failure
+        if: failure()
+        run: docker compose logs --no-color --tail=100
+      - name: Stop Elasticsearch
+        if: always()
+        run: docker compose down --volumes

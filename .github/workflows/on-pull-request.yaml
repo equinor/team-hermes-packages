@@ -20,3 +20,6 @@ jobs:
     uses: $/.github/workflows/python-test-and-build.yaml
     with:
       workspace-directory: team-hermes-packages-python
+
+  demo-faceted-search:
+    uses: $/.github/workflows/demo-faceted-search.yaml

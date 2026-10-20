@@ -1,0 +1,101 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  color: #243746;
+  background: #f5f7f8;
+}
+
+.demo {
+  max-width: 1440px;
+  margin: auto;
+  padding: 24px;
+}
+
+.demo header {
+  margin-bottom: 24px;
+}
+
+.demo h1 {
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.demo-layout {
+  display: grid;
+  grid-template-columns: 340px minmax(0, 1fr);
+  min-height: 720px;
+  background: white;
+  border: 1px solid #d5dce0;
+}
+
+.demo aside {
+  height: 80vh;
+  min-height: 600px;
+  border-right: 1px solid #d5dce0;
+}
+
+.demo main {
+  padding: 24px;
+  overflow: auto;
+}
+
+.demo .toolbar,
+.demo nav {
+  display: flex;
+  align-items: end;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.demo .toolbar label {
+  display: grid;
+  gap: 6px;
+}
+
+.demo .toolbar input,
+.demo .toolbar select,
+.demo .toolbar button,
+.demo nav button {
+  padding: 8px;
+  border: 1px solid #8b9da8;
+  border-radius: 4px;
+}
+
+.demo button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.demo table {
+  width: 100%;
+  margin: 16px 0;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.demo th,
+.demo td {
+  padding: 8px;
+  border-bottom: 1px solid #d5dce0;
+}
+
+.demo [role="alert"] {
+  padding: 12px;
+  color: #8b0000;
+  background: #fff0f0;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 800px) {
+  .demo-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .demo aside {
+    min-height: 0;
+    height: 480px;
+    border-right: none;
+    border-bottom: 1px solid #d5dce0;
+  }
+}
