@@ -9,6 +9,7 @@
     "team-hermes-packages-python": {
       "release-type": "python",
       "component": "team-hermes-packages-python",
+      "include-component-in-tag": true,
       "extra-files": [
         {
           "type": "toml",

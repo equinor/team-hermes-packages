@@ -16,6 +16,9 @@ jobs:
       team-hermes-packages-react--release_created: ${{ steps.release.outputs['team-hermes-packages-react--release_created'] }}
       team-hermes-packages-react--tag_name: ${{ steps.release.outputs['team-hermes-packages-react--tag_name'] }}
       team-hermes-packages-react--version: ${{ steps.release.outputs['team-hermes-packages-react--version'] }}
+      team-hermes-packages-python--release_created: ${{ steps.release.outputs['team-hermes-packages-python--release_created'] }}
+      team-hermes-packages-python--tag_name: ${{ steps.release.outputs['team-hermes-packages-python--tag_name'] }}
+      team-hermes-packages-python--version: ${{ steps.release.outputs['team-hermes-packages-python--version'] }}
     steps:
       - uses: googleapis/release-please-action@v4
         id: release
@@ -64,3 +67,35 @@ jobs:
 
       - name: "Publish to npm"
         run: npm publish --access public
+
+  publish-python-artifacts:
+    needs: release-please
+    if: needs.release-please.outputs.team-hermes-packages-python--release_created == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    defaults:
+      run:
+        working-directory: team-hermes-packages-python
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          ref: ${{ needs.release-please.outputs.team-hermes-packages-python--tag_name }}
+      - uses: jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c # v4.3.0
+        timeout-minutes: 5
+      - name: Build artifacts
+        run: uv build --no-sources
+      - name: Check released version and installed wheel
+        env:
+          RELEASE_VERSION: ${{ needs.release-please.outputs.team-hermes-packages-python--version }}
+        run: |
+          uv venv .artifact-venv
+          uv pip install --python .artifact-venv/bin/python dist/*.whl
+          uv pip check --python .artifact-venv/bin/python
+          .artifact-venv/bin/python -I tests/artifact_smoke.py
+          .artifact-venv/bin/python -I -c 'import os; from importlib.metadata import version; assert version("team-hermes-packages") == os.environ["RELEASE_VERSION"]'
+      - name: Attach wheel and source archive
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ needs.release-please.outputs.team-hermes-packages-python--tag_name }}
+        run: gh release upload "$RELEASE_TAG" dist/*.whl dist/*.tar.gz --clobber
