@@ -1,9 +1,16 @@
-import { useCallback, useEffect, useSyncExternalStore } from 'react'
+import { useEffect, useSyncExternalStore } from 'react'
+import { flushSync } from 'react-dom'
 
 type ColorScheme = 'light' | 'dark'
 
 const STORAGE_KEY = 'color-scheme'
 const ATTRIBUTE = 'data-color-scheme'
+
+/** Attribute set on `<html>` while `toggleColorScheme` runs its crossfade view transition. */
+export const COLOR_SCHEME_TRANSITION_ATTRIBUTE = 'data-color-scheme-transition'
+
+const listeners = new Set<() => void>()
+let activeTransition: ViewTransition | null = null
 
 function getSystemPreference(): ColorScheme {
   return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
@@ -22,6 +29,7 @@ function getSnapshot(): ColorScheme {
 }
 
 function subscribe(callback: () => void) {
+  listeners.add(callback)
   const observer = new MutationObserver((mutations) => {
     for (const mutation of mutations) {
       if (mutation.attributeName === ATTRIBUTE) {
@@ -30,7 +38,53 @@ function subscribe(callback: () => void) {
     }
   })
   observer.observe(document.documentElement, { attributes: true })
-  return () => observer.disconnect()
+  return () => {
+    listeners.delete(callback)
+    observer.disconnect()
+  }
+}
+
+function flipColorScheme() {
+  const next: ColorScheme = getSnapshot() === 'light' ? 'dark' : 'light'
+  localStorage.setItem(STORAGE_KEY, next)
+  applyScheme(next)
+}
+
+function toggleColorScheme() {
+  if (
+    typeof document.startViewTransition !== 'function' ||
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  ) {
+    flipColorScheme()
+    return
+  }
+
+  const root = document.documentElement
+  root.setAttribute(COLOR_SCHEME_TRANSITION_ATTRIBUTE, '')
+
+  const transition = document.startViewTransition(() => {
+    // The MutationObserver notifies subscribers asynchronously. Notify them inside flushSync instead, so
+    // components (like the toggle's icon and aria-pressed) are updated before the new view is captured.
+    flushSync(() => {
+      flipColorScheme()
+      for (const listener of listeners) {
+        listener()
+      }
+    })
+  })
+  activeTransition = transition
+
+  // Rejects when the animation is skipped, e.g. in hidden tabs. The update callback still runs.
+  transition.ready.catch(() => {})
+
+  // A newer transition skips this one and settles its `finished` early, so only the latest may clear the marker.
+  const clearMarker = () => {
+    if (activeTransition === transition) {
+      activeTransition = null
+      root.removeAttribute(COLOR_SCHEME_TRANSITION_ATTRIBUTE)
+    }
+  }
+  transition.finished.then(clearMarker, clearMarker)
 }
 
 export function initColorScheme() {
@@ -50,12 +104,6 @@ export function useColorScheme() {
     }
     mediaQuery.addEventListener('change', handleChange)
     return () => mediaQuery.removeEventListener('change', handleChange)
-  }, [])
-
-  const toggleColorScheme = useCallback(() => {
-    const next: ColorScheme = getSnapshot() === 'light' ? 'dark' : 'light'
-    localStorage.setItem(STORAGE_KEY, next)
-    applyScheme(next)
   }, [])
 
   return { colorScheme, toggleColorScheme } as const

@@ -58,7 +58,7 @@ import { NavBar } from '@team-hermes/react-components'
 - **Category navigation** — Groups links under collapsible dropdown menus.
 - **Active indicator** — Highlights the category matching the current route.
 - **External links** — Links marked with `external: true` open in a new tab and show the EDS external link icon.
-- **Color scheme toggle** — Switches between light and dark mode.
+- **Color scheme toggle** — Switches between light and dark mode with a short crossfade. Screen readers announce it as a "Dark mode" toggle button that is pressed while dark mode is on.
 - **User popover** — Displays user info and permissions when `user` is provided.
 - **Support section** — Shows help/support dialog with ServiceNow and GitHub links.
 
@@ -123,6 +123,18 @@ navigation. The chevron is replaced by the EDS external link icon, and screen re
 Hides the color scheme toggle button from the navbar.
 
 <Canvas of={NavBarStories.WithoutColorSchemeToggle} />
+
+### Localized color scheme toggle
+
+The color scheme toggle keeps the same accessible name in both schemes and uses `aria-pressed`
+to tell screen readers whether dark mode is on. Pass `colorSchemeToggleLabel` to translate the
+name. Keep it naming dark mode, and don't change it with the scheme.
+
+```tsx
+<NavBar categories={categories} LinkComponent={RouterLink} colorSchemeToggleLabel="Mørk modus" />
+```
+
+<Canvas of={NavBarStories.WithLocalizedColorSchemeToggle} />
 
 ### With environment and logo
 

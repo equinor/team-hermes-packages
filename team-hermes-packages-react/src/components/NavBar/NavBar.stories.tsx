@@ -208,6 +208,11 @@ const meta = {
       description: 'Whether the light/dark mode toggle is shown.',
       control: 'boolean',
     },
+    colorSchemeToggleLabel: {
+      description:
+        'Accessible name of the light/dark mode toggle. Stays the same in both schemes; aria-pressed exposes whether dark mode is on.',
+      control: 'text',
+    },
   },
 } satisfies Meta<typeof NavBar>
 
@@ -272,6 +277,12 @@ export const WithApplicationConfig: Story = {
 export const WithoutColorSchemeToggle: Story = {
   args: {
     showColorSchemeToggle: false,
+  },
+}
+
+export const WithLocalizedColorSchemeToggle: Story = {
+  args: {
+    colorSchemeToggleLabel: 'Dark mode',
   },
 }
 

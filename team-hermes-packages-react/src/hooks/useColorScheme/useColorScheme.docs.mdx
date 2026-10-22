@@ -43,9 +43,42 @@ function ThemeToggle() {
 
 2. **`useColorScheme()`** subscribes to changes on the `data-color-scheme` attribute using `useSyncExternalStore` and a `MutationObserver`, so it stays in sync even if the attribute is changed externally.
 
-3. **`toggleColorScheme()`** flips between `"light"` and `"dark"`, saves the choice to `localStorage`, and updates the DOM attribute.
+3. **`toggleColorScheme()`** flips between `"light"` and `"dark"`, saves the choice to `localStorage`, and updates the DOM attribute. Where supported, the switch crossfades (see **Crossfade** below).
 
 4. If no stored preference exists, the hook listens for system preference changes (e.g. OS-level dark mode toggle) and applies them automatically.
+
+## Crossfade
+
+`toggleColorScheme()` crossfades between the schemes:
+
+- When the browser supports [view transitions](https://developer.mozilla.org/en-US/docs/Web/API/View_Transition_API), the change runs inside `document.startViewTransition()`. Components that use `useColorScheme` re-render before the new view is captured, so it already shows their updated state.
+- When view transitions are unsupported, or the user prefers reduced motion (`prefers-reduced-motion: reduce`), the change applies immediately.
+- While the transition runs, `<html>` has the `data-color-scheme-transition` attribute. Its name is exported as `COLOR_SCHEME_TRANSITION_ATTRIBUTE`.
+
+The crossfade styles ship in `@team-hermes/react-components/style.css`. They fade the new view in over the old one in 300 ms:
+
+```css
+:root[data-color-scheme-transition]::view-transition-old(root) {
+  animation: none;
+}
+
+:root[data-color-scheme-transition]::view-transition-new(root) {
+  animation: 300ms ease-out both hermes-color-scheme-fade-in;
+}
+```
+
+These selectors are more specific than typical root view-transition rules, such as page slides, so they take precedence during a theme switch. Note that:
+
+- Cascade layers are compared before specificity. If you import `style.css` into a layer, your unlayered rules win, so exclude them from theme switches as shown below.
+- Only the root snapshot is targeted. Elements with their own `view-transition-name` keep the browser's default crossfade, or your rules for them.
+
+Use the marker to keep your own view-transition animations out of theme switches:
+
+```css
+:root:not([data-color-scheme-transition])::view-transition-old(root) {
+  animation: 250ms ease-in both slide-out;
+}
+```
 
 ## API
 
@@ -74,7 +107,11 @@ Returns an object with:
     <tr>
       <td>`toggleColorScheme`</td>
       <td>`() => void`</td>
-      <td>Toggles between light and dark, persisting the choice to `localStorage`.</td>
+      <td>Toggles between light and dark, persisting the choice to `localStorage`. Crossfades where supported.</td>
     </tr>
   </tbody>
 </table>
+
+### `COLOR_SCHEME_TRANSITION_ATTRIBUTE`
+
+The name of the attribute set on `<html>` while `toggleColorScheme()` runs its crossfade: `'data-color-scheme-transition'`. Use it to target theme switches from CSS or JavaScript.

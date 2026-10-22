@@ -75,7 +75,11 @@ export { ReleaseCard } from './components/WhatsNewPanel/ReleaseCard'
 export { parseReleaseNotes } from './components/WhatsNewPanel/WhatsNewPanel.utils'
 export type { Release, WhatsNewPanelProps } from './components/WhatsNewPanel/WhatsNewPanel.types'
 // HOOKS
-export { useColorScheme, initColorScheme } from './hooks/useColorScheme/useColorScheme'
+export {
+  useColorScheme,
+  initColorScheme,
+  COLOR_SCHEME_TRANSITION_ATTRIBUTE,
+} from './hooks/useColorScheme/useColorScheme'
 export { useCopyToClipboard } from './hooks/useCopyToClipboard/useCopyToClipboard'
 export { useUrlFilters } from './hooks/useUrlFilters/useUrlFilters'
 export { useCustomToast } from './hooks/useCustomToast/useCustomToast'

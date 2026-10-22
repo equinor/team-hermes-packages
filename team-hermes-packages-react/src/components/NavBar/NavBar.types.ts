@@ -74,4 +74,10 @@ export type NavBarProps = {
    * Whether the light/dark mode toggle is shown. Defaults to `true`.
    */
   showColorSchemeToggle?: boolean
+  /**
+   * Accessible name of the light/dark mode toggle. The toggle exposes dark mode as its pressed state
+   * (`aria-pressed`), so the label should name dark mode and stay the same in both schemes.
+   * Defaults to `"Dark mode"`.
+   */
+  colorSchemeToggleLabel?: string
 }

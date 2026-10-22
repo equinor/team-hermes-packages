@@ -1,18 +1,9 @@
-import { cleanup, fireEvent, render, screen } from '@testing-library/react'
+import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
 import { home, world } from '@equinor/eds-icons'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vite-plus/test'
 import { NavBar } from './NavBar'
 import type { NavBarProps } from './NavBar.types'
 import { SupportSection } from './components/SupportSection'
-
-const colorSchemeState = vi.hoisted(() => ({
-  colorScheme: 'light',
-  toggleColorScheme: vi.fn(),
-}))
-
-vi.mock('@/hooks', () => ({
-  useColorScheme: () => colorSchemeState,
-}))
 
 vi.mock('./components/SupportSection', () => ({
   SupportSection: vi.fn(() => <button type="button">Support</button>),
@@ -21,8 +12,20 @@ vi.mock('./components/SupportSection', () => ({
 afterEach(cleanup)
 
 beforeEach(() => {
-  colorSchemeState.colorScheme = 'light'
+  vi.stubGlobal('matchMedia', (query: string) => ({
+    matches: false,
+    media: query,
+    addEventListener: () => {},
+    removeEventListener: () => {},
+  }))
+  document.documentElement.setAttribute('data-color-scheme', 'light')
   vi.clearAllMocks()
+})
+
+afterEach(() => {
+  vi.unstubAllGlobals()
+  document.documentElement.removeAttribute('data-color-scheme')
+  localStorage.clear()
 })
 
 const defaultProps: NavBarProps = {
@@ -125,31 +128,108 @@ describe('NavBar navigation', () => {
 })
 
 describe('NavBar color scheme toggle', () => {
-  it('is visible by default and invokes the toggle callback', () => {
+  it('is shown by default with the accessible name "Dark mode"', () => {
     render(<NavBar {...defaultProps} showColorSchemeToggle={undefined} />)
 
-    fireEvent.click(screen.getByRole('button'))
-
-    expect(colorSchemeState.toggleColorScheme).toHaveBeenCalledOnce()
+    expect(screen.getByRole('button', { name: 'Dark mode' })).toBeInTheDocument()
   })
 
-  it('can be hidden', () => {
-    render(<NavBar {...defaultProps} />)
+  it('uses colorSchemeToggleLabel as the accessible name', () => {
+    render(<NavBar {...defaultProps} showColorSchemeToggle colorSchemeToggleLabel="Mørk modus" />)
+
+    expect(screen.getByRole('button', { name: 'Mørk modus' })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Dark mode' })).not.toBeInTheDocument()
+  })
+
+  it('is not rendered when showColorSchemeToggle is false', () => {
+    render(<NavBar {...defaultProps} showColorSchemeToggle={false} />)
 
     expect(screen.queryByRole('button')).not.toBeInTheDocument()
   })
 
-  it.each(['light', 'dark'])('renders the %s color scheme state', (colorScheme) => {
-    colorSchemeState.colorScheme = colorScheme
+  it.each([
+    { colorScheme: 'light', pressed: false },
+    { colorScheme: 'dark', pressed: true },
+  ])('has aria-pressed=$pressed and a decorative icon in the $colorScheme scheme', ({ colorScheme, pressed }) => {
+    document.documentElement.setAttribute('data-color-scheme', colorScheme)
     render(<NavBar {...defaultProps} showColorSchemeToggle />)
 
-    const icon = screen.getByRole('button').querySelector('svg')
-    expect(icon).toBeInTheDocument()
-    if (colorScheme === 'dark') {
+    const toggle = screen.getByRole('button', { name: 'Dark mode' })
+    expect(toggle).toHaveAttribute('aria-pressed', String(pressed))
+    expect(toggle).toHaveTextContent('')
+    const icon = toggle.querySelector('svg')
+    expect(icon).toHaveAttribute('aria-hidden', 'true')
+    expect(icon).not.toHaveAttribute('role')
+    if (pressed) {
       expect(icon).toHaveClass('rotate-180')
     } else {
       expect(icon).not.toHaveClass('rotate-180')
     }
+  })
+
+  it('toggles data-color-scheme, localStorage and aria-pressed when clicked', async () => {
+    render(<NavBar {...defaultProps} showColorSchemeToggle />)
+    const toggle = screen.getByRole('button', { name: 'Dark mode', pressed: false })
+
+    fireEvent.click(toggle)
+
+    expect(document.documentElement).toHaveAttribute('data-color-scheme', 'dark')
+    expect(localStorage.getItem('color-scheme')).toBe('dark')
+    expect(await screen.findByRole('button', { name: 'Dark mode', pressed: true })).toBe(toggle)
+
+    fireEvent.click(toggle)
+
+    expect(document.documentElement).toHaveAttribute('data-color-scheme', 'light')
+    expect(localStorage.getItem('color-scheme')).toBe('light')
+    expect(await screen.findByRole('button', { name: 'Dark mode', pressed: false })).toBe(toggle)
+  })
+
+  it('updates aria-pressed and the icon before the view transition captures the new view', async () => {
+    let afterUpdate: { pressed: string | null; rotated: boolean | undefined } | undefined
+    Object.defineProperty(document, 'startViewTransition', {
+      configurable: true,
+      value: (update: () => void) => {
+        const finished = Promise.resolve().then(() => {
+          update()
+          const toggle = screen.getByRole('button', { name: 'Dark mode' })
+          afterUpdate = {
+            pressed: toggle.getAttribute('aria-pressed'),
+            rotated: toggle.querySelector('svg')?.classList.contains('rotate-180'),
+          }
+        })
+        return { ready: finished, finished }
+      },
+    })
+
+    try {
+      render(<NavBar {...defaultProps} showColorSchemeToggle />)
+      await act(async () => fireEvent.click(screen.getByRole('button', { name: 'Dark mode' })))
+
+      expect(afterUpdate).toEqual({ pressed: 'true', rotated: true })
+      expect(document.documentElement).toHaveAttribute('data-color-scheme', 'dark')
+    } finally {
+      Reflect.deleteProperty(document, 'startViewTransition')
+    }
+  })
+
+  it('comes before the user and support controls', () => {
+    render(
+      <NavBar
+        {...defaultProps}
+        showColorSchemeToggle
+        user={{ name: 'Ola Nordmann', email: 'ola@example.com', roles: [] }}
+        applicationConfig={{ name: 'MyApp', githubRepoName: 'equinor/team-hermes-packages' }}
+      />
+    )
+
+    const toggle = screen.getByRole('button', { name: 'Dark mode' })
+    expect(toggle.parentElement?.firstElementChild).toBe(toggle)
+    expect(
+      toggle.compareDocumentPosition(screen.getByRole('button', { name: 'Toggle user information popover' }))
+    ).toBe(Node.DOCUMENT_POSITION_FOLLOWING)
+    expect(toggle.compareDocumentPosition(screen.getByRole('button', { name: 'Support' }))).toBe(
+      Node.DOCUMENT_POSITION_FOLLOWING
+    )
   })
 })
 
