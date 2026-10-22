@@ -4,6 +4,7 @@
 @import './shared/styles/dialog.css';
 @import './shared/styles/menu.css';
 @import './shared/styles/accordion.css';
+@import './shared/styles/color-scheme-transition.css';
 
 @source "./**/*.{ts,tsx}";
 

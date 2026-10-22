@@ -10,7 +10,14 @@ import type { NavBarProps } from './NavBar.types'
 import { Chip } from '../Chip/Chip'
 
 export function NavBar(props: NavBarProps) {
-  const { categories, LinkComponent, applicationConfig, showColorSchemeToggle = true, environment } = props
+  const {
+    categories,
+    LinkComponent,
+    applicationConfig,
+    showColorSchemeToggle = true,
+    colorSchemeToggleLabel = 'Dark mode',
+    environment,
+  } = props
   const { colorScheme, toggleColorScheme } = useColorScheme()
   const groupPath = location.pathname.split('/')[1] // Get the first segment of the path
 
@@ -52,8 +59,14 @@ export function NavBar(props: NavBarProps) {
       </NavigationMenu.List>
       <div className="flex items-center gap-2">
         {showColorSchemeToggle && (
-          <Button variant="ghost_icon" onClick={toggleColorScheme}>
+          <Button
+            variant="ghost_icon"
+            aria-label={colorSchemeToggleLabel}
+            aria-pressed={colorScheme === 'dark'}
+            onClick={toggleColorScheme}
+          >
             <Icon
+              aria-hidden
               className={colorScheme === 'light' ? '' : 'rotate-180'}
               data={colorScheme === 'light' ? lightbulb : light}
               size={18}

@@ -1,0 +1,15 @@
+/* Crossfade for `toggleColorScheme` (useColorScheme). Scoped to the `data-color-scheme-transition` marker,
+ * whose extra specificity overrides app-level root view transitions such as page slides. */
+@keyframes hermes-color-scheme-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+:root[data-color-scheme-transition]::view-transition-old(root) {
+  animation: none;
+}
+
+:root[data-color-scheme-transition]::view-transition-new(root) {
+  animation: 300ms ease-out both hermes-color-scheme-fade-in;
+}
