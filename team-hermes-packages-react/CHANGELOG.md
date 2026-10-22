@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.11.0](https://github.com/equinor/team-hermes-packages/compare/team-hermes-packages-react-v1.10.1...team-hermes-packages-react-v1.11.0) (2026-10-22)
+
+
+### Features
+
+* **facet:** add CollapsableSection, TermFilter and HistogramFilter ([e21f0ab](https://github.com/equinor/team-hermes-packages/commit/e21f0abf479ff1c91836bc76248d4f648225a65a))
+* **facet:** add facet types and url filter codecs ([bd895fb](https://github.com/equinor/team-hermes-packages/commit/bd895fb84753e0dfbf4684ba72df54de4b889c24))
+* **facet:** add FacetSidebar, overview docs and finder example ([7c8e300](https://github.com/equinor/team-hermes-packages/commit/7c8e300cf243728ca4e073d1c8f545d2f86efa41))
+* **facet:** add filter hooks ([62a6ad7](https://github.com/equinor/team-hermes-packages/commit/62a6ad72c9707a78707aa04287e0d2e503f05525))
+* **facet:** add GroupedFacetPicker ([5575751](https://github.com/equinor/team-hermes-packages/commit/55757514d710decb54bb065606d925a37444df37))
+* **facet:** let useFinderPagination accept useUrlPagination options ([83d3a03](https://github.com/equinor/team-hermes-packages/commit/83d3a0388dabe8767e906e5216663e5688b320b0))
+* **navbar:** make color scheme toggle accessible, add theme crossfade ([db87115](https://github.com/equinor/team-hermes-packages/commit/db87115ddf2016faf41bd9bc55b70763e5060b62))
+
 ## [1.10.1](https://github.com/equinor/team-hermes-packages/compare/team-hermes-packages-react-v1.10.0...team-hermes-packages-react-v1.10.1) (2026-10-15)
 
 
