@@ -404,12 +404,12 @@ wheels = [
 
 [[package]]
 name = "team-hermes-core"
-version = "0.1.0"
+version = "0.2.0"
 source = { editable = "core" }
 
 [[package]]
 name = "team-hermes-elasticsearch"
-version = "0.1.0"
+version = "0.2.0"
 source = { editable = "elasticsearch" }
 dependencies = [
     { name = "elasticsearch" },
