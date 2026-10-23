@@ -1,5 +1,5 @@
 {
   "team-hermes-packages-react": "1.11.0",
-  "team-hermes-packages-python/elasticsearch": "0.1.0",
-  "team-hermes-packages-python/core": "0.1.0"
+  "team-hermes-packages-python/elasticsearch": "0.2.0",
+  "team-hermes-packages-python/core": "0.2.0"
 }
