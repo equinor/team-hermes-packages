@@ -3,6 +3,7 @@
   "team-hermes-packages-python/elasticsearch": "0.1.0",
   "team-hermes-packages-python/core": "0.1.0",
   "team-hermes-packages-python/validation": "0.1.0",
+  "team-hermes-packages-python/authorization": "0.1.0",
   "team-hermes-packages-python/query": "0.1.0",
   "team-hermes-packages-python/fastapi-error-handling": "0.1.0",
   "team-hermes-packages-python/fastapi-query": "0.1.0",

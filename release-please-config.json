@@ -94,6 +94,17 @@
         }
       ]
     },
+    "team-hermes-packages-python/authorization": {
+      "release-type": "python",
+      "component": "team-hermes-authorization",
+      "extra-files": [
+        {
+          "type": "toml",
+          "path": "/team-hermes-packages-python/uv.lock",
+          "jsonpath": "$.package[?(@.name.value == 'team-hermes-authorization')].version"
+        }
+      ]
+    },
     "team-hermes-packages-python/validation": {
       "release-type": "python",
       "component": "team-hermes-validation",
