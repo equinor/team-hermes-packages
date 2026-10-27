@@ -73,6 +73,15 @@ dir = "{{config_root}}/{{vars.python_workspace_dir}}"
 alias = "team-hermes-packages-python:build"
 run = "uv build --all-packages --no-sources --out-dir dist"
 
+[tasks."python:build:authorization"]
+dir = "{{config_root}}/{{vars.python_workspace_dir}}"
+run = "uv build --package team-hermes-authorization --no-sources --out-dir dist/authorization"
+
+[tasks."python:test:authorization"]
+dir = "{{config_root}}/{{vars.python_workspace_dir}}"
+depends = ["python:build:authorization"]
+run = "uv run --no-project --isolated --with ./dist/authorization/team_hermes_authorization-*.whl --with 'pytest>=9.1,<10' pytest -W default::DeprecationWarning authorization/tests"
+
 [tasks."python:build:sqlalchemy"]
 dir = "{{config_root}}/{{vars.python_workspace_dir}}"
 run = [
