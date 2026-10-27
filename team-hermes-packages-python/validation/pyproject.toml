@@ -1,0 +1,39 @@
+[build-system]
+requires = ["hatchling>=1.27,<2"]
+build-backend = "hatchling.build"
+
+[project]
+name = "team-hermes-validation"
+version = "0.1.0"
+description = "Framework-independent validation rules and reports for Team Hermes projects"
+readme = "README.md"
+license-files = ["LICENSE"]
+requires-python = ">=3.13"
+dependencies = ["pydantic>=2,<3"]
+classifiers = [
+  "Intended Audience :: Developers",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Programming Language :: Python :: 3.15",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+[project.urls]
+Repository = "https://github.com/equinor/team-hermes-packages"
+Issues = "https://github.com/equinor/team-hermes-packages/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/team_hermes"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src", "pyproject.toml", "README.md", "LICENSE"]
+
+[tool.ruff]
+extend = "../pyproject.toml"
+src = [".", "src"]
+namespace-packages = ["src/team_hermes"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101"]

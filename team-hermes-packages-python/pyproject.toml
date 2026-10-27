@@ -2,7 +2,7 @@
 dev = ["pytest>=9.1,<10", "pyrefly>=1.2.0,<1.4", "ruff>=0.15.16"]
 
 [tool.uv.workspace]
-members = ["elasticsearch", "core"]
+members = ["elasticsearch", "core", "validation"]
 
 [tool.pytest.ini_options]
 testpaths = ["*/tests"]
@@ -10,7 +10,7 @@ addopts = "--import-mode=importlib"
 
 [tool.pyrefly]
 project-includes = ["*/src", "*/tests"]
-search-path = ["core/src", "elasticsearch/src", "elasticsearch"]
+search-path = ["core/src", "elasticsearch/src", "elasticsearch", "validation/src"]
 python-version = "3.13"
 
 [tool.ruff]

@@ -1,11 +1,12 @@
 version = 1
-revision = 3
+revision = 5
 requires-python = ">=3.13"
 
 [manifest]
 members = [
     "team-hermes-core",
     "team-hermes-elasticsearch",
+    "team-hermes-validation",
 ]
 
 [manifest.dependency-groups]
@@ -435,6 +436,17 @@ dev = [
     { name = "hypothesis", specifier = ">=6.151.9,<7" },
     { name = "pytest-mock", specifier = ">=3.14.1,<4" },
 ]
+
+[[package]]
+name = "team-hermes-validation"
+version = "0.1.0"
+source = { editable = "validation" }
+dependencies = [
+    { name = "pydantic" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "pydantic", specifier = ">=2,<3" }]
 
 [[package]]
 name = "typing-extensions"
