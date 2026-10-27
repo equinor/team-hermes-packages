@@ -5,7 +5,8 @@ Independent Python 3.13+ libraries sharing a uv workspace and lockfile.
 ## 📦 Packages
 
 - [🔍 Elasticsearch](elasticsearch/README.md): typed search, filtering, pagination, and aggregations.
-- [🧩 Core](core/README.md): reserved for future shared code; no public functionality yet.
+- [🧩 Core](core/README.md): shared application exceptions with no runtime dependencies.
+- [Query](query/README.md): filter, sorting, and selection contracts; depends on core and Pydantic.
 - [Validation](validation/README.md): framework-independent validation rules, results, and serializable reports.
 
 See each package's README for installation and usage.
@@ -24,7 +25,7 @@ Dependencies are installed automatically by the check tasks:
 mise run python:test
 mise run python:lint
 mise run python:typecheck
-mise run python:pack
+mise run python:build
 ```
 
 Target tests and a Python version:

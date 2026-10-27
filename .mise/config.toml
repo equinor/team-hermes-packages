@@ -60,7 +60,15 @@ alias = "test:unit:team-hermes-packages-python"
 depends = ["python:dependencies"]
 run = "uv run --no-sync pytest -W default::DeprecationWarning"
 
-[tasks."python:pack"]
+[tasks."python:test:core"]
 dir = "{{config_root}}/{{vars.python_workspace_dir}}"
-alias = "team-hermes-packages-python:pack"
+run = "uv run --no-project --with ./core --with 'pytest>=9.1,<10' pytest -W default::DeprecationWarning core/tests"
+
+[tasks."python:test:query"]
+dir = "{{config_root}}/{{vars.python_workspace_dir}}"
+run = "uv run --no-project --with ./core --with ./query --with 'pytest>=9.1,<10' pytest -W default::DeprecationWarning query/tests"
+
+[tasks."python:build"]
+dir = "{{config_root}}/{{vars.python_workspace_dir}}"
+alias = "team-hermes-packages-python:build"
 run = "uv build --all-packages --no-sources --out-dir dist"

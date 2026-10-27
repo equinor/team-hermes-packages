@@ -28,6 +28,17 @@
         }
       ]
     },
+    "team-hermes-packages-python/query": {
+      "release-type": "python",
+      "component": "team-hermes-query",
+      "extra-files": [
+        {
+          "type": "toml",
+          "path": "/team-hermes-packages-python/uv.lock",
+          "jsonpath": "$.package[?(@.name.value == 'team-hermes-query')].version"
+        }
+      ]
+    },
     "team-hermes-packages-python/validation": {
       "release-type": "python",
       "component": "team-hermes-validation",
