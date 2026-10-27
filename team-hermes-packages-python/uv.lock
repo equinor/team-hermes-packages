@@ -7,6 +7,7 @@ members = [
     "team-hermes-core",
     "team-hermes-elasticsearch",
     "team-hermes-fastapi-error-handling",
+    "team-hermes-fastapi-query",
     "team-hermes-query",
     "team-hermes-validation",
 ]
@@ -688,6 +689,33 @@ dev = [
     { name = "opentelemetry-sdk", specifier = ">=1.30" },
     { name = "requests", specifier = ">=2.32" },
 ]
+
+[[package]]
+name = "team-hermes-fastapi-query"
+version = "0.1.0"
+source = { editable = "fastapi-query" }
+dependencies = [
+    { name = "fastapi" },
+    { name = "pydantic" },
+    { name = "team-hermes-core" },
+    { name = "team-hermes-query" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "httpx" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "fastapi", specifier = ">=0.115.6" },
+    { name = "pydantic", specifier = ">=2.9,<3" },
+    { name = "team-hermes-core", editable = "core" },
+    { name = "team-hermes-query", editable = "query" },
+]
+
+[package.metadata.requires-dev]
+dev = [{ name = "httpx", specifier = ">=0.28,<1" }]
 
 [[package]]
 name = "team-hermes-query"

@@ -9,6 +9,7 @@ Independent Python 3.13+ libraries sharing a uv workspace and lockfile.
 - [Query](query/README.md): filter, sorting, and selection contracts; depends on core and Pydantic.
 - [Validation](validation/README.md): framework-independent validation rules, results, and serializable reports.
 - [FastAPI Error Handling](fastapi-error-handling/README.md): application error responses and correlation IDs.
+- [FastAPI Query](fastapi-query/README.md): FastAPI filtering, selection, ordering, and pagination helpers.
 
 See each package's README for installation and usage.
 
