@@ -25,6 +25,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          - { task: "test:core", python: "3.11" }
+          - { task: "test:core", python: "3.12" }
+          - { task: "test:query", python: "3.11" }
+          - { task: "test:query", python: "3.12" }
           - { task: test, python: "3.13" }
           - { task: test, python: "3.14" }
           - { task: test, python: "3.15" }

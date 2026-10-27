@@ -6,6 +6,7 @@ requires-python = ">=3.13"
 members = [
     "team-hermes-core",
     "team-hermes-elasticsearch",
+    "team-hermes-query",
     "team-hermes-validation",
 ]
 
@@ -435,6 +436,21 @@ dev = [
     { name = "fastapi", specifier = ">=0.141.1,<0.142" },
     { name = "hypothesis", specifier = ">=6.151.9,<7" },
     { name = "pytest-mock", specifier = ">=3.14.1,<4" },
+]
+
+[[package]]
+name = "team-hermes-query"
+version = "0.1.0"
+source = { editable = "query" }
+dependencies = [
+    { name = "pydantic" },
+    { name = "team-hermes-core" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "pydantic", specifier = ">=2,<3" },
+    { name = "team-hermes-core", editable = "core" },
 ]
 
 [[package]]

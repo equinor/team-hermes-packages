@@ -9,7 +9,7 @@ nor another Team Hermes package is required.
 Build from this repository and install the wheel into an activated environment:
 
 ```shell
-mise run python:pack
+mise run python:build
 uv pip install team-hermes-packages-python/dist/team_hermes_validation-*.whl
 ```
 
@@ -271,5 +271,5 @@ Run the checks from the repository root:
 mise run python:test -- validation/tests
 mise run python:lint
 mise run python:typecheck
-mise run python:pack
+mise run python:build
 ```
