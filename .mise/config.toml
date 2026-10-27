@@ -72,3 +72,11 @@ run = "uv run --no-project --with ./core --with ./query --with 'pytest>=9.1,<10'
 dir = "{{config_root}}/{{vars.python_workspace_dir}}"
 alias = "team-hermes-packages-python:build"
 run = "uv build --all-packages --no-sources --out-dir dist"
+
+[tasks."python:test:fastapi-error-handling"]
+dir = "{{config_root}}/{{vars.python_workspace_dir}}"
+run = [
+  "uv build --wheel --package team-hermes-core --no-sources --out-dir dist/fastapi-error-handling",
+  "uv build --wheel --package team-hermes-fastapi-error-handling --no-sources --out-dir dist/fastapi-error-handling",
+  "uv run --no-project --with ./dist/fastapi-error-handling/team_hermes_core-*.whl --with ./dist/fastapi-error-handling/team_hermes_fastapi_error_handling-*.whl --with 'pytest>=9.1,<10' --with 'httpx>=0.28' --with 'requests>=2.32' --with 'opentelemetry-sdk>=1.30' --with '{{env.FASTAPI_REQUIREMENT | default(value='fastapi')}}' pytest -W default::DeprecationWarning fastapi-error-handling/tests",
+]
