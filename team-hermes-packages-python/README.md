@@ -8,6 +8,7 @@ Independent Python 3.13+ libraries sharing a uv workspace and lockfile.
 - [🧩 Core](core/README.md): shared application exceptions with no runtime dependencies.
 - [Query](query/README.md): filter, sorting, and selection contracts; depends on core and Pydantic.
 - [Validation](validation/README.md): framework-independent validation rules, results, and serializable reports.
+- [FastAPI Error Handling](fastapi-error-handling/README.md): application error responses and correlation IDs.
 
 See each package's README for installation and usage.
 
