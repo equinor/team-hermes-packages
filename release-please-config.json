@@ -39,6 +39,17 @@
         }
       ]
     },
+    "team-hermes-packages-python/fastapi-query": {
+      "release-type": "python",
+      "component": "team-hermes-fastapi-query",
+      "extra-files": [
+        {
+          "type": "toml",
+          "path": "/team-hermes-packages-python/uv.lock",
+          "jsonpath": "$.package[?(@.name.value == 'team-hermes-fastapi-query')].version"
+        }
+      ]
+    },
     "team-hermes-packages-python/query": {
       "release-type": "python",
       "component": "team-hermes-query",
