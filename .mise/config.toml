@@ -73,6 +73,25 @@ dir = "{{config_root}}/{{vars.python_workspace_dir}}"
 alias = "team-hermes-packages-python:build"
 run = "uv build --all-packages --no-sources --out-dir dist"
 
+[tasks."python:build:sqlalchemy"]
+dir = "{{config_root}}/{{vars.python_workspace_dir}}"
+run = [
+  "uv build --package team-hermes-core --no-sources --out-dir dist/sqlalchemy",
+  "uv build --package team-hermes-query --no-sources --out-dir dist/sqlalchemy",
+  "uv build --package team-hermes-sqlalchemy-core --no-sources --out-dir dist/sqlalchemy",
+  "uv build --package team-hermes-sqlalchemy-repository --no-sources --out-dir dist/sqlalchemy",
+  "uv build --package team-hermes-sqlalchemy-faceted-search --no-sources --out-dir dist/sqlalchemy",
+]
+
+[tasks."python:test:sqlalchemy"]
+dir = "{{config_root}}/{{vars.python_workspace_dir}}"
+depends = ["python:build:sqlalchemy"]
+run = [
+  "uv run --no-project --isolated --find-links ./dist/sqlalchemy --with ./dist/sqlalchemy/team_hermes_sqlalchemy_core-*.whl --with 'pytest>=9.1,<10' pytest -W default::DeprecationWarning sqlalchemy-core/tests",
+  "uv run --no-project --isolated --find-links ./dist/sqlalchemy --with ./dist/sqlalchemy/team_hermes_sqlalchemy_repository-*.whl --with 'pytest>=9.1,<10' pytest -W default::DeprecationWarning sqlalchemy-repository/tests",
+  "uv run --no-project --isolated --find-links ./dist/sqlalchemy --with ./dist/sqlalchemy/team_hermes_sqlalchemy_faceted_search-*.whl --with 'pytest>=9.1,<10' pytest -W default::DeprecationWarning sqlalchemy-faceted-search/tests",
+]
+
 [tasks."python:test:fastapi-error-handling"]
 dir = "{{config_root}}/{{vars.python_workspace_dir}}"
 run = [

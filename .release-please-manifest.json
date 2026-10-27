@@ -5,5 +5,8 @@
   "team-hermes-packages-python/validation": "0.1.0",
   "team-hermes-packages-python/query": "0.1.0",
   "team-hermes-packages-python/fastapi-error-handling": "0.1.0",
-  "team-hermes-packages-python/fastapi-query": "0.1.0"
+  "team-hermes-packages-python/fastapi-query": "0.1.0",
+  "team-hermes-packages-python/sqlalchemy-core": "0.1.0",
+  "team-hermes-packages-python/sqlalchemy-repository": "0.1.0",
+  "team-hermes-packages-python/sqlalchemy-faceted-search": "0.1.0"
 }
