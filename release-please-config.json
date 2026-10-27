@@ -27,6 +27,17 @@
           "jsonpath": "$.package[?(@.name.value == 'team-hermes-core')].version"
         }
       ]
+    },
+    "team-hermes-packages-python/validation": {
+      "release-type": "python",
+      "component": "team-hermes-validation",
+      "extra-files": [
+        {
+          "type": "toml",
+          "path": "/team-hermes-packages-python/uv.lock",
+          "jsonpath": "$.package[?(@.name.value == 'team-hermes-validation')].version"
+        }
+      ]
     }
   }
 }

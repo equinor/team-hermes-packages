@@ -6,6 +6,7 @@ Independent Python 3.13+ libraries sharing a uv workspace and lockfile.
 
 - [🔍 Elasticsearch](elasticsearch/README.md): typed search, filtering, pagination, and aggregations.
 - [🧩 Core](core/README.md): reserved for future shared code; no public functionality yet.
+- [Validation](validation/README.md): framework-independent validation rules, results, and serializable reports.
 
 See each package's README for installation and usage.
 
