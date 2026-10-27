@@ -61,6 +61,39 @@
         }
       ]
     },
+    "team-hermes-packages-python/sqlalchemy-core": {
+      "release-type": "python",
+      "component": "team-hermes-sqlalchemy-core",
+      "extra-files": [
+        {
+          "type": "toml",
+          "path": "/team-hermes-packages-python/uv.lock",
+          "jsonpath": "$.package[?(@.name.value == 'team-hermes-sqlalchemy-core')].version"
+        }
+      ]
+    },
+    "team-hermes-packages-python/sqlalchemy-repository": {
+      "release-type": "python",
+      "component": "team-hermes-sqlalchemy-repository",
+      "extra-files": [
+        {
+          "type": "toml",
+          "path": "/team-hermes-packages-python/uv.lock",
+          "jsonpath": "$.package[?(@.name.value == 'team-hermes-sqlalchemy-repository')].version"
+        }
+      ]
+    },
+    "team-hermes-packages-python/sqlalchemy-faceted-search": {
+      "release-type": "python",
+      "component": "team-hermes-sqlalchemy-faceted-search",
+      "extra-files": [
+        {
+          "type": "toml",
+          "path": "/team-hermes-packages-python/uv.lock",
+          "jsonpath": "$.package[?(@.name.value == 'team-hermes-sqlalchemy-faceted-search')].version"
+        }
+      ]
+    },
     "team-hermes-packages-python/validation": {
       "release-type": "python",
       "component": "team-hermes-validation",

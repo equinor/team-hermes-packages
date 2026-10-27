@@ -10,6 +10,9 @@ Independent Python 3.13+ libraries sharing a uv workspace and lockfile.
 - [Validation](validation/README.md): framework-independent validation rules, results, and serializable reports.
 - [FastAPI Error Handling](fastapi-error-handling/README.md): application error responses and correlation IDs.
 - [FastAPI Query](fastapi-query/README.md): FastAPI filtering, selection, ordering, and pagination helpers.
+- [SQLAlchemy Core](sqlalchemy-core/README.md): shared SQLAlchemy filter compilation.
+- [SQLAlchemy Repository](sqlalchemy-repository/README.md): generic synchronous CRUD, listing, and counts.
+- [SQLAlchemy Faceted Search](sqlalchemy-faceted-search/README.md): independent cross-filtered facet queries.
 
 See each package's README for installation and usage.
 

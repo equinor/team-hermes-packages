@@ -34,6 +34,7 @@ jobs:
           - { task: "test:fastapi-error-handling", python: "3.11", fastapi: "fastapi==0.115.6" }
           - { task: "test:fastapi-query", python: "3.13" }
           - { task: "test:fastapi-query", python: "3.13", fastapi: "fastapi==0.115.6", pydantic: "pydantic==2.9.0" }
+          - { task: "test:sqlalchemy", python: "3.13" }
           - { task: test, python: "3.13" }
           - { task: test, python: "3.14" }
           - { task: test, python: "3.15" }

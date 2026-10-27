@@ -1,0 +1,43 @@
+[build-system]
+requires = ["hatchling>=1.27,<2"]
+build-backend = "hatchling.build"
+
+[project]
+name = "team-hermes-sqlalchemy-core"
+version = "0.1.0"
+description = "SQLAlchemy filter compilation for Team Hermes query contracts"
+readme = "README.md"
+license-files = ["LICENSE"]
+requires-python = ">=3.13"
+dependencies = ["team-hermes-core>=0.1.0,<0.2.0", "team-hermes-query>=0.1.0,<0.2.0", "sqlalchemy>=2.0"]
+classifiers = [
+  "Intended Audience :: Developers",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Programming Language :: Python :: 3.15",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+[project.urls]
+Repository = "https://github.com/equinor/team-hermes-packages"
+Issues = "https://github.com/equinor/team-hermes-packages/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/team_hermes"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src", "pyproject.toml", "README.md", "LICENSE"]
+
+[tool.uv.sources]
+team-hermes-core = { workspace = true }
+team-hermes-query = { workspace = true }
+
+[tool.ruff]
+extend = "../pyproject.toml"
+src = [".", "src"]
+namespace-packages = ["src/team_hermes"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101"]
