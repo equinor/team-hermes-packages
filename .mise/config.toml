@@ -62,46 +62,28 @@ run = "uv run --no-sync pytest -W default::DeprecationWarning"
 
 [tasks."python:test:core"]
 dir = "{{config_root}}/{{vars.python_workspace_dir}}"
-run = [
-  "uv build --wheel --package team-hermes-core --no-sources --out-dir dist/core",
-  "uv run --no-project --isolated --with ./dist/core/team_hermes_core-*.whl --with 'pytest>=9.1,<10' pytest -W default::DeprecationWarning core/tests",
-]
+run = "uv run --no-project --with ./core --with 'pytest>=9.1,<10' pytest -W default::DeprecationWarning core/tests"
 
 [tasks."python:test:query"]
 dir = "{{config_root}}/{{vars.python_workspace_dir}}"
-run = [
-  "uv build --wheel --package team-hermes-core --no-sources --out-dir dist/query",
-  "uv build --wheel --package team-hermes-query --no-sources --out-dir dist/query",
-  "uv run --no-project --isolated --with ./dist/query/team_hermes_core-*.whl --with ./dist/query/team_hermes_query-*.whl --with 'pytest>=9.1,<10' pytest -W default::DeprecationWarning query/tests",
-]
+run = "uv run --no-project --with ./core --with ./query --with 'pytest>=9.1,<10' pytest -W default::DeprecationWarning query/tests"
 
 [tasks."python:test:elasticsearch"]
 dir = "{{config_root}}/{{vars.python_workspace_dir}}"
-run = [
-  "uv build --wheel --package team-hermes-elasticsearch --no-sources --out-dir dist/elasticsearch",
-  "uv run --no-project --isolated --with ./dist/elasticsearch/team_hermes_elasticsearch-*.whl --with 'pytest>=9.1,<10' --with 'pytest-mock>=3.14.1,<4' --with 'hypothesis>=6.151.9,<7' --with 'fastapi>=0.141.1,<0.142' pytest -W default::DeprecationWarning elasticsearch/tests",
-]
+run = "uv run --no-project --isolated --with ./elasticsearch --with 'pytest>=9.1,<10' --with 'pytest-mock>=3.14.1,<4' --with 'hypothesis>=6.151.9,<7' --with 'fastapi>=0.141.1,<0.142' pytest -W default::DeprecationWarning elasticsearch/tests"
 
 [tasks."python:test:validation"]
 dir = "{{config_root}}/{{vars.python_workspace_dir}}"
-run = [
-  "uv build --wheel --package team-hermes-validation --no-sources --out-dir dist/validation",
-  "uv run --no-project --isolated --with ./dist/validation/team_hermes_validation-*.whl --with 'pytest>=9.1,<10' pytest -W default::DeprecationWarning validation/tests",
-]
+run = "uv run --no-project --isolated --with ./validation --with 'pytest>=9.1,<10' pytest -W default::DeprecationWarning validation/tests"
 
 [tasks."python:build"]
 dir = "{{config_root}}/{{vars.python_workspace_dir}}"
 alias = "team-hermes-packages-python:build"
 run = "uv build --all-packages --no-sources --out-dir dist"
 
-[tasks."python:build:authorization"]
-dir = "{{config_root}}/{{vars.python_workspace_dir}}"
-run = "uv build --package team-hermes-authorization --no-sources --out-dir dist/authorization"
-
 [tasks."python:test:authorization"]
 dir = "{{config_root}}/{{vars.python_workspace_dir}}"
-depends = ["python:build:authorization"]
-run = "uv run --no-project --isolated --with ./dist/authorization/team_hermes_authorization-*.whl --with 'pytest>=9.1,<10' pytest -W default::DeprecationWarning authorization/tests"
+run = "uv run --no-project --isolated --with ./authorization --with 'pytest>=9.1,<10' pytest -W default::DeprecationWarning authorization/tests"
 
 [tasks."python:build:sqlalchemy"]
 dir = "{{config_root}}/{{vars.python_workspace_dir}}"

@@ -38,7 +38,7 @@ type PermissionCheck = Callable[..., bool]
 type Permissions = dict[Resource, dict[Action | str, bool | PermissionCheck]]
 
 
-def _execute_permission_check(check: PermissionCheck, user: AuthorizationSubject, **kwargs: object) -> bool:
+def _execute_permission_check(check: PermissionCheck, user: AuthorizationSubject, /, **kwargs: object) -> bool:
     signature = inspect.signature(check)
     filtered_kwargs = {name: value for name, value in kwargs.items() if name in signature.parameters}
 
