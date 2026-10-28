@@ -1,6 +1,6 @@
 # Team Hermes SQLAlchemy Repository
 
-Generic synchronous CRUD repository for Python 3.13+ and SQLAlchemy 2.x.
+Generic synchronous CRUD repository for Python 3.12+ and SQLAlchemy 2.x.
 Uses [shared filtering](../sqlalchemy-core/README.md) without a faceting dependency.
 
 For local development, follow the [workspace setup](../README.md).

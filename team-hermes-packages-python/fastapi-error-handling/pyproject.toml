@@ -8,13 +8,12 @@ version = "0.1.0"
 description = "FastAPI error handling for Team Hermes projects"
 readme = "README.md"
 license-files = ["LICENSE"]
-requires-python = ">=3.11"
+requires-python = ">=3.12"
 dependencies = ["team-hermes-core>=0.1.0", "fastapi", "pydantic>=2", "starlette"]
 classifiers = [
   "Intended Audience :: Developers",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3 :: Only",
-  "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
   "Programming Language :: Python :: 3.14",
@@ -44,7 +43,6 @@ team-hermes-core = { workspace = true }
 
 [tool.ruff]
 extend = "../pyproject.toml"
-target-version = "py311"
 src = [".", "src"]
 namespace-packages = ["src/team_hermes"]
 

@@ -6,6 +6,7 @@ from .exception_handling.handlers import (
     application_exception_handler,
     build_common_extensions,
     fallback_exception_handler,
+    framework_http_exception_handler,
     request_validation_exception_handler,
     validation_exception_handler,
 )
@@ -21,6 +22,7 @@ __all__ = [
     "application_exception_handler",
     "build_common_extensions",
     "fallback_exception_handler",
+    "framework_http_exception_handler",
     "request_validation_exception_handler",
     "validation_exception_handler",
 ]

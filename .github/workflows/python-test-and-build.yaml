@@ -25,21 +25,21 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { task: "test:core", python: "3.11" }
           - { task: "test:core", python: "3.12" }
-          - { task: "test:query", python: "3.11" }
           - { task: "test:query", python: "3.12" }
-          - { task: "test:fastapi-error-handling", python: "3.11" }
+          - { task: "test:elasticsearch", python: "3.12" }
+          - { task: "test:validation", python: "3.12" }
           - { task: "test:fastapi-error-handling", python: "3.12" }
-          - { task: "test:fastapi-error-handling", python: "3.11", fastapi: "fastapi==0.115.6" }
-          - { task: "test:fastapi-query", python: "3.13" }
-          - { task: "test:fastapi-query", python: "3.13", fastapi: "fastapi==0.115.6", pydantic: "pydantic==2.9.0" }
-          - { task: "test:sqlalchemy", python: "3.13" }
-          - { task: "test:authorization", python: "3.13" }
+          - { task: "test:fastapi-error-handling", python: "3.12", fastapi: "fastapi==0.115.6" }
+          - { task: "test:fastapi-query", python: "3.12" }
+          - { task: "test:fastapi-query", python: "3.12", fastapi: "fastapi==0.115.6", pydantic: "pydantic==2.9.0" }
+          - { task: "test:sqlalchemy", python: "3.12" }
+          - { task: "test:authorization", python: "3.12" }
+          - { task: test, python: "3.12" }
           - { task: test, python: "3.13" }
           - { task: test, python: "3.14" }
           - { task: test, python: "3.15" }
-          - { task: typecheck, python: "3.13" }
+          - { task: typecheck, python: "3.12" }
     env:
       PYTHON_WORKSPACE_DIR: ${{ inputs.workspace-directory }}
       UV_PYTHON: ${{ matrix.python }}

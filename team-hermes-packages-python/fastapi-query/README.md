@@ -4,7 +4,7 @@ FastAPI dependencies for filtering, field selection, ordering, and page-based
 pagination. Uses the models from [team-hermes-query](../query/README.md) and
 exceptions from [team-hermes-core](../core/README.md).
 
-Requires Python 3.13+, FastAPI 0.115.6+, and Pydantic 2.9 or newer within version 2. No database or error-handling
+Requires Python 3.12+, FastAPI 0.115.6+, and Pydantic 2.9 or newer within version 2. No database or error-handling
 package is required. This is not a complete OData implementation.
 
 ## Installation
@@ -130,7 +130,7 @@ mise run python:build
 The `python:test:fastapi-query` task builds core, query, and FastAPI query wheels,
 then runs the regular tests and README doctest against those installed artifacts
 in an isolated environment. CI checks current dependencies and FastAPI 0.115.6
-with Pydantic 2.9.0 on Python 3.13. Pagination tests use a concrete in-memory
+with Pydantic 2.9.0 on Python 3.12. Pagination tests use a concrete in-memory
 repository; no database or error-handling package is needed.
 
 ## License

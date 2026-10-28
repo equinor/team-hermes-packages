@@ -34,7 +34,8 @@ search-path = [
   "sqlalchemy-faceted-search/src",
   "sqlalchemy-repository/src",
 ]
-python-version = "3.13"
+python-version = "3.12"
 
 [tool.ruff]
 extend = "../.ruff.toml"
+target-version = "py312"

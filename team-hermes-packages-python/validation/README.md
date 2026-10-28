@@ -1,7 +1,7 @@
 # Team Hermes Validation
 
 Framework-independent validation rules, contextual caching, and serializable reports
-for Python 3.13+. Pydantic 2 is the only direct runtime dependency. Neither FastAPI
+for Python 3.12+. Pydantic 2 is the only direct runtime dependency. Neither FastAPI
 nor another Team Hermes package is required.
 
 ## Installation

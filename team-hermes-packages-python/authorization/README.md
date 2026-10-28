@@ -1,6 +1,6 @@
 # Team Hermes Authorization
 
-Role and attribute-based permission checks for Python 3.13+, with no runtime dependencies.
+Role and attribute-based permission checks for Python 3.12+, with no runtime dependencies.
 
 ## Installation
 

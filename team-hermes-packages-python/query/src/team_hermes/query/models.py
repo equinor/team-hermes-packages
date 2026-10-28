@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import datetime
 from enum import StrEnum, auto, unique
-from typing import Literal, Self, TypeAlias, TypedDict, Unpack, cast
+from typing import Literal, Self, TypedDict, Unpack, cast
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -150,10 +150,8 @@ class FilterExpression(BaseModel):
         operator = expression["operator"]
         value = expression["value"]
 
-        try:
-            FilterOperator(operator)
-        except ValueError:
-            raise ValidationException(f"Unsupported operator: '{operator}'") from None
+        if operator not in FilterOperator:
+            raise ValidationException(f"Unsupported operator: '{operator}'")
 
         filter_expression: FilterExpressions
         if isinstance(value, NumericTypes) and operator in NUM_OPERATORS:
@@ -174,7 +172,7 @@ class LogicalFilter(BaseModel):
     filters: list[FilterExpression | Self]
 
 
-FilterBy: TypeAlias = FilterExpression | LogicalFilter
+type FilterBy = FilterExpression | LogicalFilter
 
 
 class Select(BaseModel):

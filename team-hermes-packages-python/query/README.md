@@ -3,7 +3,7 @@
 Shared filter, sorting, and selection contracts for Team Hermes Python projects.
 Build query descriptions without importing a repository, web framework, or database library.
 
-**Requires:** Python 3.11+, Pydantic 2, and `team-hermes-core>=0.1.0` for application exceptions.
+**Requires:** Python 3.12+, Pydantic 2, and `team-hermes-core>=0.1.0` for application exceptions.
 Core remains independently installable without Pydantic or query.
 
 ## Installation
@@ -115,10 +115,9 @@ mise run python:build
 
 The README example runs as a doctest through pytest.
 
-Query is also tested independently on Python 3.11 and 3.12 in CI:
+Query is also tested as an installed wheel on Python 3.12 in CI:
 
 ```shell
-UV_PYTHON=3.11 mise run python:test:query
 UV_PYTHON=3.12 mise run python:test:query
 ```
 

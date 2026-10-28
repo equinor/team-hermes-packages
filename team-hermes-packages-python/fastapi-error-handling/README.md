@@ -2,7 +2,7 @@
 
 FastAPI error handling for Team Hermes Python projects.
 
-**Requires:** Python 3.11+, FastAPI, Pydantic 2+, Starlette, and `team-hermes-core>=0.1.0`.
+**Requires:** Python 3.12+, FastAPI, Pydantic 2+, Starlette, and `team-hermes-core>=0.1.0`.
 FastAPI is not restricted to one minor release. CI tests current dependencies and
 FastAPI 0.115.6. No query, validation, database, or cloud package is required.
 
@@ -70,10 +70,61 @@ Subclasses inherit their parent's mapping. Unexpected failures return a generic
 message; their exception text is logged, not returned. Application errors log at
 their declared severity. Request/model validation errors log at error level.
 
-FastAPI and Starlette `HTTPException`s are deliberately left to the framework,
-preserving their status, detail, headers, and registered handlers. Unmatched routes
-also retain the framework response. This differs from a catch-all wrapper that
-turns framework HTTP errors into 500s.
+FastAPI and Starlette `HTTPException`s raised within `ExceptionHandlingRoute`
+return Problem Details directly, preserving their status, detail, and headers.
+The route's configuration controls problem types and extensions. These exceptions
+do not reach application-registered HTTP exception handlers. Routing errors such
+as unmatched URLs (404) and unsupported methods (405) remain outside this wrapper
+and retain the framework response unless an application handler is registered.
+
+### Framework HTTP Exceptions as Problem Details
+
+Optionally register `framework_http_exception_handler` on the application to also
+return Problem Details for HTTP exceptions outside the route wrapper, including
+routing errors such as 404 and 405.
+Register the Starlette base class so FastAPI's HTTP exceptions are covered too.
+The route and application handler can share the same configuration, as below.
+Registration replaces the application's handler for that exception class.
+
+```pycon
+>>> from functools import partial
+>>> from starlette.exceptions import HTTPException
+>>> from team_hermes.fastapi_error_handling import ErrorHandlingConfig, framework_http_exception_handler
+>>> config = ErrorHandlingConfig(trace_id_provider=lambda: "example-trace")
+>>> app = FastAPI()
+>>> app.add_exception_handler(HTTPException, partial(framework_http_exception_handler, config=config))
+>>> router = APIRouter(route_class=ExceptionHandlingRoute.with_config(config))
+>>> @router.get("/private")
+... async def private():
+...     raise HTTPException(401, detail="Login required", headers={"WWW-Authenticate": "Bearer"})
+>>> app.include_router(router)
+>>> with TestClient(app) as client:
+...     response = client.get("/private")
+...     missing = client.get("/unknown")
+>>> response.status_code, response.headers["WWW-Authenticate"]
+(401, 'Bearer')
+>>> response.json()["title"], response.json()["detail"]
+('Unauthorized', 'Login required')
+>>> response.json()["extensions"]["traceId"]
+'example-trace'
+>>> missing.status_code, missing.json()["title"]
+(404, 'Not Found')
+
+```
+
+The handler preserves the exception's HTTP status and headers, including
+`WWW-Authenticate`, `Retry-After`, and `Allow`. It uses `application/json`, matching
+the other handlers. The problem title is the HTTP reason phrase, or `HTTP Error`
+for an unknown status. Problem types and correlation extensions use the supplied
+configuration. Omit `partial(...)` and register the handler directly to use defaults.
+
+String details populate `detail`. FastAPI also permits structured details; these
+are JSON-encoded in `extensions.httpExceptionDetail`, leaving `detail` null.
+Details are returned as supplied, so do not include sensitive information.
+Statuses that forbid response bodies, such as 204 and 304, retain their status
+and headers but have no Problem Details body. Application-level registration is
+separate from `ErrorHandlingConfig.exception_handlers`, which does not intercept
+framework HTTP exceptions.
 
 ## Configuration
 
@@ -239,14 +290,13 @@ mise run python:build
 ```
 
 CI also builds core and FastAPI wheels, installs them in an isolated environment,
-and runs the normal suite against the installed packages on Python 3.11 and 3.12.
+and runs the normal suite against the installed packages on Python 3.12.
 The integration tests use real OpenTelemetry SDK spans with an in-memory exporter;
 the SDK is only a test dependency, not a runtime requirement.
 
 ```shell
-UV_PYTHON=3.11 mise run python:test:fastapi-error-handling
 UV_PYTHON=3.12 mise run python:test:fastapi-error-handling
-UV_PYTHON=3.11 FASTAPI_REQUIREMENT='fastapi==0.115.6' mise run python:test:fastapi-error-handling
+UV_PYTHON=3.12 FASTAPI_REQUIREMENT='fastapi==0.115.6' mise run python:test:fastapi-error-handling
 ```
 
 ## License

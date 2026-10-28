@@ -1,6 +1,6 @@
 # Team Hermes SQLAlchemy Faceted Search
 
-SQLAlchemy 2.x faceting helpers for Python 3.13+, using
+SQLAlchemy 2.x faceting helpers for Python 3.12+, using
 [shared filtering](../sqlalchemy-core/README.md) and [query contracts](../query/README.md).
 No repository or FastAPI dependency, database
 driver, engine creation, session management, or transaction handling is included.

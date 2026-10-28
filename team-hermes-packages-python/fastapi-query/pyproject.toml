@@ -8,12 +8,13 @@ version = "0.1.0"
 description = "FastAPI filtering, selection, ordering, and pagination helpers for Team Hermes projects"
 readme = "README.md"
 license-files = ["LICENSE"]
-requires-python = ">=3.13"
+requires-python = ">=3.12"
 dependencies = ["team-hermes-core>=0.1.0", "team-hermes-query>=0.1.0", "fastapi>=0.115.6", "pydantic>=2.9,<3"]
 classifiers = [
   "Intended Audience :: Developers",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
   "Programming Language :: Python :: 3.14",
   "Programming Language :: Python :: 3.15",

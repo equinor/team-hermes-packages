@@ -14,6 +14,6 @@ def test_installed_readme_doctests() -> None:
 
 def test_distribution_metadata_and_typing_marker() -> None:
     package = distribution("team-hermes-authorization")
-    assert package.metadata["Requires-Python"] == ">=3.13"
+    assert package.metadata["Requires-Python"] == ">=3.12"
     assert not package.requires
     assert files("team_hermes.authorization").joinpath("py.typed").is_file()

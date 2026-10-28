@@ -134,6 +134,8 @@ def test_nested_logical_filters_and_filter_alias():
     assert alternative.filters == [quantity, status]
     assert TypeAdapter(FilterBy).validate_python(filters) is filters
     assert TypeAdapter(FilterBy).validate_python(quantity) is quantity
+    schema = TypeAdapter(FilterBy).json_schema()
+    assert {"FilterExpression", "LogicalFilter"} <= schema["$defs"].keys()
     assert json.loads(filters.model_dump_json()) == {
         "operator": "and_",
         "filters": [
