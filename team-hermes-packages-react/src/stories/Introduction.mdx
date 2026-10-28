@@ -12,16 +12,20 @@ Components are previewed and documented via Storybook. The package is hosted on 
 
 ## Installation
 
-### Temporary installation from GitHub Packages:
+Package is hosted in npm registry and can be installed via:
 
 ```bash
-gh api -H "Accept: application/octet-stream" repos/equinor/team-hermes-packages/releases/assets/$(gh api repos/equinor/team-hermes-packages/releases/tags/@team-hermes/react-components-v1.1.0 --jq '.assets[0].id') > /tmp/@team-hermes/react-components-1.1.0.tgz && yarn add @equinor/@team-hermes/react-components@/tmp/@team-hermes/react-components-1.1.0.tgz
+npm install @team-hermes/react-components
+yarn add @team-hermes/react-components
+vp add @team-hermes/react-components
 ```
+
+### Setup
 
 Import the stylesheet in your app's entry point:
 
 ```ts
-import '@equinor/@team-hermes/react-components/style.css'
+import '@team-hermes/react-components/style.css'
 ```
 
 ## Stack
