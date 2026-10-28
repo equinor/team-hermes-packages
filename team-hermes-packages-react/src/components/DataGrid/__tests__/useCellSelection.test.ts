@@ -237,7 +237,7 @@ describe('useCellSelection', () => {
       })
 
       expect(hook.result.current.selectedCells).toEqual([{ rowId: '0', columnId: 'depth' }])
-      expect(scrollToRow).toHaveBeenCalledWith(0, { behavior: 'smooth', align: 'center' })
+      expect(scrollToRow).toHaveBeenCalledWith(0, { behavior: 'instant', align: 'center' })
       expect(scrollToColumn).toHaveBeenCalledWith('depth')
     })
 
