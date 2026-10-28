@@ -8,7 +8,7 @@ version = "0.1.0"
 description = "SQLAlchemy facet queries and cross-filtered counts for Team Hermes projects"
 readme = "README.md"
 license-files = ["LICENSE"]
-requires-python = ">=3.13"
+requires-python = ">=3.12"
 dependencies = [
   "team-hermes-query>=0.1.0,<0.2.0",
   "team-hermes-sqlalchemy-core>=0.1.0,<0.2.0",
@@ -19,6 +19,7 @@ classifiers = [
   "Intended Audience :: Developers",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
   "Programming Language :: Python :: 3.14",
   "Programming Language :: Python :: 3.15",

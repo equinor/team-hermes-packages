@@ -1,6 +1,6 @@
 # Team Hermes SQLAlchemy Core
 
-SQLAlchemy 2.x filter compilation for Python 3.13+, using
+SQLAlchemy 2.x filter compilation for Python 3.12+, using
 [shared query contracts](../query/README.md). This package does not create
 connections, execute queries, manage sessions, or provide repositories or facets.
 

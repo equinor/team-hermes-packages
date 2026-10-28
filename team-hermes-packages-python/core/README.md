@@ -3,7 +3,7 @@
 Shared application exceptions for Team Hermes Python projects.
 Core describes errors; integrations decide how to handle them.
 
-**Requires:** Python 3.11+. Git is required for installation from source.
+**Requires:** Python 3.12+. Git is required for installation from source.
 Core has no runtime dependencies outside the standard library.
 
 ## ⬇️ Installation
@@ -81,11 +81,10 @@ mise run python:build
 
 The README example runs as a doctest through pytest.
 
-Core is also tested independently on Python 3.11 and 3.12 in CI. Run these checks
+Core is also tested as an installed wheel on Python 3.12 in CI. Run this check
 without installing the other workspace packages:
 
 ```shell
-UV_PYTHON=3.11 mise run python:test:core
 UV_PYTHON=3.12 mise run python:test:core
 ```
 

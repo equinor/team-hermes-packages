@@ -1,6 +1,6 @@
 # 🐍 Team Hermes Python Packages
 
-Independent Python 3.13+ libraries sharing a uv workspace and lockfile.
+Independent Python 3.12+ libraries sharing a uv workspace and lockfile.
 
 ## 📦 Packages
 

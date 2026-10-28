@@ -2,7 +2,7 @@
 
 Typed Elasticsearch searches with filters, pagination, and aggregations.
 
-**Requires:** Python 3.13+ and Git for installation from source.
+**Requires:** Python 3.12+ and Git for installation from source.
 Uses the Elasticsearch 8.x Python client (`>=8.18,<9`).
 
 **Contents**

@@ -1,4 +1,5 @@
 from collections.abc import Iterator
+from inspect import signature
 from uuid import UUID, uuid4
 
 import pytest
@@ -38,6 +39,11 @@ def session() -> Iterator[Session]:
             yield database
     finally:
         engine.dispose()
+
+
+@pytest.mark.parametrize("method", ["create", "get", "update", "delete", "list", "count"])
+def test_repository_interface_signatures_can_be_inspected(method: str):
+    assert "self" in signature(getattr(RepositoryInterface, method)).parameters
 
 
 def test_crud_persists_changes_and_preserves_return_values(session: Session):

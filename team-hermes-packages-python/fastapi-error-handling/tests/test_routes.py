@@ -1,14 +1,20 @@
 from collections.abc import AsyncIterator
+from functools import partial
 
 import pytest
 from fastapi import APIRouter, BackgroundTasks, FastAPI, HTTPException
 from fastapi.testclient import TestClient
 from pydantic import BaseModel
 from starlette.exceptions import HTTPException as StarletteHTTPException
-from starlette.responses import StreamingResponse
+from starlette.responses import JSONResponse, StreamingResponse
 from team_hermes.core import NotFoundException, ValidationException
 
-from team_hermes.fastapi_error_handling import ErrorHandlingConfig, ExceptionHandlingRoute, ProblemDetails
+from team_hermes.fastapi_error_handling import (
+    ErrorHandlingConfig,
+    ExceptionHandlingRoute,
+    ProblemDetails,
+    framework_http_exception_handler,
+)
 from team_hermes.fastapi_error_handling.exception_handling.responses import responses
 
 
@@ -87,16 +93,118 @@ def test_request_validation_and_success():
 
 
 @pytest.mark.parametrize(
-    "path,status_code,header,value",
-    [("/framework", 401, "WWW-Authenticate", "Bearer"), ("/starlette", 429, "Retry-After", "30")],
+    "path,status_code,header,value,detail",
+    [
+        ("/framework", 401, "WWW-Authenticate", "Bearer", "Login required"),
+        ("/starlette", 429, "Retry-After", "30", "Slow down"),
+    ],
 )
-def test_framework_http_exceptions_are_preserved(path, status_code, header, value):
+def test_framework_http_exceptions_return_problem_details(path, status_code, header, value, detail):
     with TestClient(make_app()) as client:
         response = client.get(path)
         assert response.status_code == status_code
         assert response.headers[header] == value
-        assert set(response.json()) == {"detail"}
+        problem = ProblemDetails.model_validate(response.json())
+        assert problem.type == "about:blank"
+        assert problem.status == status_code
+        assert problem.detail == detail
         assert client.get("/unknown").json() == {"detail": "Not Found"}
+
+
+def test_route_http_exception_handling_precedes_application_handler():
+    app = make_app()
+    app.add_exception_handler(
+        StarletteHTTPException, lambda request, exception: JSONResponse({"custom": True}, status_code=418)
+    )
+    with TestClient(app) as client:
+        response = client.get("/framework")
+        assert response.status_code == 401
+        assert response.json()["detail"] == "Login required"
+        assert response.json()["type"] == "about:blank"
+        assert client.get("/unknown").json() == {"custom": True}
+
+
+@pytest.mark.parametrize(
+    "method,path,status_code,title,detail,headers",
+    [
+        ("GET", "/framework", 401, "Unauthorized", "Login required", {"WWW-Authenticate": "Bearer"}),
+        ("GET", "/starlette", 429, "Too Many Requests", "Slow down", {"Retry-After": "30"}),
+        ("GET", "/unknown", 404, "Not Found", "Not Found", {}),
+        ("GET", "/orders", 405, "Method Not Allowed", "Method Not Allowed", {"Allow": "POST"}),
+    ],
+)
+def test_framework_problem_details_handler(method, path, status_code, title, detail, headers):
+    app = make_app()
+    app.add_exception_handler(StarletteHTTPException, framework_http_exception_handler)
+    with TestClient(app) as client:
+        response = client.request(method, path, headers={"X-Trace-Id": "client-trace"})
+    assert response.status_code == status_code
+    assert response.headers["content-type"] == "application/json"
+    for name, value in headers.items():
+        assert response.headers[name] == value
+    problem = ProblemDetails.model_validate(response.json())
+    assert problem.type == "about:blank"
+    assert problem.status == status_code
+    assert problem.title == title
+    assert problem.detail == detail
+    assert problem.extensions is not None
+    assert problem.extensions.requestPath == path
+    assert problem.extensions.traceId == "client-trace"
+    assert problem.extensions.errorId
+
+
+@pytest.mark.parametrize("register_globally", [False, True])
+def test_framework_problem_details_configuration_and_isolation(register_globally):
+    config = ErrorHandlingConfig(
+        problem_type_map={StarletteHTTPException: "urn:orders:http-error"},
+        trace_id_provider=lambda: "configured-trace",
+        extension_provider=lambda request: {"service": "orders"},
+    )
+    app = make_app(config)
+    if register_globally:
+        app.add_exception_handler(StarletteHTTPException, partial(framework_http_exception_handler, config=config))
+    with TestClient(app) as client, TestClient(make_app()) as default:
+        problem = client.get("/framework", headers={"X-Trace-Id": "client-trace"}).json()
+        assert problem["type"] == "urn:orders:http-error"
+        assert problem["extensions"]["traceId"] == "configured-trace"
+        assert problem["extensions"]["service"] == "orders"
+        default_problem = default.get("/framework").json()
+        assert default_problem["type"] == "about:blank"
+        assert default_problem["detail"] == "Login required"
+        assert default_problem["extensions"]["traceId"] == ""
+        assert client.get("/missing").json()["type"] == "/docs/problems/not-found"
+
+
+@pytest.mark.parametrize("detail", [{"code": "expired", "reasons": ["login"]}, ["invalid", 3], 42])
+def test_framework_problem_details_preserves_structured_detail(detail):
+    app = make_app()
+    app.add_exception_handler(StarletteHTTPException, framework_http_exception_handler)
+
+    @app.get("/structured")
+    def structured():
+        raise HTTPException(400, detail=detail)
+
+    with TestClient(app) as client:
+        response = client.get("/structured")
+    assert response.status_code == 400
+    assert response.json()["detail"] is None
+    assert response.json()["extensions"]["httpExceptionDetail"] == detail
+
+
+@pytest.mark.parametrize("status_code", [204, 304])
+def test_framework_problem_details_respects_bodyless_statuses(status_code):
+    app = make_app()
+    app.add_exception_handler(StarletteHTTPException, framework_http_exception_handler)
+
+    @app.get("/bodyless")
+    def bodyless():
+        raise StarletteHTTPException(status_code, detail="Must not be returned", headers={"ETag": "revision"})
+
+    with TestClient(app) as client:
+        response = client.get("/bodyless")
+    assert response.status_code == status_code
+    assert response.content == b""
+    assert response.headers["ETag"] == "revision"
 
 
 def test_configured_routes_are_isolated_after_include_router():
