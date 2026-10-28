@@ -13,7 +13,6 @@ export const DataGridSidebar = <TData extends Record<string, any>>() => {
   const [minimizeContent, setMinimizeContent] = useState<boolean>(false)
 
   const hasComments = commentConfig?.enabled
-  if (!editable && !hasComments) return null
 
   const validationErrorsAmount = table.options.meta?.validationErrors
     ? Object.keys(table.options.meta.validationErrors).length
@@ -23,6 +22,7 @@ export const DataGridSidebar = <TData extends Record<string, any>>() => {
     ? Object.keys(table.options.meta.validationWarnings)?.length
     : 0
 
+  if (!editable && !hasComments && !validationErrorsAmount && !validationWarningsAmount) return null
   const commentCount = hasComments ? commentConfig.getAllComments().length : 0
 
   const toggleCollapse = () => {
