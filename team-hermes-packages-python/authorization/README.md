@@ -74,7 +74,8 @@ True
 - Predicates receive the original subject as their first positional argument.
   Only context keywords matching declared parameter names are forwarded, and
   parameter defaults are applied. A catch-all `**kwargs` parameter does not collect
-  arbitrary context keywords.
+  arbitrary context keywords. A context keyword named `check` follows the same
+  forwarding and filtering rules.
 - Missing required arguments and incompatible annotated values raise `TypeError`.
   Predicate exceptions propagate, even when a later role could grant access.
   Callers must not treat errors as grants.
@@ -103,5 +104,5 @@ mise run python:lint
 mise run python:typecheck
 ```
 
-The isolated authorization task builds the sdist and wheel and runs tests against
-the installed wheel, including the README embedded in its metadata.
+The isolated authorization task installs the local package with `uv run --with`
+and runs its tests, including the README embedded in the installed metadata.

@@ -103,6 +103,23 @@ def test_predicate_accepts_subject_protocol_annotation() -> None:
     assert access.has_permission(user, DOCUMENTS, Action.VIEW)
 
 
+def test_predicate_ignores_undeclared_check_context() -> None:
+    def is_reader(subject: User) -> bool:
+        return "reader" in subject.roles
+
+    access = AccessControl({READER: {DOCUMENTS: {Action.VIEW: is_reader}}})
+    assert access.has_permission(User(["reader"]), DOCUMENTS, Action.VIEW, check="context")
+
+
+@pytest.mark.parametrize("allowed", [True, False])
+def test_predicate_receives_declared_check_context(allowed: bool) -> None:
+    def is_allowed(subject: User, *, check: bool) -> bool:
+        return check
+
+    access = AccessControl({READER: {DOCUMENTS: {Action.VIEW: is_allowed}}})
+    assert access.has_permission(User(["reader"]), DOCUMENTS, Action.VIEW, check=allowed) is allowed
+
+
 def test_unannotated_predicate() -> None:
     access = AccessControl({READER: {DOCUMENTS: {Action.VIEW: lambda user, owner="alice": user.user_id == owner}}})
     assert access.has_permission(User(["reader"]), DOCUMENTS, Action.VIEW)
