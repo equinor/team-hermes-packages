@@ -1,7 +1,7 @@
 import { Icon } from '@equinor/eds-core-react'
 import { chevron_left, chevron_right } from '@equinor/eds-icons'
 import { Stack } from '@/components'
-import type { CellActions } from '../../context/DataGridContext'
+import { useDataGridContext, type CellActions } from '../../context/DataGridContext'
 
 type DataGridValidationSectionProps = {
   cellSelection: CellActions
@@ -11,6 +11,7 @@ type DataGridValidationSectionProps = {
 
 export const DataGridValidationSection = (props: DataGridValidationSectionProps) => {
   const { cellSelection, validationMessages, type } = props
+  const { table } = useDataGridContext()
 
   if (!validationMessages || Object.keys(validationMessages).length === 0) return null
 
@@ -35,7 +36,11 @@ export const DataGridValidationSection = (props: DataGridValidationSectionProps)
       </Stack>
       <Stack $scrollY $grow={1} $minHeight={0} $padding={[0, 0.5]}>
         {Object.entries(validationMessages).map(([key, error], index) => {
-          const [rowIndex, columnId] = key.replace(/[[\]]/g, '').split('.')
+          const [rowIndex, ...parts] = key.replace(/[[\]]/g, '').split('.')
+          const fullPath = parts.join('.')
+          const column = table.getAllLeafColumns().find((c) => c.id === fullPath)
+          const header = column?.columnDef.header
+          const columnLabel = (typeof header === 'string' && header) || parts[parts.length - 1]
           return (
             <button
               key={index}
@@ -44,7 +49,7 @@ export const DataGridValidationSection = (props: DataGridValidationSectionProps)
               onClick={() => cellSelection.selectErrorCell(index, type)}
             >
               <span className="text-meta" key={key}>
-                <b>{columnId ? `${columnId}:${Number(rowIndex) + 1}` : `#${Number(rowIndex) + 1}`}</b>
+                <b>{columnLabel ? `${columnLabel}:${Number(rowIndex) + 1}` : `#${Number(rowIndex) + 1}`}</b>
                 <br />
                 {`${error}`}
               </span>
