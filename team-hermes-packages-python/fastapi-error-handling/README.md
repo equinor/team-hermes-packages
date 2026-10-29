@@ -20,9 +20,74 @@ Omit `--find-links` when core is available from your configured package source.
 
 ## Quick Start
 
+Set `ExceptionHandlingRoute` on the router to turn Hermes exceptions into
+Problem Details responses.
+
 This app approves orders, returning 404 for a missing order, 400 for a non-positive
 total, and 422 when the purchasing limit is exceeded. The dictionary is example
 storage; replace it with your application's data access.
+
+```pycon
+>>> from fastapi import APIRouter, FastAPI
+>>> from pydantic import BaseModel
+
+>>> from team_hermes.core import (
+...     BusinessRuleViolationException,
+...     NotFoundException,
+...     ValidationException,
+... )
+>>> from team_hermes.fastapi_error_handling import ExceptionHandlingRoute
+
+>>> app = FastAPI()
+>>> router = APIRouter(route_class=ExceptionHandlingRoute)
+>>> orders = {"order-1": 50}
+
+>>> class OrderApproval(BaseModel):
+...     total: int
+...
+
+>>> def approve_order(order_id: str, total: int) -> dict[str, str | int]:
+...     if order_id not in orders:
+...         raise NotFoundException("Order not found", extensions={"orderId": order_id})
+...     if total <= 0:
+...         raise ValidationException(
+...             "Order total must be positive",
+...             title="Order validation failed",
+...             errors=[
+...                 {
+...                     "pointer": "#/total",
+...                     "code": "positive_total_required",
+...                     "detail": "Total must be positive",
+...                 }
+...             ],
+...         )
+...     if total > 100:
+...         raise BusinessRuleViolationException(
+...             "Order total exceeds the purchasing limit",
+...             extensions={
+...                 "ruleCode": "order_limit_exceeded",
+...                 "limit": 100,
+...                 "requestedTotal": total,
+...             },
+...         )
+...     orders[order_id] = total
+...     return {"id": order_id, "status": "approved", "total": total}
+...
+
+>>> @router.post("/orders/{order_id}/approval")
+... def approve(order_id: str, body: OrderApproval):
+...     return approve_order(order_id, body.total)
+...
+>>> app.include_router(router)
+
+```
+
+Errors return `application/problem+json` responses.
+
+## Configured Example
+
+Run this after Quick Start to build a new app with optional configuration,
+reusing the same approval endpoint.
 
 ```pycon
 >>> import logging
@@ -31,21 +96,13 @@ storage; replace it with your application's data access.
 >>> from functools import partial
 >>> from uuid import uuid4
 
->>> from fastapi import APIRouter, FastAPI
->>> from pydantic import BaseModel
 >>> from starlette.exceptions import HTTPException
 >>> from starlette.requests import Request
 >>> from starlette.responses import Response
 
->>> from team_hermes.core import (
-...     BusinessRuleViolationException,
-...     NotFoundException,
-...     UpstreamApiException,
-...     ValidationException,
-... )
+>>> from team_hermes.core import UpstreamApiException
 >>> from team_hermes.fastapi_error_handling import (
 ...     ErrorHandlingConfig,
-...     ExceptionHandlingRoute,
 ...     ProblemDetails,
 ...     build_common_extensions,
 ...     framework_http_exception_handler,
@@ -139,44 +196,7 @@ storage; replace it with your application's data access.
 ...     },
 ... )
 
->>> orders = {"order-1": 50}
-
->>> class OrderApproval(BaseModel):
-...     total: int
-...
-
->>> def approve_order(order_id: str, total: int) -> dict[str, str | int]:
-...     if order_id not in orders:
-...         raise NotFoundException("Order not found", extensions={"orderId": order_id})
-...     if total <= 0:
-...         raise ValidationException(
-...             "Order total must be positive",
-...             title="Order validation failed",
-...             errors=[
-...                 {
-...                     "pointer": "#/total",
-...                     "code": "positive_total_required",
-...                     "detail": "Total must be positive",
-...                 }
-...             ],
-...         )
-...     if total > 100:
-...         raise BusinessRuleViolationException(
-...             "Order total exceeds the purchasing limit",
-...             extensions={
-...                 "ruleCode": "order_limit_exceeded",
-...                 "limit": 100,
-...                 "requestedTotal": total,
-...             },
-...         )
-...     orders[order_id] = total
-...     return {"id": order_id, "status": "approved", "total": total}
-...
-
->>> @router.post("/orders/{order_id}/approval")
-... def approve(order_id: str, body: OrderApproval):
-...     return approve_order(order_id, body.total)
-...
+>>> router.add_api_route("/orders/{order_id}/approval", approve, methods=["POST"])
 >>> app.include_router(router)
 
 ```
@@ -185,6 +205,8 @@ storage; replace it with your application's data access.
 
 Use `errors` for individual field-validation findings and `extensions` for
 metadata, such as trace IDs and business-rule codes. A response can contain both.
+
+The responses below use the configured example.
 
 **Business-rule rejection (`extensions`):** send a request above the purchasing limit:
 
@@ -794,7 +816,7 @@ status codes. Include the `502` response in OpenAPI:
 
 ## Development
 
-The quick start and response payload are executed and checked by pytest. Follow the
+The README examples and response payloads are checked by pytest. Follow the
 [workspace setup](../README.md), then run from the repository root:
 
 ```shell

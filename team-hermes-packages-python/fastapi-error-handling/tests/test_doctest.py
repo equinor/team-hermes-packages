@@ -11,12 +11,13 @@ from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
 
-@pytest.fixture
-def quick_start_example() -> doctest.DocTest:
+def readme_example(*section_names: str) -> doctest.DocTest:
     readme_path = Path(__file__).resolve().parents[1] / "README.md"
     readme = readme_path.read_text(encoding="utf-8")
-    quick_start = readme.partition("## Quick Start\n")[2].partition("\n## ")[0]
-    example = doctest.DocTestParser().get_doctest(quick_start, {}, "README quick start", str(readme_path), 0)
+    sections = [readme.partition(f"## {name}\n")[2].partition("\n## ")[0] for name in section_names]
+    assert all(sections)
+    name = "README " + " + ".join(section_names)
+    example = doctest.DocTestParser().get_doctest("\n".join(sections), {}, name, str(readme_path), 0)
     result = doctest.DocTestRunner().run(example, clear_globs=False)
     assert result.failed == 0
     assert result.attempted > 0
@@ -24,12 +25,46 @@ def quick_start_example() -> doctest.DocTest:
 
 
 @pytest.fixture
-def quick_start_app(quick_start_example: doctest.DocTest) -> FastAPI:
-    return quick_start_example.globs["app"]
+def configured_example() -> doctest.DocTest:
+    return readme_example("Quick Start", "Configured Example")
 
 
-def test_readme_quick_start(quick_start_app: FastAPI) -> None:
-    with TestClient(quick_start_app) as client:
+@pytest.fixture
+def configured_app(configured_example: doctest.DocTest) -> FastAPI:
+    return configured_example.globs["app"]
+
+
+def test_readme_quick_start() -> None:
+    example = readme_example("Quick Start")
+    with TestClient(example.globs["app"]) as client:
+        accepted = client.post("/orders/order-1/approval", json={"total": 60})
+        missing = client.post("/orders/missing/approval", json={"total": 50})
+        invalid = client.post("/orders/order-1/approval", json={"total": 0})
+        rejected = client.post("/orders/order-1/approval", json={"total": 150})
+        malformed = client.post("/orders/order-1/approval", json={"total": "invalid"})
+
+    assert accepted.status_code == 200
+    assert accepted.json() == {"id": "order-1", "status": "approved", "total": 60}
+    assert example.globs["orders"]["order-1"] == 60
+    assert missing.status_code == 404
+    assert missing.headers["content-type"] == "application/problem+json"
+    problem = missing.json()
+    assert problem["status"] == 404
+    assert problem["detail"] == "Order not found"
+    assert problem["extensions"]["requestPath"] == "/orders/missing/approval"
+    assert problem["extensions"]["orderId"] == "missing"
+    UUID(problem["extensions"]["errorId"])
+    assert invalid.status_code == 400
+    assert invalid.json()["errors"] == [
+        {"pointer": "#/total", "code": "positive_total_required", "detail": "Total must be positive"}
+    ]
+    assert rejected.status_code == 422
+    assert rejected.json()["extensions"]["ruleCode"] == "order_limit_exceeded"
+    assert malformed.status_code == 422
+
+
+def test_readme_configured_example(configured_app: FastAPI) -> None:
+    with TestClient(configured_app) as client:
         accepted = client.post("/orders/order-1/approval", json={"total": 50})
         missing = client.post("/orders/order-404/approval", json={"total": 50})
         invalid = client.post("/orders/order-1/approval", json={"total": 0})
@@ -50,13 +85,13 @@ def test_readme_quick_start(quick_start_app: FastAPI) -> None:
     assert wrong_method.status_code == 405
     assert wrong_method.json()["status"] == 405
     assert wrong_method.headers["allow"] == "POST"
-    documented_responses = quick_start_app.openapi()["paths"]["/orders/{order_id}/approval"]["post"]["responses"]
+    documented_responses = configured_app.openapi()["paths"]["/orders/{order_id}/approval"]["post"]["responses"]
     assert {"400", "404", "422", "502", "503"} <= documented_responses.keys()
     assert "application/problem+json" in documented_responses["503"]["content"]
 
 
-def test_readme_configuration(quick_start_app: FastAPI, quick_start_example: doctest.DocTest) -> None:
-    namespace = quick_start_example.globs
+def test_readme_configuration(configured_app: FastAPI, configured_example: doctest.DocTest) -> None:
+    namespace = configured_example.globs
     config = namespace["config"]
     router = namespace["APIRouter"](
         route_class=namespace["ExceptionHandlingRoute"].with_config(config),
@@ -71,8 +106,8 @@ def test_readme_configuration(quick_start_app: FastAPI, quick_start_example: doc
     def fail_timeout() -> None:
         raise TimeoutError("Private connection details")
 
-    quick_start_app.include_router(router)
-    with TestClient(quick_start_app) as client:
+    configured_app.include_router(router)
+    with TestClient(configured_app) as client:
         upstream = client.get("/upstream")
         timeout = client.get("/timeout", headers={"X-Trace-Id": "timeout-trace"})
         another_timeout = client.get("/timeout")
@@ -112,14 +147,14 @@ def test_readme_configuration(quick_start_app: FastAPI, quick_start_example: doc
     ids=["business-rule", "field-validation"],
 )
 def test_readme_problem_details_response(
-    quick_start_app: FastAPI, total: int, expected_status: int, example_index: int
+    configured_app: FastAPI, total: int, expected_status: int, example_index: int
 ) -> None:
     readme = (Path(__file__).resolve().parents[1] / "README.md").read_text(encoding="utf-8")
     section = readme.partition("## Problem Details\n")[2].partition("\n## ")[0]
     examples = [json.loads(block) for block in re.findall(r"```json\n(.*?)\n```", section, re.DOTALL)]
     assert len(examples) == 2
     example = examples[example_index]
-    with TestClient(quick_start_app) as client:
+    with TestClient(configured_app) as client:
         response = client.post(
             "/orders/order-1/approval", json={"total": total}, headers={"X-Trace-Id": "example-trace"}
         )
