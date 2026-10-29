@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "team-hermes-authorization"
-version = "0.1.0"
+version = "0.2.0"
 description = "Framework-independent role and attribute-based authorization for Team Hermes projects"
 readme = "README.md"
 license-files = ["LICENSE"]
