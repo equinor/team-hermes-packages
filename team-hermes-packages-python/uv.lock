@@ -782,6 +782,9 @@ dependencies = [
 ]
 
 [package.optional-dependencies]
+httpx = [
+    { name = "httpx" },
+]
 requests = [
     { name = "requests" },
 ]
@@ -799,13 +802,14 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "fastapi" },
+    { name = "httpx", marker = "extra == 'httpx'", specifier = ">=0.28" },
     { name = "opentelemetry-api", marker = "extra == 'telemetry'", specifier = ">=1.30" },
     { name = "pydantic", specifier = ">=2" },
     { name = "requests", marker = "extra == 'requests'", specifier = ">=2.32" },
     { name = "starlette" },
     { name = "team-hermes-core", editable = "core" },
 ]
-provides-extras = ["requests", "telemetry"]
+provides-extras = ["httpx", "requests", "telemetry"]
 
 [package.metadata.requires-dev]
 dev = [
