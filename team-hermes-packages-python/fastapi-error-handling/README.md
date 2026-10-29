@@ -157,6 +157,9 @@ not by message or severity:
 | `MissingPrivilegeException`      | The caller lacks permission.                    | 403            |
 | `UpstreamApiException`           | An upstream API returns an unexpected response. | 500            |
 
+`UnauthorizedException` does not add `WWW-Authenticate` to the `401` response;
+authentication code must supply it.
+
 FastAPI/Pydantic request validation returns 422. Unexpected Python exceptions and
 response validation failures return a generic 500; `ValueError` is not a 400.
 Other `ApplicationException` subclasses default to 500 unless they inherit a more
@@ -167,7 +170,9 @@ for category details.
 
 ### When to Return or Raise
 
-**Empty search:** no matches is a valid result, not a failure.
+Return expected results; raise when the operation cannot proceed.
+
+**Empty search:** no matches is a valid result.
 
 ```pycon
 >>> order_statuses = {"order-1": "pending"}
@@ -190,7 +195,7 @@ True
 
 ```
 
-**Required lookup:** raise when the operation requires a record that does not exist.
+**Required lookup:** raise when a required record is missing.
 
 ```pycon
 >>> from team_hermes.core import NotFoundException
@@ -209,8 +214,7 @@ team_hermes.core.exceptions.NotFoundException: Order not found
 
 ```
 
-**Validation check:** return findings when checking data is the operation,
-even if the data is invalid.
+**Validation check:** return findings when checking data is the operation.
 
 ```pycon
 >>> def check_total(total: int) -> list[dict[str, str]]:
@@ -225,22 +229,14 @@ even if the data is invalid.
 
 ```
 
-This check neither saves nor approves anything. Findings are expected results;
-errors that prevent a check from running should still propagate. A command that
-cannot proceed may instead raise an application exception.
+A rejected create or save raises instead. Failures that prevent a check from
+running still propagate.
 
 ### Exception Propagation
 
-**Raise once; let the handler catch it.** Raise the application exception where the
-failure is identified, then let it propagate unchanged through callers to
-`ExceptionHandlingRoute`. The wrapper logs it and creates the HTTP error response.
-
-Do not add `try`/`except` at each layer merely to log and re-raise the same exception,
-and do not return exception objects. Catch only when you need to recover, translate
-the failure, or perform necessary cleanup; prefer context managers or `finally` for cleanup.
-
-Here, `load_order` deliberately fails. The endpoint forwards the call without
-catching the exception; the route wrapper handles it:
+**Raise once; let the handler catch it.** `ExceptionHandlingRoute` logs the
+exception and creates the response. Catch only to recover or translate, not to
+log and re-raise. Use context managers or `finally` for cleanup; never return exceptions.
 
 ```pycon
 >>> from fastapi import APIRouter, FastAPI
@@ -271,9 +267,8 @@ catching the exception; the route wrapper handles it:
 
 ### Upstream Failures
 
-Translate documented status/code pairs, not status alone. This HTTPX example
-(`uv pip install httpx`) inspects responses directly so known rejections can become
-application exceptions:
+Translate known rejections into application exceptions; unexpected responses
+become `UpstreamApiException`. Install HTTPX with `uv pip install httpx`.
 
 ```pycon
 >>> import httpx
@@ -285,6 +280,7 @@ application exceptions:
 ...     UpstreamApiException,
 ...     ValidationException,
 ... )
+>>> # Keep upstream findings separate from public fields.
 >>> class CreatedOrder(BaseModel):
 ...     id: str
 ...     total: int
@@ -305,6 +301,7 @@ application exceptions:
 >>> class UpstreamValidation(BaseModel):
 ...     errors: list[UpstreamFinding] = Field(min_length=1)
 ...
+>>> # Map known fields and codes; indices must refer to submitted items.
 >>> def translate_findings(payload: object, item_count: int = 0) -> list[FieldFinding]:
 ...     try:
 ...         report = UpstreamValidation.model_validate(payload)
@@ -332,6 +329,7 @@ application exceptions:
 ...             raise UpstreamApiException("Order service returned unsupported validation findings")
 ...     return issues
 ...
+>>> # Chain parsing and transport exceptions, not HTTP response objects.
 >>> def create_order(client: httpx.Client, total: int, items: list[OrderItem] | None = None) -> CreatedOrder:
 ...     request_body: dict[str, object] = {"total": total}
 ...     if items is not None:
@@ -368,12 +366,7 @@ application exceptions:
 ...         raise DuplicateException("Order already exists")
 ...     raise UpstreamApiException("Order service rejected the request")
 ...
-
-```
-
-**API endpoint:** return the order; let exceptions reach the wrapper.
-
-```pycon
+>>> # Expose the operation; let exceptions reach the route wrapper.
 >>> from collections.abc import Iterator
 >>> from fastapi import APIRouter, Depends, FastAPI
 >>> from team_hermes.fastapi_error_handling import ExceptionHandlingRoute
@@ -389,14 +382,22 @@ application exceptions:
 >>> orders_app = FastAPI()
 >>> orders_router = APIRouter(route_class=ExceptionHandlingRoute, responses=responses)
 >>> @orders_router.post("/orders", response_model=CreatedOrder, status_code=201)
-... def submit_order(body: CreateOrderRequest, client: httpx.Client = Depends(get_order_client)) -> CreatedOrder:
+... def submit_order(
+...     body: CreateOrderRequest,
+...     client: httpx.Client = Depends(get_order_client),
+... ) -> CreatedOrder:
 ...     return create_order(client, body.total, body.items)
 ...
 >>> orders_app.include_router(orders_router)
 
 ```
 
-**Successful creation:** your API returns `201 Created` (`application/json`).
+#### Request and Response Examples
+
+Requests target `/orders`. Success uses `application/json`; errors use `application/problem+json`.
+The purchasing-limit and timeout responses omit `extensions` for brevity.
+
+**Success: `201 Created`**
 
 ```shell
 curl -i http://127.0.0.1:8000/orders \
@@ -411,8 +412,7 @@ curl -i http://127.0.0.1:8000/orders \
 }
 ```
 
-**Field validation (`errors`):** upstream `422` / `validation_failed` becomes
-`400 Bad Request` (`application/problem+json`).
+**Field validation: `400 Bad Request`**
 
 ```shell
 curl -i http://127.0.0.1:8000/orders \
@@ -443,15 +443,7 @@ curl -i http://127.0.0.1:8000/orders \
 }
 ```
 
-For `{"total": 0}`, `#/total` points to the invalid request value. The `errors`
-array follows the [RFC 9457 example](https://www.rfc-editor.org/rfc/rfc9457.html#section-3),
-with safe messages and stable codes. Private upstream data stays out; `errorId`
-changes per response.
-
-**Nested array validation:** upstream finding
-`{"field": "line_items.qty", "index": 1, "code": "too_small"}` maps to
-`#/items/1/quantity`, the second item's quantity. Indices are zero-based; this
-example keeps item order unchanged when sending to the upstream service.
+**Nested array: `400 Bad Request`**
 
 ```shell
 curl -i http://127.0.0.1:8000/orders \
@@ -459,8 +451,6 @@ curl -i http://127.0.0.1:8000/orders \
   -H 'X-Trace-Id: example-trace' \
   -d '{"total": 50, "items": [{"quantity": 2}, {"quantity": 0}]}'
 ```
-
-Your API returns `400 Bad Request` (`application/problem+json`):
 
 ```json
 {
@@ -484,10 +474,45 @@ Your API returns `400 Bad Request` (`application/problem+json`):
 }
 ```
 
-Each invalid item gets its own `errors` entry. Unknown fields or invalid indices
-remain upstream failures, not caller validation errors.
+**Purchasing limit: `422 Unprocessable Entity`**
 
-**Optional: return `422` instead of `400`.** Configure the router before adding routes:
+```shell
+curl -i http://127.0.0.1:8000/orders \
+  -H 'Content-Type: application/json' \
+  -d '{"total": 150}'
+```
+
+```json
+{
+  "type": "/docs/problems/business-rule-violation",
+  "title": "Business Rule Violation",
+  "status": 422,
+  "detail": "Purchasing limit exceeded"
+}
+```
+
+**Upstream timeout: `500 Internal Server Error`**
+
+```shell
+curl -i http://127.0.0.1:8000/orders \
+  -H 'Content-Type: application/json' \
+  -d '{"total": 150}'
+```
+
+```json
+{
+  "type": "/docs/problems/upstream-api-error",
+  "title": "Upstream API Error",
+  "status": 500,
+  "detail": "Order service timed out"
+}
+```
+
+A timed-out creation may have succeeded. No writes are retried without an idempotency guarantee.
+
+#### Override the Validation Status
+
+Use `422` instead of `400`, configuring the router before adding routes:
 
 ```pycon
 >>> from team_hermes.fastapi_error_handling import ErrorHandlingConfig
@@ -501,134 +526,10 @@ remain upstream failures, not caller validation errors.
 
 ```
 
-**Failure examples:** send the same request to `orders_app` with its default status
-mappings. Each response assumes the upstream outcome shown; `extensions` is omitted
-from these excerpts. All errors use `application/problem+json`.
-
-```shell
-curl -i http://127.0.0.1:8000/orders \
-  -H 'Content-Type: application/json' \
-  -d '{"total": 150}'
-```
-
-**Purchasing limit:** upstream `422` with `{"code": "limit_exceeded"}` raises
-`BusinessRuleViolationException`. Your API returns `422`:
-
-```json
-{
-  "type": "/docs/problems/business-rule-violation",
-  "title": "Business Rule Violation",
-  "status": 422,
-  "detail": "Purchasing limit exceeded"
-}
-```
-
-**Duplicate order:** upstream `409` with `{"code": "order_exists"}` raises
-`DuplicateException`. Your API returns `409`:
-
-```json
-{
-  "type": "/docs/problems/duplicate",
-  "title": "Duplicate",
-  "status": 409,
-  "detail": "Order already exists"
-}
-```
-
-**Unrecognized rejection:** each of these raises `UpstreamApiException`, returning
-the same `500` response. A service-credential failure is not your caller's `401`:
-
-- Upstream `422`: `{"code": "unknown_rule"}`
-- Upstream `401`: `{"code": "invalid_service_credentials"}`
-- Upstream `500`: `{"message": "Private upstream details"}`
-
-```json
-{
-  "type": "/docs/problems/upstream-api-error",
-  "title": "Upstream API Error",
-  "status": 500,
-  "detail": "Order service rejected the request"
-}
-```
-
-**Invalid JSON:** upstream `502` with an HTML body such as `<h1>Bad Gateway</h1>`
-becomes `UpstreamApiException`, with the JSON parsing exception preserved as its cause:
-
-```json
-{
-  "type": "/docs/problems/upstream-api-error",
-  "title": "Upstream API Error",
-  "status": 500,
-  "detail": "Order service returned invalid JSON"
-}
-```
-
-**Invalid order data:** upstream `200` with `{"id": "order-1", "total": "invalid"}`
-becomes `UpstreamApiException` caused by Pydantic's `ValidationError`, not a caller `422`:
-
-```json
-{
-  "type": "/docs/problems/upstream-api-error",
-  "title": "Upstream API Error",
-  "status": 500,
-  "detail": "Order service returned invalid order data"
-}
-```
-
-**Malformed findings:** upstream `422` with `{"code": "validation_failed", "errors": []}`
-also becomes `UpstreamApiException` caused by `ValidationError`:
-
-```json
-{
-  "type": "/docs/problems/upstream-api-error",
-  "title": "Upstream API Error",
-  "status": 500,
-  "detail": "Order service returned invalid validation data"
-}
-```
-
-**Unsupported finding:** upstream `422` with
-`{"code": "validation_failed", "errors": [{"field": "private_field", "code": "unknown"}]}`
-becomes `UpstreamApiException`. There is no exception cause to chain for this rejection:
-
-```json
-{
-  "type": "/docs/problems/upstream-api-error",
-  "title": "Upstream API Error",
-  "status": 500,
-  "detail": "Order service returned unsupported validation findings"
-}
-```
-
-**Timeout:** `httpx.ReadTimeout` is chained with `raise UpstreamApiException(...) from error`:
-
-```json
-{
-  "type": "/docs/problems/upstream-api-error",
-  "title": "Upstream API Error",
-  "status": 500,
-  "detail": "Order service timed out"
-}
-```
-
-The client does not retry: the order may already exist upstream. Retrying creation
-requires an idempotency guarantee.
-
-**Connection failure:** `httpx.ConnectError` is preserved as the cause in the same way:
-
-```json
-{
-  "type": "/docs/problems/upstream-api-error",
-  "title": "Upstream API Error",
-  "status": 500,
-  "detail": "Order service unavailable"
-}
-```
-
 ### Safe Metadata
 
-Application details and extensions are public, even on `500`. Prefer an
-application-owned message and stable code over response bodies, URLs, or credentials:
+**Treat details and extensions as public, even on `500`.** Use application-owned
+messages and stable codes, not upstream response bodies, URLs, or credentials:
 
 ```pycon
 >>> from team_hermes.core import UpstreamApiException
@@ -641,51 +542,43 @@ application-owned message and stable code over response bodies, URLs, or credent
 
 ```
 
-Use JSON-compatible values and do not overwrite correlation or severity fields.
-Model-validation errors can include input values; request validation omits them.
+### Logging
 
-### Logging and Status Mappings
-
-The application owns logging and redaction. Put specific exception mappings before
-base classes, and document custom statuses in OpenAPI:
+Choose the logger used by the exception handlers. Configure its handlers, format,
+and redaction in your application.
 
 ```pycon
 >>> import logging
 >>> from fastapi import APIRouter
->>> from team_hermes.core import ApplicationException, UpstreamApiException
 >>> from team_hermes.fastapi_error_handling import ErrorHandlingConfig, ExceptionHandlingRoute
->>> config = ErrorHandlingConfig(
+>>> logging_config = ErrorHandlingConfig(
 ...     logger=logging.getLogger("example.errors"),
-...     status_map={UpstreamApiException: 502, ApplicationException: 500},
 ... )
->>> configured_router = APIRouter(
-...     route_class=ExceptionHandlingRoute.with_config(config),
+>>> logging_router = APIRouter(
+...     route_class=ExceptionHandlingRoute.with_config(logging_config),
 ... )
 
 ```
 
-This overrides the default `500` for `UpstreamApiException`; it is an application
-policy, not a requirement to use `502` for every dependency failure.
+### Custom Status Codes
 
-### Authentication Challenges
-
-`UnauthorizedException` does not set `WWW-Authenticate`. Raise an HTTP exception
-with the appropriate challenge at the authentication boundary; the handler preserves it:
+Return `502` for `UpstreamApiException`; all other exceptions keep their default
+status codes. Include the `502` response in OpenAPI:
 
 ```pycon
->>> from starlette.exceptions import HTTPException
->>> raise HTTPException(401, headers={"WWW-Authenticate": "Bearer"})
-Traceback (most recent call last):
-...
-starlette.exceptions.HTTPException: 401: Unauthorized
+>>> from fastapi import APIRouter
+>>> from team_hermes.core import UpstreamApiException
+>>> from team_hermes.fastapi_error_handling import ErrorHandlingConfig, ExceptionHandlingRoute
+>>> from team_hermes.fastapi_error_handling.exception_handling.responses import create_response, responses
+>>> status_config = ErrorHandlingConfig(
+...     status_map={UpstreamApiException: 502},
+... )
+>>> configured_router = APIRouter(
+...     route_class=ExceptionHandlingRoute.with_config(status_config),
+...     responses={**responses, 502: create_response(UpstreamApiException())},
+... )
 
 ```
-
-### Handler Scope
-
-Configure each participating router before adding routes. Other routers, outer
-middleware, lifespan, and WebSockets are outside the wrapper's scope. Errors during
-streaming or background work cannot replace a response that has already started.
 
 ## Development
 

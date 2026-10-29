@@ -223,12 +223,21 @@ def test_readme_usage_guidelines() -> None:
     def fail_upstream() -> None:
         raise upstream_exception("Upstream failed")
 
+    @router.get("/validation")
+    def fail_validation() -> None:
+        raise validation_exception("Invalid input")
+
     app.include_router(router)
     with TestClient(app) as client:
         response = client.get("/upstream")
+        validation_response = client.get("/validation")
 
     assert response.status_code == 502
     assert response.json()["status"] == 502
+    assert validation_response.status_code == 400
+    assert validation_response.json()["status"] == 400
+    documented_responses = app.openapi()["paths"]["/upstream"]["get"]["responses"]
+    assert "application/problem+json" in documented_responses["502"]["content"]
 
     upstream_failure: httpx.Response | httpx.RequestError | None = None
 
@@ -267,7 +276,7 @@ def test_readme_usage_guidelines() -> None:
 
     upstream_section = guidelines.partition("### Upstream Failures\n")[2].partition("\n### ")[0]
     responses = [json.loads(block) for block in re.findall(r"```json\n(.*?)\n```", upstream_section, re.DOTALL)]
-    assert len(responses) == 12
+    assert len(responses) == 5
     success_example, validation_example, nested_example, *failure_examples = responses
     assert rejected.status_code == 400
     assert rejected.headers["content-type"] == "application/problem+json"
@@ -297,6 +306,12 @@ def test_readme_usage_guidelines() -> None:
     assert "line_items" not in nested_rejected.text
 
     expected_failures = {problem["detail"]: problem for problem in failure_examples}
+    expected_failures["Order already exists"] = {
+        "type": "/docs/problems/duplicate",
+        "title": "Duplicate",
+        "status": 409,
+        "detail": "Order already exists",
+    }
     failures: list[tuple[httpx.Response | httpx.RequestError, str]] = [
         (httpx.Response(422, json={"code": "limit_exceeded"}), "Purchasing limit exceeded"),
         (httpx.Response(409, json={"code": "order_exists"}), "Order already exists"),
@@ -326,7 +341,15 @@ def test_readme_usage_guidelines() -> None:
         for failure, detail in failures:
             upstream_failure = failure
             response = client.post("/orders", json={"total": 150})
-            expected = expected_failures[detail]
+            expected = expected_failures.get(
+                detail,
+                {
+                    "type": "/docs/problems/upstream-api-error",
+                    "title": "Upstream API Error",
+                    "status": 500,
+                    "detail": detail,
+                },
+            )
             assert response.status_code == expected["status"]
             assert response.headers["content-type"] == "application/problem+json"
             problem = response.json()
