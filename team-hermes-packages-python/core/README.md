@@ -24,27 +24,26 @@ For reproducible installs, replace `main` with a release tag or full commit SHA.
 Import from `team_hermes.core`, raise a specific exception, and catch it where you
 can handle the failure. `ApplicationException` catches any of the built-in categories:
 
-```python
-from team_hermes.core import ApplicationException, NotFoundException
+```pycon
+>>> from team_hermes.core import ApplicationException, NotFoundException
+>>> orders = {"order-1": "pending"}
+>>> def get_order_status(order_id: str) -> str:
+...     if order_id not in orders:
+...         raise NotFoundException("Order not found", extensions={"order_id": order_id})
+...     return orders[order_id]
+...
+>>> try:
+...     status = get_order_status("order-404")
+...     print(status)
+... except ApplicationException as error:
+...     print(str(error))
+...
+Order not found
 
-orders = {"order-1": "pending"}
-
-
-def get_order_status(order_id: str) -> str:
-  if order_id not in orders:
-    raise NotFoundException("Order not found", extensions={"order_id": order_id})
-  return orders[order_id]
-
-
-try:
-  status = get_order_status("order-404")
-  print(status)
-except ApplicationException as error:
-  print(str(error))
 ```
 
-This prints `Order not found`. The caller decides how to present the error;
-the lookup function has no logging or HTTP dependency.
+The caller decides how to present the error; the lookup function has no logging
+or HTTP dependency.
 
 ## Handling Errors
 
@@ -89,8 +88,14 @@ is required to exist.
   core does not emit logs.
 - The base `ApplicationException` additionally accepts `type`, `instance`, and
   `severity`. Its defaults are `about:blank`, `ERROR`, and `None` for optional fields.
-- `to_dict()` includes all fields, retains `None`, and shares the original
-  extensions dictionary. It is not an HTTP response.
+- `ApplicationException` and `ValidationException` accept keyword-only `errors`,
+  a list of dictionaries for safe, structured error details. For example,
+  `ValidationException("Invalid order", errors=[{"detail": "Total must be positive", "pointer": "#/total"}])`.
+  Core stores these details without interpreting them; the FastAPI integration
+  exposes supported fields in the response's top-level `errors` array.
+- `to_dict()` retains `None` for existing fields and shares the original
+  extensions dictionary. It includes `errors` only when supplied, including an
+  empty list. It is not an HTTP response.
 
 ## 🛠️ Development
 

@@ -24,4 +24,4 @@ def fallback_exception_handler(
         detail="An internal error occurred. Please contact support.",
         extensions=build_common_extensions(request, config=config),
     )
-    return JSONResponse(problem_details.model_dump(), status_code=problem_details.status)
+    return problem_details.to_response()

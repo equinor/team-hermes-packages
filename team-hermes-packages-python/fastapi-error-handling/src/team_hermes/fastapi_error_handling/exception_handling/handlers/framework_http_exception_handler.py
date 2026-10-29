@@ -4,7 +4,7 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.utils import is_body_allowed_for_status_code
 from starlette.exceptions import HTTPException
 from starlette.requests import Request
-from starlette.responses import JSONResponse, Response
+from starlette.responses import Response
 
 from ..config import ErrorHandlingConfig
 from ..problem_details import ProblemDetails
@@ -34,4 +34,4 @@ def framework_http_exception_handler(
         detail=detail if isinstance(detail, str) else None,
         extensions=build_common_extensions(request, custom_extensions, config),
     )
-    return JSONResponse(problem_details.model_dump(), status_code=exception.status_code, headers=exception.headers)
+    return problem_details.to_response(headers=exception.headers)

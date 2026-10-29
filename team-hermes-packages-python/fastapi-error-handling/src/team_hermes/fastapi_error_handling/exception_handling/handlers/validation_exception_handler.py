@@ -51,4 +51,4 @@ def validation_exception_handler(
         extensions=build_common_extensions(request, config=config),
     )
 
-    return JSONResponse(problem_details.model_dump(), status_code=problem_details.status)
+    return problem_details.to_response()
