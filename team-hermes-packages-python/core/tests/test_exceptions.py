@@ -144,6 +144,19 @@ def test_exception_customization(exception_class):
     assert error.instance is None
 
 
+@pytest.mark.parametrize("exception_class", [ApplicationException, ValidationException])
+@pytest.mark.parametrize(
+    "errors",
+    [[], [{"code": "positive_total_required", "detail": "Total must be positive", "pointer": "#/total"}]],
+)
+def test_structured_errors(exception_class, errors):
+    error = exception_class(detail="Order validation failed", errors=errors, extensions={"orderId": "order-1"})
+    assert error.errors is errors
+    assert error.to_dict()["errors"] == errors
+    assert error.extensions == {"orderId": "order-1"}
+    assert exception_class().errors is None
+
+
 def test_severity_values():
     assert {severity.name: severity.value for severity in ExceptionSeverity} == {
         "WARNING": 1,

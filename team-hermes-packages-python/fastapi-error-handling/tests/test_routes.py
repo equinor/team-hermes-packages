@@ -72,6 +72,9 @@ def test_route_error_dispatch(path, status_code, problem_type):
     with TestClient(make_app()) as client:
         response = client.get(path, headers={"X-Trace-Id": "client-trace"})
     assert response.status_code == status_code
+    assert response.headers["content-type"] == "application/problem+json"
+    assert "instance" not in response.json()
+    assert "traceId" not in response.json()
     problem = ProblemDetails.model_validate(response.json())
     assert problem.type == problem_type
     assert problem.extensions is not None
@@ -85,10 +88,13 @@ def test_request_validation_and_success():
     with TestClient(make_app()) as client:
         response = client.post("/orders", json={"quantity": "invalid"})
         assert response.status_code == 422
+        assert response.headers["content-type"] == "application/problem+json"
         assert response.json()["type"] == "about:blank"
         assert response.json()["errors"][0]["source"]["pointer"] == "/body/quantity"
         assert "received" not in response.text
-        assert client.post("/orders", json={"quantity": 3}).json() == {"quantity": 3}
+        success = client.post("/orders", json={"quantity": 3})
+        assert success.json() == {"quantity": 3}
+        assert success.headers["content-type"] == "application/json"
         assert client.post("/orders", content="{", headers={"content-type": "application/json"}).status_code == 422
 
 
@@ -139,7 +145,7 @@ def test_framework_problem_details_handler(method, path, status_code, title, det
     with TestClient(app) as client:
         response = client.request(method, path, headers={"X-Trace-Id": "client-trace"})
     assert response.status_code == status_code
-    assert response.headers["content-type"] == "application/json"
+    assert response.headers["content-type"] == "application/problem+json"
     for name, value in headers.items():
         assert response.headers[name] == value
     problem = ProblemDetails.model_validate(response.json())
@@ -187,7 +193,7 @@ def test_framework_problem_details_preserves_structured_detail(detail):
     with TestClient(app) as client:
         response = client.get("/structured")
     assert response.status_code == 400
-    assert response.json()["detail"] is None
+    assert "detail" not in response.json()
     assert response.json()["extensions"]["httpExceptionDetail"] == detail
 
 
@@ -229,13 +235,47 @@ def test_configured_problem_types(path):
 
 def test_openapi_responses_document_schema_without_fabricated_examples():
     schema = make_app().openapi()
+    problem_schema = schema["components"]["schemas"]["ProblemDetails"]
+    assert {"extensions", "errors"} <= problem_schema["properties"].keys()
+    assert not {"requestPath", "traceId", "errorId"} & problem_schema["properties"].keys()
+    metadata_schema = schema["components"]["schemas"]["ProblemDetailsExtensions"]
+    assert {"requestPath", "traceId", "errorId"} <= metadata_schema["properties"].keys()
+    assert metadata_schema["additionalProperties"] is True
     documented = schema["paths"]["/missing"]["get"]["responses"]
     for status_code in responses:
-        content = documented[str(status_code)]["content"]["application/json"]
+        content = documented[str(status_code)]["content"]["application/problem+json"]
         assert content["schema"]["$ref"].endswith("/ProblemDetails")
         assert "example" not in content
         assert "examples" not in content
         assert documented[str(status_code)]["description"]
+
+
+@pytest.mark.parametrize("from_provider", [False, True])
+def test_metadata_cannot_override_problem_fields(from_provider):
+    metadata = {"type": "metadata:type", "status": 200, "errors": [{"detail": "Metadata error"}], "service": "orders"}
+    config = ErrorHandlingConfig(extension_provider=(lambda request: metadata) if from_provider else None)
+    app = make_app(config)
+    router = APIRouter(route_class=ExceptionHandlingRoute.with_config(config))
+
+    @router.get("/collision")
+    def collision():
+        raise ValidationException(
+            "Invalid order",
+            errors=[{"detail": "Quantity must be positive", "pointer": "#/items/0/quantity"}],
+            extensions=None if from_provider else metadata,
+        )
+
+    app.include_router(router)
+    with TestClient(app) as client:
+        response = client.get("/collision")
+    body = response.json()
+    assert response.status_code == body["status"] == 400
+    assert body["type"] == "/docs/problems/validation-error"
+    assert body["errors"] == [{"detail": "Quantity must be positive", "pointer": "#/items/0/quantity"}]
+    assert body["extensions"]["service"] == "orders"
+    assert body["extensions"]["status"] == 200
+    assert body["extensions"]["errors"] == metadata["errors"]
+    assert "service" not in body
 
 
 def test_streaming_and_background_tasks():

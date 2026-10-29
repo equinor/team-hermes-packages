@@ -15,12 +15,18 @@ from .problem_details import ProblemDetails
 
 
 def create_response(exception: ApplicationException) -> dict[str, Any]:
-    return {"model": ProblemDetails, "description": exception.title or "Application error"}
+    return {
+        "model": ProblemDetails,
+        "description": exception.title or "Application error",
+        "content": {
+            "application/problem+json": {"schema": {"$ref": "#/components/schemas/ProblemDetails"}},
+        },
+    }
 
 
 def create_conflict_response() -> dict[str, Any]:
     return {
-        "model": ProblemDetails,
+        **create_response(ConflictException()),
         "description": f"{DuplicateException().title} or {ConflictException().title}",
     }
 
