@@ -733,17 +733,17 @@ wheels = [
 
 [[package]]
 name = "team-hermes-authorization"
-version = "0.1.0"
+version = "0.2.0"
 source = { editable = "authorization" }
 
 [[package]]
 name = "team-hermes-core"
-version = "0.1.0"
+version = "0.2.0"
 source = { editable = "core" }
 
 [[package]]
 name = "team-hermes-elasticsearch"
-version = "0.1.0"
+version = "0.2.0"
 source = { editable = "elasticsearch" }
 dependencies = [
     { name = "elasticsearch" },
@@ -772,7 +772,7 @@ dev = [
 
 [[package]]
 name = "team-hermes-fastapi-error-handling"
-version = "0.1.0"
+version = "0.2.0"
 source = { editable = "fastapi-error-handling" }
 dependencies = [
     { name = "fastapi" },
@@ -820,7 +820,7 @@ dev = [
 
 [[package]]
 name = "team-hermes-fastapi-query"
-version = "0.1.0"
+version = "0.2.0"
 source = { editable = "fastapi-query" }
 dependencies = [
     { name = "fastapi" },
@@ -847,7 +847,7 @@ dev = [{ name = "httpx", specifier = ">=0.28,<1" }]
 
 [[package]]
 name = "team-hermes-query"
-version = "0.1.0"
+version = "0.2.0"
 source = { editable = "query" }
 dependencies = [
     { name = "pydantic" },
@@ -862,7 +862,7 @@ requires-dist = [
 
 [[package]]
 name = "team-hermes-sqlalchemy-core"
-version = "0.1.0"
+version = "0.2.0"
 source = { editable = "sqlalchemy-core" }
 dependencies = [
     { name = "sqlalchemy" },
@@ -879,7 +879,7 @@ requires-dist = [
 
 [[package]]
 name = "team-hermes-sqlalchemy-faceted-search"
-version = "0.1.0"
+version = "0.2.0"
 source = { editable = "sqlalchemy-faceted-search" }
 dependencies = [
     { name = "pydantic" },
@@ -898,7 +898,7 @@ requires-dist = [
 
 [[package]]
 name = "team-hermes-sqlalchemy-repository"
-version = "0.1.0"
+version = "0.2.0"
 source = { editable = "sqlalchemy-repository" }
 dependencies = [
     { name = "sqlalchemy" },
@@ -917,7 +917,7 @@ requires-dist = [
 
 [[package]]
 name = "team-hermes-validation"
-version = "0.1.0"
+version = "0.2.0"
 source = { editable = "validation" }
 dependencies = [
     { name = "pydantic" },
