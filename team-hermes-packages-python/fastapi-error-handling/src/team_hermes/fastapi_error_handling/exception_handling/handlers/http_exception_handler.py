@@ -31,4 +31,4 @@ def http_exception_handler(
         extensions=build_common_extensions(request, custom_extensions, config),
     )
 
-    return JSONResponse(problem_details.model_dump(), status_code=problem_details.status)
+    return problem_details.to_response()

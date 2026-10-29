@@ -1,4 +1,7 @@
+from collections.abc import Mapping
+
 from pydantic import BaseModel, ConfigDict, Field
+from starlette.responses import JSONResponse
 
 
 class ErrorSource(BaseModel):
@@ -9,6 +12,7 @@ class ErrorItem(BaseModel):
     code: str | None = Field(None, description="Machine-readable error code")
     title: str | None = Field(None, description="Short summary of the error")
     detail: str | None = Field(None, description="Human-readable explanation")
+    pointer: str | None = Field(None, description="JSON Pointer identifying the invalid request value")
     source: ErrorSource | None = Field(None, description="Object indicating the error source")
 
 
@@ -27,3 +31,11 @@ class ProblemDetails(BaseModel):
     instance: str | None = Field(default=None, description="URI identifying the specific occurrence")
     errors: list[ErrorItem] | None = Field(default=None, description="Array of specific error details")
     extensions: ProblemDetailsExtensions | None = Field(default=None, description="Custom extension members")
+
+    def to_response(self, *, headers: Mapping[str, str] | None = None) -> JSONResponse:
+        return JSONResponse(
+            self.model_dump(mode="json", exclude_none=True),
+            status_code=self.status,
+            media_type="application/problem+json",
+            headers=headers,
+        )

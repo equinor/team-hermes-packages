@@ -22,6 +22,8 @@ class ApplicationException(Exception):
         instance: str | None = None,
         extensions: dict[str, Any] | None = None,
         severity: ExceptionSeverity = ExceptionSeverity.ERROR,
+        *,
+        errors: list[dict[str, Any]] | None = None,
     ) -> None:
         super().__init__(detail)
         self.type = type
@@ -30,6 +32,7 @@ class ApplicationException(Exception):
         self.instance = instance
         self.extensions = extensions
         self.severity = severity
+        self.errors = errors
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -39,6 +42,7 @@ class ApplicationException(Exception):
             "instance": self.instance,
             "extensions": self.extensions,
             "severity": self.severity.name if self.severity else None,
+            **({"errors": self.errors} if self.errors is not None else {}),
         }
 
 
@@ -80,8 +84,12 @@ class ValidationException(ApplicationException):
         detail: str = "The received data is invalid.",
         title: str = "Unprocessable Entity",
         extensions: dict[str, Any] | None = None,
+        *,
+        errors: list[dict[str, Any]] | None = None,
     ) -> None:
-        super().__init__(type="/docs/problems/validation-error", title=title, detail=detail, extensions=extensions)
+        super().__init__(
+            type="/docs/problems/validation-error", title=title, detail=detail, extensions=extensions, errors=errors
+        )
 
 
 class UnauthorizedException(ApplicationException):
