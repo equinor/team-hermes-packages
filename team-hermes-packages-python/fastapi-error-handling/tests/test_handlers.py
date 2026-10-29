@@ -52,13 +52,11 @@ def test_application_status_and_payload(exception_type, status_code):
     response = application_exception_handler(make_request(), exception)
     body = json.loads(bytes(response.body))
     assert response.status_code == status_code
-    assert body == {
+    expected = {
         "type": exception.type,
         "title": exception.title,
         "status": status_code,
         "detail": "Order problem",
-        "instance": None,
-        "errors": None,
         "extensions": {
             "requestPath": "/orders",
             "traceId": "",
@@ -67,9 +65,34 @@ def test_application_status_and_payload(exception_type, status_code):
             "orderId": "order-1",
         },
     }
+    assert body == {key: value for key, value in expected.items() if value is not None}
     assert UUID(body["extensions"]["errorId"]).version == 4
     assert exception.extensions == {"orderId": "order-1"}
-    assert response.media_type == "application/json"
+    assert response.media_type == "application/problem+json"
+
+
+def test_application_validation_errors():
+    errors = [{"code": "positive_total_required", "detail": "Total must be positive", "pointer": "#/total"}]
+    exception = ValidationException("Order validation failed", errors=errors, extensions={"orderId": "order-1"})
+    response = application_exception_handler(make_request(), exception)
+    body = json.loads(bytes(response.body))
+    assert response.status_code == body["status"] == 400
+    assert response.headers["content-type"] == "application/problem+json"
+    assert body["errors"] == errors
+    assert "instance" not in body
+    assert "findings" not in body["extensions"]
+    assert body["extensions"]["orderId"] == "order-1"
+    assert exception.errors == errors
+
+
+def test_application_exception_without_structured_error_support():
+    exception = NotFoundException("Order not found")
+    del exception.errors
+    response = application_exception_handler(make_request(), exception)
+    body = json.loads(bytes(response.body))
+    assert response.status_code == 404
+    assert body["detail"] == "Order not found"
+    assert "errors" not in body
 
 
 @pytest.mark.parametrize("severity", list(ExceptionSeverity))
@@ -152,7 +175,7 @@ def test_request_validation_details(location, pointer):
         "code": "missing",
         "title": "Request validation error",
         "detail": "Field required",
-        "source": {"pointer": pointer} if pointer else None,
+        **({"source": {"pointer": pointer}} if pointer else {}),
     }
 
 

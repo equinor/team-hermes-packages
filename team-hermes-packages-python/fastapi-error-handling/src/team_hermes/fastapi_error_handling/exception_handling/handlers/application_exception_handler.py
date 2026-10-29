@@ -18,7 +18,7 @@ from team_hermes.core import (
 )
 
 from ..config import ErrorHandlingConfig
-from ..problem_details import ProblemDetails
+from ..problem_details import ErrorItem, ProblemDetails
 from .utils.build_common_extensions import build_common_extensions
 
 STATUS_MAP: dict[type[ApplicationException], int] = {
@@ -63,13 +63,15 @@ def application_exception_handler(
     if config.exception_observer:
         config.exception_observer(application_exception)
 
+    errors = getattr(application_exception, "errors", None)
     problem_details = ProblemDetails(
         type=config.problem_type_for(application_exception, application_exception.type),
         title=application_exception.title,
         status=_status_for_exception(application_exception, config),
         detail=application_exception.detail,
         instance=application_exception.instance,
+        errors=[ErrorItem.model_validate(error) for error in errors] if errors is not None else None,
         extensions=build_common_extensions(request, custom_extensions, config),
     )
 
-    return JSONResponse(problem_details.model_dump(), status_code=problem_details.status)
+    return problem_details.to_response()
