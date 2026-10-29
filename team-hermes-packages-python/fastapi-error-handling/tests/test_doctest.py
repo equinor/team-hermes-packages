@@ -142,6 +142,10 @@ def test_readme_usage_guidelines() -> None:
         {"code": "validation_failed"},
         {"code": "validation_failed", "errors": []},
         {"code": "validation_failed", "errors": [{"field": "order_total", "code": None}]},
+        {
+            "code": "validation_failed",
+            "errors": [{"field": "order_total", "code": "too_small", "index": 0}],
+        },
         {"code": "validation_failed", "errors": [{"field": "private_field", "code": "unknown"}]},
         {
             "code": "validation_failed",
@@ -168,6 +172,11 @@ def test_readme_usage_guidelines() -> None:
             "Purchasing limit exceeded",
         ),
         (409, {"code": "order_exists"}, example.globs["DuplicateException"], "Order already exists"),
+        (409, upstream_findings, upstream_exception, "Order service rejected the request"),
+        (409, {"code": "limit_exceeded"}, upstream_exception, "Order service rejected the request"),
+        (422, {"code": "order_exists"}, upstream_exception, "Order service rejected the request"),
+        (422, [], upstream_exception, "Order service rejected the request"),
+        (422, "Private upstream details", upstream_exception, "Order service rejected the request"),
         (422, {"code": "unknown_rule"}, upstream_exception, "Order service rejected the request"),
         (401, {"code": "invalid_service_credentials"}, upstream_exception, "Order service rejected the request"),
         (500, {"message": "Private upstream details"}, upstream_exception, "Order service rejected the request"),
@@ -177,11 +186,14 @@ def test_readme_usage_guidelines() -> None:
             with pytest.raises(exception_type, match=message) as caught:
                 create_order(client, 150)
             assert caught.value.__cause__ is None
+            assert "Private" not in str(caught.value)
 
-    with order_service_stub(200, {"id": "order-1", "total": "invalid"}) as client:
-        with pytest.raises(upstream_exception, match="Order service returned invalid order data") as caught:
-            create_order(client, 50)
-        assert isinstance(caught.value.__cause__, example.globs["ValidationError"])
+    for invalid_order_payload in ({"id": "order-1", "total": "invalid"}, [], "Private upstream details"):
+        with order_service_stub(200, invalid_order_payload) as client:
+            with pytest.raises(upstream_exception, match="Order service returned invalid order data") as caught:
+                create_order(client, 50)
+            assert isinstance(caught.value.__cause__, example.globs["ValidationError"])
+            assert "Private" not in str(caught.value)
 
     def successful_order(request: httpx.Request) -> httpx.Response:
         assert request.method == "POST"
