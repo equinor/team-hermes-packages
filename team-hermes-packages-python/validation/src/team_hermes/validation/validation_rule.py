@@ -32,9 +32,10 @@ def validation_rule(
         A decorator that replaces the check function with a configured rule.
 
     With a target path, the check receives each target as its first positional
-    argument. ``context`` and ``path`` are forwarded only when declared by the
-    check. ``path`` omits the first dotted segment of the target location and is
-    None for a top-level target. Other optional parameters retain their defaults.
+    argument. ``context``, ``path``, and ``target_path`` are forwarded only when
+    declared by the check. ``target_path`` is the full target location, including
+    list indexes. ``path`` omits its first dotted segment and is None for a
+    top-level target. Other optional parameters retain their defaults.
 
     Scalar arguments with annotations are checked using ``isinstance``. Use
     concrete runtime annotations: postponed/string annotations are not resolved,
