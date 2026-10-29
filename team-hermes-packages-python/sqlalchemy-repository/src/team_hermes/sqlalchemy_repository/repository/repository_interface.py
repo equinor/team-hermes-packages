@@ -16,6 +16,14 @@ class RepositoryInterface[Entity](ABC):
         pass
 
     @abstractmethod
+    def create_many(self, items: list[Entity]) -> list[Entity]:
+        pass
+
+    @abstractmethod
+    def bulk_insert(self, rows: list[dict[str, Any]]) -> None:
+        pass
+
+    @abstractmethod
     def get(
         self, uid: UUID, fetch_relationships: Callable[[type[Entity]], list[LoaderOption]] | None = None
     ) -> Entity:

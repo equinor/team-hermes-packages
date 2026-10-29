@@ -2,7 +2,7 @@ from collections.abc import Callable
 from typing import Any
 from uuid import UUID
 
-from sqlalchemy import func, select
+from sqlalchemy import func, insert, select
 from sqlalchemy.orm import Session
 from sqlalchemy.orm.interfaces import LoaderOption
 
@@ -23,6 +23,16 @@ class Repository[Entity: HasID](RepositoryInterface[Entity]):
         self.session.add(item)
         self.session.commit()
         return item
+
+    def create_many(self, items: list[Entity]) -> list[Entity]:
+        self.session.add_all(items)
+        self.session.commit()
+        return items
+
+    def bulk_insert(self, rows: list[dict[str, Any]]) -> None:
+        if rows:
+            self.session.execute(insert(self.entity), rows)
+        self.session.commit()
 
     def get(
         self, uid: UUID, fetch_relationships: Callable[[type[Entity]], list[LoaderOption]] | None = None
