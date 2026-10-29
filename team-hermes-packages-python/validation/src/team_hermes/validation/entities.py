@@ -75,7 +75,9 @@ class ValidationRule:
             filtered_path = target_path.split(".", 1)[1] if target_path and "." in target_path else None
             try:
                 if target_path != "":
-                    if target_failures := self.check(target, context=context, path=filtered_path):
+                    if target_failures := self.check(
+                        target, context=context, path=filtered_path, target_path=target_path
+                    ):
                         failures.extend(target_failures)
                 else:
                     if target_failures := self.check(context):

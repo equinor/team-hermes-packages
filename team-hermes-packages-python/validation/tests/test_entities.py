@@ -112,10 +112,12 @@ def test_nested_sets_expand_paths_and_forward_context():
         groups: list[Group] = field(default_factory=list)
 
     context = Context(groups=[Group(values=[1, 2]), Group(values=[3])])
+    target_paths: list[str] = []
 
     @validation_rule("Check values")
-    def check_value(value: int, context: Context, path: str):
+    def check_value(value: int, context: Context, path: str, target_path: str):
         assert len(context.groups) == 2
+        target_paths.append(target_path)
         return [ValidationFailure(value=value, code="value", location=path)]
 
     nested = ValidationSet(path="groups", rules=[ValidationSet(path="values", rules=[check_value])])
@@ -125,6 +127,7 @@ def test_nested_sets_expand_paths_and_forward_context():
     result = engine.validate(context)
     assert len(result.rules) == 2
     assert [finding.location for finding in result.rules[0][1]] == ["values[0]", "values[1]", "values[0]"]
+    assert target_paths == ["groups[0].values[0]", "groups[0].values[1]", "groups[1].values[0]"]
     assert [finding.value for finding in result.rules[0][1]] == [1, 2, 3]
 
 

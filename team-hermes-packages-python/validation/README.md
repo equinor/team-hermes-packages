@@ -221,10 +221,14 @@ Errors determine the overall `FAILURE` status, but warnings remain in the report
 - `validation_rule` accepts a display name, severity, optional `target_path`, and
   description. The decorated name identifies the rule in reports.
 - Without a target path, a check receives the context. With a target path, it
-  receives the target plus `context` and `path` when those parameters are declared.
+  receives the target plus `context`, `path`, and `target_path` when those
+  parameters are declared.
 - Paths traverse object attributes with dots and expand lists. Missing or `None`
   attributes are skipped; mapping-key traversal is not supported. The check's
   relative `path` omits the first dotted segment, or is `None` for a top-level target.
+  Its `target_path` retains the full location, including list indexes: for example,
+  `batch.orders[0].items[1]` versus the relative `orders[0].items[1]`. Use
+  `target_path` when validation findings must identify fields relative to the context.
 - Nested `ValidationSet` paths compose with parent paths. A set's path controls
   its direct rules' targets; those rules' individual `target_path` values are not applied.
 - `context.cached(key, populate)` populates once per key and context, including

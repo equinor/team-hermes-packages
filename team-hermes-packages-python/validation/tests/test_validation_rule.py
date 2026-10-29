@@ -78,6 +78,34 @@ def test_top_level_target_has_no_relative_path():
     assert check_target.apply(Context(target=1)).is_valid
 
 
+@pytest.mark.parametrize(
+    ("rule_path", "expected_locations"),
+    [
+        ("target", ["target"]),
+        ("values", ["values[0]", "values[1]"]),
+        ("group.values", ["group.values[0]", "group.values[1]"]),
+    ],
+)
+def test_target_check_receives_full_target_path(rule_path, expected_locations):
+    @dataclass
+    class Group:
+        values: list[int]
+
+    @dataclass
+    class Context(ValidationContext):
+        target: int
+        values: list[int]
+        group: Group
+
+    @validation_rule("Check target location", target_path=rule_path)
+    def check_target(value: int, target_path: str):
+        return [ValidationFailure(value=value, code="invalid", location=target_path)]
+
+    context = Context(target=1, values=[2, 3], group=Group(values=[4, 5]))
+    result = check_target.apply(context)
+    assert [finding.location for finding in result.rules[0][1]] == expected_locations
+
+
 @pytest.mark.parametrize("value", [[1, "mixed"], {"value": 1}])
 def test_collection_values_bypass_runtime_annotation_check(value):
     @validation_rule("Collections")
