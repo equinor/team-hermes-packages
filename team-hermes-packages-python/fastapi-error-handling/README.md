@@ -178,14 +178,17 @@ trace headers or generate an entire trace. `errorId` identifies each error occur
 Configured extension fields override common fields; exception extension fields
 override both, including severity and correlation fields, for compatibility.
 
-`exception_observer` receives application and unhandled exceptions, not request/model
-validation failures. `exception_handlers` maps additional exception classes to
+`exception_observer` receives application and unhandled exceptions, plus HTTPX
+failures when that integration is enabled, not request/model validation failures.
+`exception_handlers` maps additional exception classes to
 synchronous callables accepting `(request, exception, config)` and returning a
 Starlette response. Standard application, validation, and framework exceptions take
 precedence over these handlers. Callbacks run during handling and must return valid
 values without raising. Treat configuration mappings as immutable after startup.
 
 ## Optional Integrations
+
+### Requests
 
 Install the `requests` extra when using upstream `requests.exceptions.HTTPError`:
 
@@ -232,6 +235,65 @@ preserved: real `requests.Response` objects with 4xx/5xx statuses are falsey, so
 produce **502**, as does a missing response. A truthy response retains its status.
 This adapter is separate from framework `HTTPException` handling.
 
+### HTTPX
+
+Install the optional HTTPX dependency:
+
+```shell
+uv pip install 'team-hermes-fastapi-error-handling[httpx]'
+```
+
+Installing the extra does not enable handling automatically. Register the adapter
+explicitly; importing the base package does not import HTTPX.
+
+```pycon
+>>> import httpx
+>>> from fastapi import APIRouter, FastAPI
+>>> from fastapi.testclient import TestClient
+>>> from team_hermes.fastapi_error_handling import ErrorHandlingConfig, ExceptionHandlingRoute
+>>> from team_hermes.fastapi_error_handling.exception_handling.integrations.httpx import http_exception_handler
+>>> config = ErrorHandlingConfig(
+...     exception_handlers={httpx.HTTPError: http_exception_handler},
+...     problem_type_map={
+...         httpx.TimeoutException: "urn:orders:upstream-timeout",
+...         httpx.HTTPError: "urn:orders:upstream-failure",
+...     },
+... )
+>>> router = APIRouter(route_class=ExceptionHandlingRoute.with_config(config))
+>>> @router.get("/upstream")
+... async def httpx_failure():
+...     raise httpx.ReadTimeout("Private upstream detail")
+...
+>>> httpx_app = FastAPI()
+>>> httpx_app.include_router(router)
+>>> with TestClient(httpx_app) as client:
+...     response = client.get("/upstream")
+>>> response.status_code
+504
+>>> response.json()["type"]
+'urn:orders:upstream-timeout'
+>>> response.json()["detail"]
+'An upstream service did not respond in time.'
+>>> "Private upstream detail" in response.text
+False
+
+```
+
+Timeouts return **504**; other HTTPX errors return **502**, regardless of the
+upstream response status. Responses contain standard correlation fields but omit
+upstream URLs, headers, response bodies, and exception messages. The adapter logs
+the exception class and incoming request method/path, not upstream error details.
+The configured exception observer receives the original exception; applications
+own any logging or telemetry redaction performed by that observer and any custom
+extensions they add.
+
+This policy differs from the existing requests adapter, whose behavior is unchanged.
+To enable both, install `[requests,httpx]` and register each adapter under its own
+client's exception class in the same `exception_handlers` mapping. Neither
+integration is enabled automatically.
+
+### Telemetry
+
 Install the `telemetry` extra for OpenTelemetry API hooks, then enable them explicitly:
 
 ```pycon
@@ -257,7 +319,8 @@ True
 Active span IDs take precedence over request headers. Recording spans receive
 application exception attributes or an exception event for unhandled failures.
 No SDK, exporter, instrumentation, Azure integration, or provider is configured.
-Combine these fields with `exception_handlers` in one configuration to use both extras.
+Combine these fields with `exception_handlers` in one configuration to use telemetry
+with the requests or HTTPX integration.
 
 ## Compatibility and Disclosure
 
@@ -279,7 +342,7 @@ Combine these fields with `exception_handlers` in one configuration to use both 
 
 ## Development
 
-All four README examples run with `doctest` as part of pytest. Follow the
+All README examples run with `doctest` as part of pytest. Follow the
 [workspace setup](../README.md), then run from the repository root:
 
 ```shell

@@ -22,6 +22,7 @@ classifiers = [
 ]
 
 [project.optional-dependencies]
+httpx = ["httpx>=0.28"]
 requests = ["requests>=2.32"]
 telemetry = ["opentelemetry-api>=1.30"]
 
