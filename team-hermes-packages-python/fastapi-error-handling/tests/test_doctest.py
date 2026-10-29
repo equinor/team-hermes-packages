@@ -12,7 +12,7 @@ from fastapi.testclient import TestClient
 
 
 @pytest.fixture
-def quick_start_app() -> FastAPI:
+def quick_start_example() -> doctest.DocTest:
     readme_path = Path(__file__).resolve().parents[1] / "README.md"
     readme = readme_path.read_text(encoding="utf-8")
     quick_start = readme.partition("## Quick Start\n")[2].partition("\n## ")[0]
@@ -20,7 +20,12 @@ def quick_start_app() -> FastAPI:
     result = doctest.DocTestRunner().run(example, clear_globs=False)
     assert result.failed == 0
     assert result.attempted > 0
-    return example.globs["app"]
+    return example
+
+
+@pytest.fixture
+def quick_start_app(quick_start_example: doctest.DocTest) -> FastAPI:
+    return quick_start_example.globs["app"]
 
 
 def test_readme_quick_start(quick_start_app: FastAPI) -> None:
@@ -35,6 +40,7 @@ def test_readme_quick_start(quick_start_app: FastAPI) -> None:
     assert accepted.status_code == 200
     assert accepted.json() == {"id": "order-1", "status": "approved", "total": 50}
     assert missing.status_code == 404
+    assert missing.json()["type"] == "/docs/problems/order-not-found"
     assert missing.json()["extensions"]["orderId"] == "order-404"
     assert invalid.status_code == 400
     assert invalid.json()["detail"] == "Order total must be positive"
@@ -45,18 +51,80 @@ def test_readme_quick_start(quick_start_app: FastAPI) -> None:
     assert wrong_method.json()["status"] == 405
     assert wrong_method.headers["allow"] == "POST"
     documented_responses = quick_start_app.openapi()["paths"]["/orders/{order_id}/approval"]["post"]["responses"]
-    assert {"400", "404", "422"} <= documented_responses.keys()
+    assert {"400", "404", "422", "502", "503"} <= documented_responses.keys()
+    assert "application/problem+json" in documented_responses["503"]["content"]
 
 
-def test_readme_problem_details_response(quick_start_app: FastAPI) -> None:
+def test_readme_configuration(quick_start_app: FastAPI, quick_start_example: doctest.DocTest) -> None:
+    namespace = quick_start_example.globs
+    config = namespace["config"]
+    router = namespace["APIRouter"](
+        route_class=namespace["ExceptionHandlingRoute"].with_config(config),
+    )
+    upstream_exception = namespace["UpstreamApiException"]
+
+    @router.get("/upstream")
+    def fail_upstream() -> None:
+        raise upstream_exception("Order service unavailable")
+
+    @router.get("/timeout")
+    def fail_timeout() -> None:
+        raise TimeoutError("Private connection details")
+
+    quick_start_app.include_router(router)
+    with TestClient(quick_start_app) as client:
+        upstream = client.get("/upstream")
+        timeout = client.get("/timeout", headers={"X-Trace-Id": "timeout-trace"})
+        another_timeout = client.get("/timeout")
+
+    assert config.logger.name == "orders.errors"
+    assert upstream.status_code == 502
+    upstream_extensions = upstream.json()["extensions"]
+    UUID(upstream_extensions["traceId"])
+    assert upstream_extensions["apiVersion"] == "v1"
+    assert upstream_extensions["method"] == "GET"
+    assert upstream_extensions["severity"] == "ERROR"
+
+    assert timeout.status_code == 503
+    assert timeout.headers["content-type"] == "application/problem+json"
+    problem = timeout.json()
+    assert problem["type"] == "/docs/problems/order-timeout"
+    assert problem["status"] == 503
+    assert problem["title"] == "Service unavailable"
+    assert problem["detail"] == "Order service timed out"
+    assert problem["extensions"]["traceId"] == "timeout-trace"
+    assert problem["extensions"]["requestPath"] == "/timeout"
+    assert problem["extensions"]["apiVersion"] == "v1"
+    assert problem["extensions"]["method"] == "GET"
+    UUID(problem["extensions"]["errorId"])
+    assert "Private" not in timeout.text
+
+    next_trace_id = another_timeout.json()["extensions"]["traceId"]
+    UUID(next_trace_id)
+    assert next_trace_id != upstream_extensions["traceId"]
+    assert namespace["request_trace_id"].get() == ""
+    assert namespace["error_counts"] == {"UpstreamApiException": 1}
+
+
+@pytest.mark.parametrize(
+    ("total", "expected_status", "example_index"),
+    [(150, 422, 0), (0, 400, 1)],
+    ids=["business-rule", "field-validation"],
+)
+def test_readme_problem_details_response(
+    quick_start_app: FastAPI, total: int, expected_status: int, example_index: int
+) -> None:
     readme = (Path(__file__).resolve().parents[1] / "README.md").read_text(encoding="utf-8")
-    example = json.loads(readme.partition("```json\n")[2].partition("\n```")[0])
+    section = readme.partition("## Problem Details\n")[2].partition("\n## ")[0]
+    examples = [json.loads(block) for block in re.findall(r"```json\n(.*?)\n```", section, re.DOTALL)]
+    assert len(examples) == 2
+    example = examples[example_index]
     with TestClient(quick_start_app) as client:
         response = client.post(
-            "/orders/order-1/approval", json={"total": 150}, headers={"X-Trace-Id": "example-trace"}
+            "/orders/order-1/approval", json={"total": total}, headers={"X-Trace-Id": "example-trace"}
         )
 
-    assert response.status_code == 422
+    assert response.status_code == expected_status
     assert response.headers["content-type"] == "application/problem+json"
     payload = response.json()
     UUID(payload["extensions"]["errorId"])

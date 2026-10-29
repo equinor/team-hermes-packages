@@ -26,40 +26,117 @@ storage; replace it with your application's data access.
 
 ```pycon
 >>> import logging
+>>> from collections import Counter
+>>> from contextvars import ContextVar
 >>> from functools import partial
+>>> from uuid import uuid4
 
 >>> from fastapi import APIRouter, FastAPI
 >>> from pydantic import BaseModel
 >>> from starlette.exceptions import HTTPException
+>>> from starlette.requests import Request
+>>> from starlette.responses import Response
 
 >>> from team_hermes.core import (
 ...     BusinessRuleViolationException,
 ...     NotFoundException,
+...     UpstreamApiException,
 ...     ValidationException,
 ... )
 >>> from team_hermes.fastapi_error_handling import (
 ...     ErrorHandlingConfig,
 ...     ExceptionHandlingRoute,
+...     ProblemDetails,
+...     build_common_extensions,
 ...     framework_http_exception_handler,
 ... )
 >>> from team_hermes.fastapi_error_handling.exception_handling.responses import (
+...     create_response,
 ...     responses,
 ... )
 
 >>> logging.basicConfig(level=logging.INFO)
->>> config = ErrorHandlingConfig(logger=logging.getLogger("orders.errors"))
+>>> request_trace_id: ContextVar[str] = ContextVar("request_trace_id", default="")
+>>> error_counts: Counter[str] = Counter()
+
+>>> # A process-local metric; replace with your monitoring client's counter.
+>>> def record_exception(exception: Exception) -> None:
+...     error_counts[type(exception).__name__] += 1
+...
+
+>>> # Custom handlers build their own response without exposing private error text.
+>>> def handle_timeout(
+...     request: Request,
+...     exception: Exception,
+...     config: ErrorHandlingConfig,
+... ) -> Response:
+...     config.logger.error("Order service timed out")
+...     return ProblemDetails(
+...         type=config.problem_type_for(exception),
+...         title="Service unavailable",
+...         status=503,
+...         detail="Order service timed out",
+...         extensions=build_common_extensions(request, config=config),
+...     ).to_response()
+...
+
+>>> # All settings are optional; omitted settings use defaults.
+>>> # First matching class wins; put subclasses first.
+>>> # Callbacks must be synchronous and should not raise.
+>>> config = ErrorHandlingConfig(
+...     # Optional: choose the logger for built-in handlers.
+...     logger=logging.getLogger("orders.errors"),
+...     # Optional: override HTTP statuses by exception class.
+...     status_map={UpstreamApiException: 502},
+...     # Optional: supply extensions.traceId from request context.
+...     trace_id_provider=request_trace_id.get,
+...     # Optional: add public response metadata under extensions.
+...     extension_provider=lambda request: {"apiVersion": "v1", "method": request.method},
+...     # Optional: observe application and fallback exceptions for telemetry.
+...     exception_observer=record_exception,
+...     # Optional: handle exception types not covered by built-in handlers.
+...     exception_handlers={TimeoutError: handle_timeout},
+...     # Optional: override Problem Details type URIs by exception class.
+...     problem_type_map={
+...         NotFoundException: "/docs/problems/order-not-found",
+...         TimeoutError: "/docs/problems/order-timeout",
+...     },
+... )
 >>> app = FastAPI()
 
->>> # Optional: handle HTTP errors, including routing 404/405.
+>>> # Optional: reuse or generate a trace ID, keeping concurrent requests separate.
+>>> @app.middleware("http")
+... async def correlate_request(request: Request, call_next):
+...     trace_id = (
+...         request.headers.get("X-Trace-Id")
+...         or request.headers.get("traceparent")
+...         or uuid4().hex
+...     )
+...     token = request_trace_id.set(trace_id)
+...     try:
+...         return await call_next(request)
+...     finally:
+...         request_trace_id.reset(token)
+...
+
+>>> # Optional: return Problem Details for HTTP errors outside wrapped routes,
+>>> # including routing errors such as 404 and 405.
 >>> app.add_exception_handler(
 ...     HTTPException,
 ...     partial(framework_http_exception_handler, config=config),
 ... )
 
->>> # Configure each router before adding routes; coverage is router-local.
+>>> # Apply this configuration before adding routes to the router.
+>>> # Other routers need their own ExceptionHandlingRoute configuration.
 >>> router = APIRouter(
+...     # Required for this router to use Hermes error handling.
 ...     route_class=ExceptionHandlingRoute.with_config(config),
-...     responses=responses,  # OpenAPI documentation only.
+...     # Optional: document error responses in OpenAPI; this does not enable handling.
+...     responses={
+...         **responses,
+...         502: create_response(UpstreamApiException()),
+...         503: {**responses[500], "description": "Order service timed out"},
+...     },
 ... )
 
 >>> orders = {"order-1": 50}
@@ -72,7 +149,17 @@ storage; replace it with your application's data access.
 ...     if order_id not in orders:
 ...         raise NotFoundException("Order not found", extensions={"orderId": order_id})
 ...     if total <= 0:
-...         raise ValidationException("Order total must be positive")
+...         raise ValidationException(
+...             "Order total must be positive",
+...             title="Order validation failed",
+...             errors=[
+...                 {
+...                     "pointer": "#/total",
+...                     "code": "positive_total_required",
+...                     "detail": "Total must be positive",
+...                 }
+...             ],
+...         )
 ...     if total > 100:
 ...         raise BusinessRuleViolationException(
 ...             "Order total exceeds the purchasing limit",
@@ -96,8 +183,8 @@ storage; replace it with your application's data access.
 
 ## Problem Details
 
-Use `errors` for field-validation findings and `extensions` for business-rule
-context. These are complementary cases, not alternative validation formats.
+Use `errors` for individual field-validation findings and `extensions` for
+metadata, such as trace IDs and business-rule codes. A response can contain both.
 
 **Business-rule rejection (`extensions`):** send a request above the purchasing limit:
 
@@ -122,9 +209,44 @@ The request returns **422** and `Content-Type: application/problem+json`, with a
     "traceId": "example-trace",
     "errorId": "2ee44ba8-d14b-413f-ae31-099d8f6bb75e",
     "severity": "ERROR",
+    "apiVersion": "v1",
+    "method": "POST",
     "ruleCode": "order_limit_exceeded",
     "limit": 100,
     "requestedTotal": 150
+  }
+}
+```
+
+**Field validation (`errors` + `extensions`): `400 Bad Request`**
+
+```shell
+curl -i http://127.0.0.1:8000/orders/order-1/approval \
+  -H 'Content-Type: application/json' \
+  -H 'X-Trace-Id: example-trace' \
+  -d '{"total": 0}'
+```
+
+```json
+{
+  "type": "/docs/problems/validation-error",
+  "title": "Order validation failed",
+  "status": 400,
+  "detail": "Order total must be positive",
+  "errors": [
+    {
+      "pointer": "#/total",
+      "code": "positive_total_required",
+      "detail": "Total must be positive"
+    }
+  ],
+  "extensions": {
+    "requestPath": "/orders/order-1/approval",
+    "traceId": "example-trace",
+    "errorId": "2ee44ba8-d14b-413f-ae31-099d8f6bb75e",
+    "severity": "ERROR",
+    "apiVersion": "v1",
+    "method": "POST"
   }
 }
 ```
@@ -134,26 +256,40 @@ Responses follow [RFC 9457](https://www.rfc-editor.org/info/rfc9457/), use
 top-level `errors`; metadata goes in `extensions`. Clients should identify errors
 by `type` and documented codes, not by matching the text in `detail`.
 
+The application examples use `errors[].pointer`, such as `#/total`. FastAPI request
+validation uses `errors[].source.pointer`, such as `/body/total`; Pydantic model
+validation uses the same member with dot-separated paths. Clients should handle
+both shapes.
+
 ## Exception-to-HTTP Status Mapping
 
 Default HTTP statuses by exception class:
 
-| Exception                        | Use for                        | Status |
-| -------------------------------- | ------------------------------ | ------ |
-| `ValidationException`            | Invalid application input      | 400    |
-| `UnauthorizedException`          | Missing or invalid credentials | 401    |
-| `MissingPrivilegeException`      | Insufficient permissions       | 403    |
-| `NotFoundException`              | A missing required resource    | 404    |
-| `ConflictException`              | A conflict with current state  | 409    |
-| `DuplicateException`             | A uniqueness violation         | 409    |
-| `BusinessRuleViolationException` | A rejected business rule       | 422    |
-| `UpstreamApiException`           | An upstream service failure    | 500    |
+### Application Exceptions
 
-- Request validation returns `422`; application validation returns `400`.
-- Unmapped application exceptions, unexpected errors, and response validation failures return `500`.
-- `UnauthorizedException` does not set `WWW-Authenticate`.
+| Exception                        | Description                                                  | Status |
+| -------------------------------- | ------------------------------------------------------------ | ------ |
+| `ValidationException`            | Invalid application input                                    | 400    |
+| `UnauthorizedException`          | Missing or invalid credentials; no `WWW-Authenticate` header | 401    |
+| `MissingPrivilegeException`      | Insufficient permissions                                     | 403    |
+| `NotFoundException`              | A missing required resource                                  | 404    |
+| `ConflictException`              | A conflict with current state                                | 409    |
+| `DuplicateException`             | A uniqueness violation                                       | 409    |
+| `BusinessRuleViolationException` | A rejected business rule                                     | 422    |
+| `UpstreamApiException`           | An upstream service failure                                  | 500    |
+| `ApplicationException`           | No more specific status mapping                              | 500    |
 
 See the [core exception guide](../core/README.md#choosing-an-exception).
+
+### Framework and Unhandled Errors
+
+| Exception                                    | Description                                                      | Status        |
+| -------------------------------------------- | ---------------------------------------------------------------- | ------------- |
+| `fastapi.exceptions.RequestValidationError`  | Invalid FastAPI request input                                    | 422           |
+| `pydantic.ValidationError`                   | Invalid Pydantic model data                                      | 422           |
+| `starlette.exceptions.HTTPException`         | Includes the `fastapi.HTTPException` subclass; preserves headers | `status_code` |
+| `fastapi.exceptions.ResponseValidationError` | Invalid FastAPI response data                                    | 500           |
+| `builtins.Exception`                         | Other unhandled errors                                           | 500           |
 
 ## Usage Guidelines
 
@@ -279,6 +415,26 @@ log and re-raise. Use context managers or `finally` for cleanup; never return ex
 
 Translate known rejections into application exceptions; unexpected responses
 become `UpstreamApiException`. This example uses HTTPX.
+
+```mermaid
+flowchart TD
+  upstream["Upstream response or transport error"] --> client["create_order<br/>Translates upstream codes<br/>to public errors"]
+  client -->|422 + validation_failed| validation["ValidationException"]
+  client -->|422 + limit_exceeded| business["BusinessRuleViolationException"]
+  client -->|409 + order_exists| duplicate["DuplicateException"]
+  client -->|Unexpected or malformed response, transport failure| failure["UpstreamApiException"]
+  validation -->|errors| route["ExceptionHandlingRoute"]
+  business -->|extensions| route
+  duplicate --> route
+  failure --> route
+  route --> handler["application_exception_handler<br/>Maps status and builds Problem Details"]
+  handler -->|"optional errors + extensions"| response["HTTP status + Problem Details JSON<br/>application/problem+json"]
+```
+
+- **`errors`** lists individual validation findings, such as a field's code, message, and location.
+- **`extensions`** holds additional context, such as trace IDs, request metadata, or business-rule codes.
+
+A response can contain both.
 
 ```pycon
 >>> import httpx
@@ -568,8 +724,13 @@ Use `422` instead of `400`, configuring the router before adding routes:
 
 ### Safe Metadata
 
-**Treat details and extensions as public, even on `500`.** Use application-owned
-messages and stable codes, not upstream response bodies, URLs, or credentials:
+**Treat `detail`, `errors`, and `extensions` as public, even on `500`.** Use
+application-owned messages and stable codes, not upstream response bodies, URLs,
+or credentials.
+
+The Pydantic validation handler can include rejected input in `errors[].detail`.
+Catch and translate these errors before they reach the handler when input may be
+sensitive.
 
 ```pycon
 >>> from team_hermes.core import UpstreamApiException
