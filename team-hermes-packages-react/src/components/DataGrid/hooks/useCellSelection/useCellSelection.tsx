@@ -260,12 +260,12 @@ export function useCellSelection({
       if (!columnId) {
         setSelectedCellsByRow(rowId)
         setIndex(newIndex)
-        scrollToRow?.(rowIndex as number, { behavior: 'smooth', align: 'center' })
+        scrollToRow?.(rowIndex as number, { behavior: 'instant', align: 'center' })
         return
       }
       setSelectedCells([{ rowId, columnId }])
       setIndex(newIndex)
-      scrollToRow?.(rowIndex as number, { behavior: 'smooth', align: 'center' })
+      scrollToRow?.(rowIndex as number, { behavior: 'instant', align: 'center' })
       if (columnId) scrollToColumn?.(columnId)
     },
     [
