@@ -5,21 +5,15 @@
     "moduleDetection": "force",
     "module": "esnext",
     "moduleResolution": "bundler",
-    "resolveJsonModule": true,
     "jsx": "react-jsx",
-    "types": ["node", "jest", "vitest/globals"],
+    "types": ["node"],
     "strict": true,
-    "noUnusedLocals": true,
-    "declaration": true,
     "noEmit": true,
     "allowImportingTsExtensions": true,
     "esModuleInterop": true,
     "isolatedModules": true,
     "verbatimModuleSyntax": true,
-    "skipLibCheck": true,
-    "paths": {
-      "@/*": ["./src/*"]
-    }
+    "skipLibCheck": true
   },
-  "include": ["**/*.ts", "**/*.tsx", "**/*.d.ts", ".storybook/**/*.ts", ".storybook/**/*.tsx"]
+  "include": ["*.ts", "*.d.ts", ".storybook/**/*.ts", ".storybook/**/*.tsx"]
 }

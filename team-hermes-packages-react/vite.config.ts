@@ -1,24 +1,9 @@
 import tailwindcss from '@tailwindcss/vite'
-import path from 'node:path'
 import { defineConfig } from 'vite-plus'
 
+// Workspace root: Storybook reads this file, and `vp check` here lints and formats every package.
 export default defineConfig({
   plugins: [tailwindcss()],
-  test: {
-    passWithNoTests: true,
-    environment: 'jsdom',
-    setupFiles: ['./vitest.setup.ts'],
-  },
-  resolve: {
-    alias: { '@': path.resolve(import.meta.dirname, './src') },
-    tsconfigPaths: true,
-  },
-  pack: {
-    dts: {
-      tsgo: true,
-    },
-    exports: true,
-  },
   lint: {
     options: {
       typeAware: true,
@@ -30,6 +15,7 @@ export default defineConfig({
     },
   },
   fmt: {
+    ignorePatterns: ['**/CHANGELOG.md'],
     useTabs: false,
     tabWidth: 2,
     singleQuote: true,

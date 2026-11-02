@@ -31,4 +31,4 @@ jobs:
         run: mise run test:unit:team-hermes-packages-react
 
       - name: "Build verification"
-        run: vp pack
+        run: mise run team-hermes-packages-react:pack

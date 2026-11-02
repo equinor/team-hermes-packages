@@ -8,7 +8,7 @@ Maintained by Team Hermes at [Equinor](https://github.com/equinor).
 
 Start with the README for your package:
 
-- [React components](team-hermes-packages-react/README.md)
+- [React components](team-hermes-packages-react/packages/react-components/README.md)
 - [Python packages](team-hermes-packages-python/README.md)
 
 ## ⬇️ Installation
@@ -16,7 +16,7 @@ Start with the README for your package:
 ### React
 
 Requires React 19 and compatible Equinor Design System peer dependencies, listed in
-the [package metadata](team-hermes-packages-react/package.json).
+the [package metadata](team-hermes-packages-react/packages/react-components/package.json).
 
 ```sh
 npm install @team-hermes/react-components

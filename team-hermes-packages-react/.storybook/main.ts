@@ -2,7 +2,7 @@ import path from 'node:path'
 import type { StorybookConfig } from '@storybook/react-vite'
 
 const config: StorybookConfig = {
-  stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
+  stories: ['../packages/*/src/**/*.mdx', '../packages/*/src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
   addons: [
     '@chromatic-com/storybook',
     '@storybook/addon-vitest',
@@ -16,7 +16,7 @@ const config: StorybookConfig = {
     config.resolve = config.resolve || {}
     config.resolve.alias = {
       ...(config.resolve.alias as Record<string, string>),
-      '@': path.resolve(import.meta.dirname, '../src'),
+      '@': path.resolve(import.meta.dirname, '../packages/react-components/src'),
     }
 
     // Workaround for Rolldown bug: strictExecutionOrder (set by Storybook's
