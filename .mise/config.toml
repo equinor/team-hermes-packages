@@ -27,12 +27,12 @@ run = "vp check --fix"
 [tasks."test:unit:team-hermes-packages-react"]
 dir = "{{config_root}}/team-hermes-packages-react"
 depends = ["team-hermes-packages-react:dependencies"]
-run = "vp test"
+run = "vp run -r test"
 
 [tasks."team-hermes-packages-react:pack"]
 depends = ["team-hermes-packages-react:dependencies"]
 dir = "{{config_root}}/team-hermes-packages-react"
-run = "vp pack"
+run = "vp run -r pack"
 
 [tasks."team-hermes-packages-react:build-storybook"]
 depends = ["team-hermes-packages-react:dependencies"]

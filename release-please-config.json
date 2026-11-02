@@ -2,7 +2,7 @@
   "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
   "separate-pull-requests": false,
   "packages": {
-    "team-hermes-packages-react": {
+    "team-hermes-packages-react/packages/react-components": {
       "release-type": "node",
       "component": "team-hermes-packages-react"
     },
