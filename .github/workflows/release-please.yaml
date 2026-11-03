@@ -13,12 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       releases_created: ${{ steps.release.outputs.releases_created }}
-      react-components--release_created: ${{ steps.release.outputs['team-hermes-packages-react/packages/react-components--release_created'] }}
-      react-components--tag_name: ${{ steps.release.outputs['team-hermes-packages-react/packages/react-components--tag_name'] }}
-      react-components--version: ${{ steps.release.outputs['team-hermes-packages-react/packages/react-components--version'] }}
-      react-omnia-map--release_created: ${{ steps.release.outputs['team-hermes-packages-react/packages/react-omnia-map--release_created'] }}
-      react-omnia-map--tag_name: ${{ steps.release.outputs['team-hermes-packages-react/packages/react-omnia-map--tag_name'] }}
-      react-omnia-map--version: ${{ steps.release.outputs['team-hermes-packages-react/packages/react-omnia-map--version'] }}
+      npm-packages: ${{ steps.npm-packages.outputs.packages }}
     steps:
       - uses: googleapis/release-please-action@v4
         id: release
@@ -26,16 +21,36 @@ jobs:
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
 
-  publish-react:
+      # Releases under team-hermes-packages-react/ are npm packages; output them as a matrix for the publish job.
+      - name: "Collect released npm packages"
+        id: npm-packages
+        env:
+          RELEASE_OUTPUTS: ${{ toJSON(steps.release.outputs) }}
+        run: |
+          packages="$(jq -c '
+            . as $outputs
+            | [ keys[]
+                | select(endswith("--release_created") and $outputs[.] == "true")
+                | sub("--release_created$"; "")
+                | select(startswith("team-hermes-packages-react/"))
+                | { path: ., tag: $outputs[. + "--tag_name"] } ]
+          ' <<< "$RELEASE_OUTPUTS")"
+          echo "packages=$packages" >> "$GITHUB_OUTPUT"
+
+  publish-npm:
     needs: release-please
-    if: needs.release-please.outputs.react-components--release_created == 'true'
+    if: needs.release-please.outputs.npm-packages != '[]'
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{ fromJSON(needs.release-please.outputs.npm-packages) }}
     permissions:
       contents: write
       id-token: write
     defaults:
       run:
-        working-directory: team-hermes-packages-react/packages/react-components
+        working-directory: ${{ matrix.package.path }}
     steps:
       - name: "Setup: checkout repository"
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -63,49 +78,7 @@ jobs:
       - name: "Upload tarball to release"
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release upload "${{ needs.release-please.outputs.react-components--tag_name }}" *.tgz --clobber
-
-      - name: "Publish to npm"
-        run: npm publish --access public
-
-  publish-react-omnia-map:
-    needs: release-please
-    if: needs.release-please.outputs.react-omnia-map--release_created == 'true'
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      id-token: write
-    defaults:
-      run:
-        working-directory: team-hermes-packages-react/packages/react-omnia-map
-    steps:
-      - name: "Setup: checkout repository"
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-
-      - name: "Setup: Runtimes"
-        uses: jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c # v4.3.0
-        timeout-minutes: 5
-
-      - name: "Setup: Vite+"
-        uses: voidzero-dev/setup-vp@9fd26ff49f9b5e6276c2b493da4454ad4527f7f4 # v1.20.0
-        with:
-          version: "0.2.1"
-          node-manager: false
-          run-install: false
-
-      - name: "Setup: Install dependencies"
-        run: vp install --frozen-lockfile
-
-      - name: "Build library"
-        run: vp run build
-
-      - name: "Create tarball"
-        run: npm pack
-
-      - name: "Upload tarball to release"
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: gh release upload "${{ needs.release-please.outputs.react-omnia-map--tag_name }}" *.tgz --clobber
+        run: gh release upload "${{ matrix.package.tag }}" *.tgz --clobber
 
       - name: "Publish to npm"
         run: npm publish --access public
