@@ -89,6 +89,12 @@ Loads a public web map and hides its own layers, leaving only your `layers` on t
 
 <Canvas of={OmniaMapStories.HideWebMapLayers} />
 
+### Switch map
+
+Changing `itemId` swaps the backing map and remounts the element. The layers are moved to the new map, the view fits to them again, and `useLayerHighlight` re-applies the highlight on the northern hubs.
+
+<Canvas of={OmniaMapStories.SwitchMap} />
+
 ## Props
 
 <ArgTypes of={OmniaMapStories} />

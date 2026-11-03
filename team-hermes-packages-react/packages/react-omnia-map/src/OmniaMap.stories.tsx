@@ -1,7 +1,11 @@
+import type { ArcgisMap } from '@arcgis/map-components/components/arcgis-map'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useMemo, useState } from 'react'
+import { useLayerHighlight } from './hooks/useLayerHighlight'
 import { OmniaMap } from './OmniaMap'
 import { createPlacesLayer, NORWEGIAN_CITIES, US_CITIES } from './stories/sample-data'
+
+const PUBLIC_WEB_MAP_ID = 'f2e9b762544945f390ca4ac3671cfa72'
 
 const meta = {
   title: 'Map/OmniaMap',
@@ -95,8 +99,47 @@ function HideWebMapLayersExample(args: Story['args']) {
 export const HideWebMapLayers: Story = {
   args: {
     basemap: undefined,
-    itemId: 'f2e9b762544945f390ca4ac3671cfa72',
+    itemId: PUBLIC_WEB_MAP_ID,
     hideWebMapLayers: true,
   },
   render: (args) => <HideWebMapLayersExample {...args} />,
+}
+
+function SwitchMapExample(args: Story['args']) {
+  const [mapElement, setMapElement] = useState<ArcgisMap | null>(null)
+  const [itemId, setItemId] = useState<string | undefined>(PUBLIC_WEB_MAP_ID)
+  const cities = useMemo(() => createPlacesLayer(NORWEGIAN_CITIES.slice(0, 3), { title: 'Cities' }), [])
+  const hubs = useMemo(
+    () => createPlacesLayer(NORWEGIAN_CITIES.slice(3), { title: 'Northern hubs', color: '#d9534f' }),
+    []
+  )
+  const layers = useMemo(() => [cities, hubs], [cities, hubs])
+  const highlighted = useMemo(() => [hubs], [hubs])
+
+  useLayerHighlight(mapElement, highlighted)
+
+  return (
+    <>
+      <div style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
+        <button type="button" disabled={itemId === PUBLIC_WEB_MAP_ID} onClick={() => setItemId(PUBLIC_WEB_MAP_ID)}>
+          Web map
+        </button>
+        <button type="button" disabled={itemId === undefined} onClick={() => setItemId(undefined)}>
+          Topo basemap only
+        </button>
+      </div>
+      <OmniaMap
+        {...args}
+        ref={setMapElement}
+        itemId={itemId}
+        basemap={itemId ? undefined : 'topo-vector'}
+        hideWebMapLayers
+        layers={layers}
+      />
+    </>
+  )
+}
+
+export const SwitchMap: Story = {
+  render: (args) => <SwitchMapExample {...args} />,
 }

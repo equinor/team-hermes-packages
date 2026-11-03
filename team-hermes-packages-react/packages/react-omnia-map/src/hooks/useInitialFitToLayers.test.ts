@@ -10,7 +10,10 @@ import { useInitialFitToLayers } from './useInitialFitToLayers'
 
 function createMapElement() {
   const goTo = vi.fn(() => Promise.resolve())
-  const element = { view: { goTo }, viewOnReady: vi.fn(() => Promise.resolve()) } as unknown as ArcgisMap
+  const element = {
+    view: { goTo },
+    viewOnReady: vi.fn(() => Promise.resolve()),
+  } as unknown as ArcgisMap
   return { element, goTo }
 }
 
