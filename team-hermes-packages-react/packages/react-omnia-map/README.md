@@ -17,7 +17,7 @@ Peer dependencies: `react` and `react-dom` (^19), `@arcgis/core` and `@arcgis/ma
 
 ### Types
 
-Reference the ArcGIS React types once in your app (for example in `src/arcgis.d.ts`) so `<arcgis-map>` is a typed JSX element:
+The package's type declarations already reference `@arcgis/map-components/types/react`, so the props of `OmniaMap` are typed without any setup. If you also use `<arcgis-map>` or other ArcGIS components directly in your own JSX (for example widgets slotted into the map), reference the ArcGIS React types once in your app, for example in `src/arcgis.d.ts`:
 
 ```ts
 /// <reference types="@arcgis/map-components/types/react" />
