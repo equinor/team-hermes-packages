@@ -23,7 +23,7 @@ export function Root() {
 
 - `appId` is the OAuth2 app ID from the ArcGIS Developer Dashboard. `appId` and `portalUrl` are read once on mount.
 - `portalUrl` defaults to `https://www.arcgis.com`. For `https://omnia.maps.arcgis.com`, contact the core Omnia Maps team to allow your app domains (CORS).
-- Sign-in redirects the whole page by default. Set `popup` to sign in through a popup window instead, which is required when the app runs in an iframe (such as Storybook). The popup flow needs an `oauth-callback.html` page served at the root of your app (Esri provides [a sample](https://github.com/Esri/jsapi-resources/blob/main/oauth/oauth-callback.html)), and its URL must be registered as a redirect URI on your OAuth2 application.
+- Sign-in redirects the whole page by default. Set `popup` to sign in through a popup window instead, which is required when the app runs in an iframe (such as Storybook). The popup flow needs an `oauth-callback.html` page served at the root of **your own app's origin** (Esri provides [a sample](https://github.com/Esri/jsapi-resources/blob/main/oauth/oauth-callback.html)), and its URL must be registered as a redirect URI on your OAuth2 application. Don't register a URL on a shared host (such as a GitHub Pages site shared by other projects), because every page on that origin could then complete the sign-in flow for your app.
 
 `useOmniaMapsAuth()` returns:
 
@@ -53,7 +53,9 @@ It throws when used outside the provider.
 
 ## Examples
 
-The examples use the placeholder `appId` `client_id_replace_me` and the `popup` flow, because Storybook runs stories in an iframe. Signing in with the placeholder fails with “Invalid client_id”. Enter your own app ID in the controls (the provider remounts when it changes) and register this Storybook's `oauth-callback.html` as a redirect URI on that app.
+The examples use the placeholder `appId` `client_id_replace_me` and the `popup` flow, because Storybook runs stories in an iframe. Signing in with the placeholder fails with “Invalid client_id”.
+
+Signing in only works when Storybook runs locally (`vp exec storybook dev`), with your own app ID entered in the controls (the provider remounts when it changes) and `http://localhost:6006/oauth-callback.html` registered as a redirect URI on that app. The deployed Storybook does not include the callback page, so do not register its URL on an OAuth app.
 
 ### Status
 

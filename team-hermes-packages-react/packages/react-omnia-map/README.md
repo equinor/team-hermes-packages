@@ -76,7 +76,7 @@ Get `mapElement` through the `ref` of `OmniaMap`.
 </OmniaMapsAuthContextProvider>
 ```
 
-Sign-in redirects the page by default. Pass `popup` to use a popup window instead (needed inside iframes). This requires an `oauth-callback.html` page served next to your app, registered as a redirect URI on your OAuth2 application.
+Sign-in redirects the page by default. Pass `popup` to use a popup window instead (needed inside iframes). This requires an `oauth-callback.html` page served at the root of your own app's origin, registered as a redirect URI on your OAuth2 application. Don't register a URL on a host shared with other projects.
 
 ## Write an app-level wrapper
 

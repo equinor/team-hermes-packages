@@ -20,8 +20,8 @@ type OmniaMapsAuthContextProviderProps = PropsWithChildren<{
   portalUrl?: string
   /**
    * Sign in through a popup window instead of redirecting the page, which is required inside iframes (e.g. Storybook).
-   * Needs an `oauth-callback.html` page served next to your app, with its URL registered as a redirect URI on your
-   * OAuth2 application. Read once when the provider mounts. Defaults to false.
+   * Needs an `oauth-callback.html` page served at the root of your own app's origin, with its URL registered as a
+   * redirect URI on your OAuth2 application. Read once when the provider mounts. Defaults to false.
    */
   popup?: boolean
 }>
