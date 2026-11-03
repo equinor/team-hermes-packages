@@ -4,6 +4,36 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+catalogs:
+  default:
+    '@tailwindcss/vite':
+      specifier: ^4.3.1
+      version: 4.3.1
+    '@testing-library/react':
+      specifier: ^16.3.2
+      version: 16.3.2
+    '@types/node':
+      specifier: ^25.6.2
+      version: 25.9.4
+    '@types/react':
+      specifier: ^19.2.17
+      version: 19.2.17
+    '@types/react-dom':
+      specifier: ^19.2.3
+      version: 19.2.3
+    jsdom:
+      specifier: ^29.1.1
+      version: 29.1.1
+    tailwindcss:
+      specifier: ^4.3.1
+      version: 4.3.2
+    typescript:
+      specifier: ^6.0.3
+      version: 6.0.3
+    vite-plus:
+      specifier: ^0.1.20
+      version: 0.1.24
+
 overrides:
   vite: npm:@voidzero-dev/vite-plus-core@latest
   vitest: npm:@voidzero-dev/vite-plus-test@latest
@@ -31,22 +61,22 @@ importers:
         specifier: ^10.4.6
         version: 10.4.6(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(esbuild@0.28.1)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(storybook@10.4.6(@testing-library/dom@10.4.1)(@types/react@19.2.17)(react@19.2.7)(vite-plus@0.1.24(@types/node@25.9.4)(esbuild@0.28.1)(jiti@2.7.0)(jsdom@29.1.1(@noble/hashes@1.8.0))(typescript@6.0.3)(vite@8.1.0(@types/node@25.9.4)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))(yaml@2.9.0)))(typescript@6.0.3)(vite@8.1.0(@types/node@25.9.4)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))
       '@tailwindcss/vite':
-        specifier: ^4.3.1
+        specifier: 'catalog:'
         version: 4.3.1(vite@8.1.0(@types/node@25.9.4)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))
       '@types/node':
-        specifier: ^25.6.2
+        specifier: 'catalog:'
         version: 25.9.4
       storybook:
         specifier: ^10.4.6
         version: 10.4.6(@testing-library/dom@10.4.1)(@types/react@19.2.17)(react@19.2.7)(vite-plus@0.1.24(@types/node@25.9.4)(esbuild@0.28.1)(jiti@2.7.0)(jsdom@29.1.1(@noble/hashes@1.8.0))(typescript@6.0.3)(vite@8.1.0(@types/node@25.9.4)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))(yaml@2.9.0))
       tailwindcss:
-        specifier: ^4.3.1
-        version: 4.3.1
+        specifier: 'catalog:'
+        version: 4.3.2
       typescript:
-        specifier: ^6.0.3
+        specifier: 'catalog:'
         version: 6.0.3
       vite-plus:
-        specifier: ^0.1.20
+        specifier: 'catalog:'
         version: 0.1.24(@types/node@25.9.4)(esbuild@0.28.1)(jiti@2.7.0)(jsdom@29.1.1(@noble/hashes@1.8.0))(typescript@6.0.3)(vite@8.1.0(@types/node@25.9.4)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))(yaml@2.9.0)
 
   packages/react-components:
@@ -110,13 +140,13 @@ importers:
         specifier: ^4.3.2
         version: 4.3.2
       '@tailwindcss/vite':
-        specifier: ^4.3.1
+        specifier: 'catalog:'
         version: 4.3.1(vite@8.1.0(@types/node@25.9.4)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))
       '@testing-library/jest-dom':
         specifier: ^6.9.1
         version: 6.9.1
       '@testing-library/react':
-        specifier: ^16.3.2
+        specifier: 'catalog:'
         version: 16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@tsdown/css':
         specifier: 0.22.3
@@ -125,31 +155,31 @@ importers:
         specifier: ^30.0.0
         version: 30.0.0
       '@types/node':
-        specifier: ^25.6.2
+        specifier: 'catalog:'
         version: 25.9.4
       '@types/react':
-        specifier: ^19.2.17
+        specifier: 'catalog:'
         version: 19.2.17
       '@types/react-dom':
-        specifier: ^19.2.3
+        specifier: 'catalog:'
         version: 19.2.3(@types/react@19.2.17)
       '@typescript/native-preview':
         specifier: 7.0.0-dev.20260509.2
         version: 7.0.0-dev.20260509.2
       jsdom:
-        specifier: ^29.1.1
+        specifier: 'catalog:'
         version: 29.1.1(@noble/hashes@1.8.0)
       styled-components:
         specifier: ^6.4.3
         version: 6.4.3(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       tailwindcss:
-        specifier: ^4.3.1
+        specifier: 'catalog:'
         version: 4.3.2
       typescript:
-        specifier: ^6.0.3
+        specifier: 'catalog:'
         version: 6.0.3
       vite-plus:
-        specifier: ^0.1.20
+        specifier: 'catalog:'
         version: 0.1.24(@tsdown/css@0.22.3)(@types/node@25.9.4)(esbuild@0.28.1)(jiti@2.7.0)(jsdom@29.1.1(@noble/hashes@1.8.0))(typescript@6.0.3)(vite@8.1.0(@types/node@25.9.4)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))(yaml@2.9.0)
       vitest:
         specifier: npm:@voidzero-dev/vite-plus-test@latest
@@ -167,22 +197,19 @@ importers:
         specifier: ^5.2.0
         version: 5.2.0(luxon@3.7.2)
       '@testing-library/react':
-        specifier: ^16.3.2
+        specifier: 'catalog:'
         version: 16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@types/node':
-        specifier: ^25.6.2
+        specifier: 'catalog:'
         version: 25.9.4
       '@types/react':
-        specifier: ^19.2.17
+        specifier: 'catalog:'
         version: 19.2.17
       '@types/react-dom':
-        specifier: ^19.2.3
+        specifier: 'catalog:'
         version: 19.2.3(@types/react@19.2.17)
-      '@typescript/native-preview':
-        specifier: 7.0.0-dev.20260509.2
-        version: 7.0.0-dev.20260509.2
       jsdom:
-        specifier: ^29.1.1
+        specifier: 'catalog:'
         version: 29.1.1(@noble/hashes@1.8.0)
       react:
         specifier: ^19.0.0
@@ -191,10 +218,10 @@ importers:
         specifier: ^19.0.0
         version: 19.2.7(react@19.2.7)
       typescript:
-        specifier: ^6.0.3
+        specifier: 'catalog:'
         version: 6.0.3
       vite-plus:
-        specifier: ^0.1.20
+        specifier: 'catalog:'
         version: 0.1.24(@types/node@25.9.4)(esbuild@0.28.1)(jiti@2.7.0)(jsdom@29.1.1(@noble/hashes@1.8.0))(typescript@6.0.3)(vite@8.1.0(@types/node@25.9.4)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))(yaml@2.9.0)
 
 packages:

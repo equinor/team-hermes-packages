@@ -36,16 +36,15 @@
     "@arcgis/core": "^5.1.27",
     "@arcgis/map-components": "^5.1.27",
     "@esri/calcite-components": "^5.2.0",
-    "@testing-library/react": "^16.3.2",
-    "@types/node": "^25.6.2",
-    "@types/react": "^19.2.17",
-    "@types/react-dom": "^19.2.3",
-    "@typescript/native-preview": "7.0.0-dev.20260509.2",
-    "jsdom": "^29.1.1",
+    "@testing-library/react": "catalog:",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "jsdom": "catalog:",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "typescript": "^6.0.3",
-    "vite-plus": "^0.1.20"
+    "typescript": "catalog:",
+    "vite-plus": "catalog:"
   },
   "peerDependencies": {
     "@arcgis/core": "^5.1.0",
