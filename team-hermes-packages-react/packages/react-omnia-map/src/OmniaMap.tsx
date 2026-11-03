@@ -6,6 +6,7 @@ import type { GraphicHit } from '@arcgis/core/views/types'
 import type { ArcgisMap } from '@arcgis/map-components/components/arcgis-map'
 import type { TargetedEvent } from '@esri/calcite-components'
 import type { JSX, Ref } from 'react'
+import { backingMapKey } from './helpers/backing-map-key'
 import { useForwardedElementState } from './hooks/useForwardedElementState'
 import { useInitialFitToLayers } from './hooks/useInitialFitToLayers'
 import { useReconcileLayers } from './hooks/useReconcileLayers'
@@ -20,8 +21,8 @@ export type OmniaMapProps = Omit<ArcgisMapElementProps, 'ref'> & {
    */
   layers?: readonly Layer[]
   /**
-   * Zoom to the extent of `layers` once, the first time the view is ready and the layers contain any geometry.
-   * Overrides `center`/`zoom`/`extent` at that point. Defaults to true.
+   * Zoom to the extent of `layers` once per map, the first time its view is ready and the layers contain any
+   * geometry. Overrides `center`/`zoom`/`extent` at that point. Defaults to true.
    */
   initialFitToLayers?: boolean
   /**
@@ -40,6 +41,7 @@ const NO_LAYERS: readonly Layer[] = []
 
 /**
  * A thin React wrapper around <arcgis-map>. Accepts every <arcgis-map> prop and child, and adds reactive `layers`.
+ * Changing `itemId` or `map` remounts the element, so the hooks and `layers` start over on the new map.
  * Authentication is not handled here: for private web maps, gate rendering in your own wrapper using
  * OmniaMapsAuthContextProvider and useOmniaMapsAuth().
  */
@@ -84,6 +86,7 @@ export function OmniaMap({
   return (
     <arcgis-map
       {...arcgisMapProps}
+      key={backingMapKey(arcgisMapProps)}
       ref={mapElementRef}
       onarcgisViewLayerviewCreate={handleLayerviewCreate}
       onarcgisViewClick={handleViewClick}
