@@ -7,9 +7,6 @@ export default defineConfig({
     setupFiles: ['./vitest.setup.ts'],
   },
   pack: {
-    dts: {
-      tsgo: true,
-    },
     exports: true,
   },
 })
