@@ -9,6 +9,7 @@ Maintained by Team Hermes at [Equinor](https://github.com/equinor).
 Start with the README for your package:
 
 - [React components](team-hermes-packages-react/packages/react-components/README.md)
+- [React ArcGIS map](team-hermes-packages-react/packages/react-omnia-map/README.md)
 - [Python packages](team-hermes-packages-python/README.md)
 
 ## ⬇️ Installation
@@ -20,6 +21,13 @@ the [package metadata](team-hermes-packages-react/packages/react-components/pack
 
 ```sh
 npm install @team-hermes/react-components
+```
+
+The ArcGIS map wrapper is a separate package. It requires `@arcgis/core` and `@arcgis/map-components` (^5.1) as peer
+dependencies.
+
+```sh
+npm install @team-hermes/react-omnia-map @arcgis/core @arcgis/map-components
 ```
 
 ### Python

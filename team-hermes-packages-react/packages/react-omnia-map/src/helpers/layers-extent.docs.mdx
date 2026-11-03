@@ -1,0 +1,30 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks'
+import * as ExtentStories from './layers-extent.stories'
+
+<Meta of={ExtentStories} />
+
+# getLayersExtent
+
+Returns the padded WGS84 `Extent` covering everything in `layers`: every graphic of a `GraphicsLayer`, or `fullExtent` for other layer types. Returns `null` when the layers contain no geometry.
+
+## Usage
+
+```tsx
+import { getLayersExtent } from '@team-hermes/react-omnia-map'
+
+const extent = getLayersExtent(layers)
+if (extent) await mapElement.view.goTo(extent)
+
+// Add 50% padding instead of the default 20%
+const roomyExtent = getLayersExtent(layers, 0.5)
+```
+
+- `padding` is the fraction added around the contents. It defaults to `0.2`, which grows the width and height by 20%. Use `0` for no padding.
+- Only WGS84 and Web Mercator geometries are supported; other spatial references are ignored.
+- `OmniaMap` uses this internally for `initialFitToLayers`.
+
+## Example
+
+The red rectangle is the extent of the cities layer.
+
+<Canvas of={ExtentStories.PaddedExtent} />

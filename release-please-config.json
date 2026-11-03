@@ -6,6 +6,10 @@
       "release-type": "node",
       "component": "team-hermes-packages-react"
     },
+    "team-hermes-packages-react/packages/react-omnia-map": {
+      "release-type": "node",
+      "component": "team-hermes-react-omnia-map"
+    },
     "team-hermes-packages-python/elasticsearch": {
       "release-type": "python",
       "component": "team-hermes-elasticsearch",

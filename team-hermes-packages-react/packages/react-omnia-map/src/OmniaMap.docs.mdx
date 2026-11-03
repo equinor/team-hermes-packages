@@ -1,0 +1,93 @@
+import { Meta, Primary, Controls, Canvas, ArgTypes } from '@storybook/addon-docs/blocks'
+import * as OmniaMapStories from './OmniaMap.stories'
+
+<Meta of={OmniaMapStories} />
+
+# OmniaMap
+
+A thin React wrapper around the ArcGIS `<arcgis-map>` web component. It accepts every `<arcgis-map>` prop and child, and adds reactive `layers`, click helpers and fit-to-layers behavior.
+
+<Primary />
+
+<Controls />
+
+## Usage
+
+```tsx
+import { OmniaMap } from '@team-hermes/react-omnia-map'
+```
+
+Add the type reference once in your app so `<arcgis-map>` is a typed JSX element (see the package README):
+
+```ts
+/// <reference types="@arcgis/map-components/types/react" />
+```
+
+- `layers` are ArcGIS `Layer` instances that **you own**. They are added and removed by identity, so memoize the array and reuse the instances across renders. Draw order follows insertion order.
+- `OmniaMap` is **auth-unaware** and always renders. Gate rendering in your own wrapper (see below).
+- `initialFitToLayers` (default `true`) zooms to the extent of `layers` once, when the view is ready.
+- `hideWebMapLayers` hides the web map's own operational layers (the basemap stays) so only `layers` remain.
+- `onMapClick` receives the clicked map point. `onLayerClick` receives the topmost layer from `layers` under the pointer, or `null`.
+- Styling is done through `className` / `style` only. Give the map an explicit height.
+- To slot widgets (zoom, legend, ...) into the map, import and register them next to where you use them, e.g. `import '@arcgis/map-components/components/arcgis-zoom'`.
+
+```tsx
+const layers = useMemo(() => [new GraphicsLayer({ graphics })], [graphics])
+
+<OmniaMap basemap="topo-vector" layers={layers} style={{ height: 480 }} />
+```
+
+## Write an app-level wrapper
+
+The intended consumption model is a small wrapper in your app that owns authentication, turns your domain data into layers and memoizes them:
+
+```tsx
+import Graphic from '@arcgis/core/Graphic'
+import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
+import { OmniaMap, useOmniaMapsAuth } from '@team-hermes/react-omnia-map'
+import { useMemo } from 'react'
+
+export function WellsMap({ wells }: { wells: Well[] }) {
+  const { authenticationStatus, handleSignIn } = useOmniaMapsAuth()
+
+  // Domain -> GraphicsLayer builder; memoized so the layer keeps its identity between renders.
+  const layers = useMemo(() => [new GraphicsLayer({ title: 'Wells', graphics: wells.map(toGraphic) })], [wells])
+
+  if (authenticationStatus === 'checking' || authenticationStatus === 'signing-in') return <Spinner />
+  if (authenticationStatus === 'signed-out') return <button onClick={handleSignIn}>Sign in</button>
+
+  return <OmniaMap itemId="<your web map id>" layers={layers} style={{ height: '100%' }} />
+}
+```
+
+Wrap your app in `OmniaMapsAuthContextProvider` (see the Auth page).
+
+## Examples
+
+### Basic
+
+A map with a `GraphicsLayer`. The map is fitted to the layer on load.
+
+<Canvas of={OmniaMapStories.Basic} />
+
+### Layer click
+
+`onLayerClick` reports which layer and graphic was hit.
+
+<Canvas of={OmniaMapStories.LayerClick} />
+
+### Initial fit to layers
+
+The map starts at `0,0` and jumps to the layer once. Set `initialFitToLayers` to `false` to keep `center` and `zoom`.
+
+<Canvas of={OmniaMapStories.InitialFitToLayers} />
+
+### Hide web map layers
+
+Loads a public web map and hides its own layers, leaving only your `layers` on top of its basemap.
+
+<Canvas of={OmniaMapStories.HideWebMapLayers} />
+
+## Props
+
+<ArgTypes of={OmniaMapStories} />
