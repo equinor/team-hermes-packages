@@ -1,0 +1,68 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import * as AuthStories from './omnia-maps-auth-context.stories'
+
+<Meta of={AuthStories} />
+
+# OmniaMapsAuthContextProvider / useOmniaMapsAuth
+
+An opt-in companion for private web maps. `OmniaMap` never renders sign-in UI; use this provider and hook to build your own gate.
+
+## Usage
+
+```tsx
+import { OmniaMapsAuthContextProvider, useOmniaMapsAuth } from '@team-hermes/react-omnia-map'
+
+export function Root() {
+  return (
+    <OmniaMapsAuthContextProvider appId="<your app id>" portalUrl="https://omnia.maps.arcgis.com">
+      <App />
+    </OmniaMapsAuthContextProvider>
+  )
+}
+```
+
+- `appId` is the OAuth2 app ID from the ArcGIS Developer Dashboard. `appId` and `portalUrl` are read once on mount.
+- `portalUrl` defaults to `https://www.arcgis.com`. For `https://omnia.maps.arcgis.com`, contact the core Omnia Maps team to allow your app domains (CORS).
+- Sign-in redirects the whole page by default. Set `popup` to sign in through a popup window instead, which is required when the app runs in an iframe (such as Storybook). The popup flow needs an `oauth-callback.html` page served at the root of your app (Esri provides [a sample](https://github.com/Esri/jsapi-resources/blob/main/oauth/oauth-callback.html)), and its URL must be registered as a redirect URI on your OAuth2 application.
+
+`useOmniaMapsAuth()` returns:
+
+<table>
+  <thead>
+    <tr>
+      <th>Property</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`authenticationStatus`</td>
+      <td>`'checking' | 'signed-in' | 'signed-out' | 'signing-in'`</td>
+      <td>Current sign-in state.</td>
+    </tr>
+    <tr>
+      <td>`handleSignIn`</td>
+      <td>`() => Promise<void>`</td>
+      <td>Starts the sign-in flow.</td>
+    </tr>
+  </tbody>
+</table>
+
+It throws when used outside the provider.
+
+## Examples
+
+The examples use the placeholder `appId` `client_id_replace_me` and the `popup` flow, because Storybook runs stories in an iframe. Signing in with the placeholder fails with “Invalid client_id”. Enter your own app ID in the controls (the provider remounts when it changes) and register this Storybook's `oauth-callback.html` as a redirect URI on that app.
+
+### Status
+
+<Canvas of={AuthStories.Status} />
+
+### Auth gate
+
+A wrapper that only renders the map once the user is signed in.
+
+<Canvas of={AuthStories.AuthGate} />
+
+<Controls of={AuthStories.Status} />

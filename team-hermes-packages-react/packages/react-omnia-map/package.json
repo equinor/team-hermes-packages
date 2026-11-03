@@ -1,0 +1,56 @@
+{
+  "name": "@team-hermes/react-omnia-map",
+  "version": "0.0.0",
+  "description": "React wrapper around the ArcGIS <arcgis-map> web component for Team Hermes.",
+  "homepage": "https://github.com/equinor/team-hermes-packages#readme",
+  "bugs": {
+    "url": "https://github.com/equinor/team-hermes-packages/issues"
+  },
+  "license": "MIT",
+  "author": "Equinor Team Hermes",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/equinor/team-hermes-packages.git",
+    "directory": "team-hermes-packages-react/packages/react-omnia-map"
+  },
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.mjs",
+    "./package.json": "./package.json"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "scripts": {
+    "build": "vp pack",
+    "dev": "vp pack --watch",
+    "test": "vp test",
+    "pack": "vp pack",
+    "prepublishOnly": "vp run build"
+  },
+  "devDependencies": {
+    "@arcgis/core": "^5.1.27",
+    "@arcgis/map-components": "^5.1.27",
+    "@esri/calcite-components": "^5.2.0",
+    "@testing-library/react": "^16.3.2",
+    "@types/node": "^25.6.2",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@typescript/native-preview": "7.0.0-dev.20260509.2",
+    "jsdom": "^29.1.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "typescript": "^6.0.3",
+    "vite-plus": "^0.1.20"
+  },
+  "peerDependencies": {
+    "@arcgis/core": "^5.1.0",
+    "@arcgis/map-components": "^5.1.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  }
+}

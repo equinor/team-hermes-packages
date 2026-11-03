@@ -1,0 +1,30 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks'
+import * as PanStories from './usePanLayersIntoView.stories'
+
+<Meta of={PanStories} />
+
+# usePanLayersIntoView
+
+Pans the view (keeping the current scale) so the graphics in `layers` become visible, unless any of them already are. Only `GraphicsLayer`s are considered. This is a hook, not a prop on `OmniaMap`.
+
+## Usage
+
+```tsx
+import { OmniaMap, usePanLayersIntoView } from '@team-hermes/react-omnia-map'
+
+function Map({ layers, hoveredLayers }: Props) {
+  const [mapElement, setMapElement] = useState<ArcgisMap | null>(null)
+  usePanLayersIntoView(mapElement, hoveredLayers, { delayMs: 300 })
+
+  return <OmniaMap ref={setMapElement} layers={layers} />
+}
+```
+
+- `delayMs` (default `300`) is how long `layers` must stay unchanged before panning, so sweeping across a list does not pan the map.
+- Memoize `layers`, as every change restarts the delay.
+
+## Example
+
+Hover a city: Tromsø, Trondheim, Bergen and Stavanger pan into view when they are outside the visible area.
+
+<Canvas of={PanStories.PanOnHover} />

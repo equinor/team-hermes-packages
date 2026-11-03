@@ -1,0 +1,28 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks'
+import * as HighlightStories from './useLayerHighlight.stories'
+
+<Meta of={HighlightStories} />
+
+# useLayerHighlight
+
+Highlights every graphic in each of `layers` with the view's highlight style, and re-applies the highlight when a layer's graphics change. Only `GraphicsLayer`s are highlighted. This is a hook, not a prop on `OmniaMap`.
+
+## Usage
+
+```tsx
+import { OmniaMap, useLayerHighlight } from '@team-hermes/react-omnia-map'
+
+function Map({ layers, highlighted }: Props) {
+  const [mapElement, setMapElement] = useState<ArcgisMap | null>(null)
+  useLayerHighlight(mapElement, highlighted)
+
+  return <OmniaMap ref={setMapElement} layers={layers} />
+}
+```
+
+- `mapElement` is the `<arcgis-map>` element, obtained through the `ref` of `OmniaMap`. The hook does nothing while it is `null`.
+- Memoize `highlighted` to avoid flicker. Highlighted layers must also be in the map's `layers`.
+
+## Example
+
+<Canvas of={HighlightStories.Highlight} />
