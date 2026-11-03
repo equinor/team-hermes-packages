@@ -10,7 +10,10 @@ Documentation and live examples are in the Storybook of this repository (see the
 npm install @team-hermes/react-omnia-map @arcgis/core @arcgis/map-components
 ```
 
-Peer dependencies: `react` and `react-dom` (^19), `@arcgis/core` and `@arcgis/map-components` (^5.1). They are peers because they are large, and this package does not pull them in for you.
+Peer dependencies: `react` and `react-dom` (^19), `@arcgis/core` and `@arcgis/map-components` (^5.1).
+
+- **React 19 is required.** `OmniaMap` passes props and event handlers (such as `onarcgisViewClick`) straight to the `<arcgis-map>` custom element, which only React 19 supports. React 18 and older are not supported.
+- **The ArcGIS packages are peers** so your app and this package share a single copy. Two copies would break `instanceof` checks on layers, register the custom element twice, and double the bundle size.
 
 ### Types
 

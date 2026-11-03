@@ -13,6 +13,8 @@ A thin React wrapper around the ArcGIS `<arcgis-map>` web component. It accepts 
 
 ## Usage
 
+**Requires React 19.** `OmniaMap` passes props and event handlers (such as `onarcgisViewClick`) straight to the `<arcgis-map>` custom element, which only React 19 supports. React 18 and older are not supported. `@arcgis/core` and `@arcgis/map-components` (^5.1) are peer dependencies, so your app and this package share one copy.
+
 ```tsx
 import { OmniaMap } from '@team-hermes/react-omnia-map'
 ```
