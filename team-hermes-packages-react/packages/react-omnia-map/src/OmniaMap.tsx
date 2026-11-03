@@ -6,6 +6,7 @@ import type { GraphicHit } from '@arcgis/core/views/types'
 import type { ArcgisMap } from '@arcgis/map-components/components/arcgis-map'
 import type { TargetedEvent } from '@esri/calcite-components'
 import type { JSX, Ref } from 'react'
+import { useRef } from 'react'
 import { backingMapKey } from './helpers/backing-map-key'
 import { useForwardedElementState } from './hooks/useForwardedElementState'
 import { useInitialFitToLayers } from './hooks/useInitialFitToLayers'
@@ -56,6 +57,7 @@ export function OmniaMap({
   ...arcgisMapProps
 }: OmniaMapProps) {
   const [mapElement, mapElementRef] = useForwardedElementState(ref)
+  const latestClick = useRef(0)
 
   useReconcileLayers(mapElement, layers)
   useInitialFitToLayers(mapElement, layers, initialFitToLayers)
@@ -73,13 +75,20 @@ export function OmniaMap({
     onMapClick?.(event.detail.mapPoint, event.detail)
 
     if (!onLayerClick) return
+    const click = ++latestClick.current
     if (layers.length === 0) {
       onLayerClick(null, null)
       return
     }
-    const response = await event.target.hitTest(event.detail, {
-      include: layers,
-    })
+    let response
+    try {
+      response = await event.target.hitTest(event.detail, { include: layers })
+    } catch {
+      // The view was destroyed or replaced between the click and the result.
+      return
+    }
+    // A newer click supersedes this one, so results are reported in click order.
+    if (click !== latestClick.current) return
     const hit = response.results.find((result): result is GraphicHit => result.type === 'graphic')
     const layer = hit ? (layers.find((candidate) => candidate === hit.graphic.layer) ?? null) : null
     onLayerClick(layer, hit ?? null)
