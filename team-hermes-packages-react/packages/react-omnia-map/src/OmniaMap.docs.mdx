@@ -27,6 +27,7 @@ Add the type reference once in your app so `<arcgis-map>` is a typed JSX element
 - `OmniaMap` is **auth-unaware** and always renders. Gate rendering in your own wrapper (see below).
 - `initialFitToLayers` (default `true`) zooms to the extent of `layers` once, when the view is ready.
 - `hideWebMapLayers` hides the web map's own operational layers (the basemap stays) so only `layers` remain.
+- Changing `itemId` or `map` remounts the `<arcgis-map>` element, because it swaps its backing map without telling React. Your `layers` are moved to the new map, `initialFitToLayers` fits again, and `ref` and the hooks below receive the new element. The view's camera is not preserved.
 - `onMapClick` receives the clicked map point. `onLayerClick` receives the topmost layer from `layers` under the pointer, or `null`.
 - Styling is done through `className` / `style` only. Give the map an explicit height.
 - To slot widgets (zoom, legend, ...) into the map, import and register them next to where you use them, e.g. `import '@arcgis/map-components/components/arcgis-zoom'`.

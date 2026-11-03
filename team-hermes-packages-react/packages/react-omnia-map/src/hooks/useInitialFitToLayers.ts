@@ -7,24 +7,24 @@ import { getLayersExtent } from '../helpers/layers-extent'
 const noop = () => {}
 
 /**
- * Zooms the view to the extent of `layers` exactly once: the first time the view is ready *and* the layers contain
- * any geometry, whichever comes last. Layer instances that are still empty when the view becomes ready are watched
- * (graphics for GraphicsLayers, load completion for other layers) until the first usable extent appears.
+ * Zooms the view to the extent of `layers` exactly once per map element: the first time the view is ready *and* the
+ * layers contain any geometry, whichever comes last. Layer instances that are still empty when the view becomes ready
+ * are watched (graphics for GraphicsLayers, load completion for other layers) until the first usable extent appears.
  * Later changes to `layers` do not move the view.
  */
 export function useInitialFitToLayers(mapElement: ArcgisMap | null, layers: readonly Layer[], enabled = true) {
-  const hasFitted = useRef(false)
+  const fittedElement = useRef<ArcgisMap | null>(null)
 
   useEffect(() => {
-    if (!enabled || hasFitted.current || !mapElement) return
+    if (!enabled || !mapElement || fittedElement.current === mapElement) return
     let canceled = false
     const stopWatching: (() => void)[] = []
 
     const fitIfPossible = () => {
-      if (canceled || hasFitted.current) return
+      if (canceled || fittedElement.current === mapElement) return
       const extent = getLayersExtent(layers)
       if (!extent) return
-      hasFitted.current = true
+      fittedElement.current = mapElement
       for (const stop of stopWatching) stop()
       // goTo rejects when a newer goTo or user interaction interrupts it.
       mapElement.view.goTo({ target: extent }).catch(() => {})
@@ -34,7 +34,7 @@ export function useInitialFitToLayers(mapElement: ArcgisMap | null, layers: read
     void mapElement.viewOnReady().then(() => {
       if (canceled) return
       fitIfPossible()
-      if (hasFitted.current) return
+      if (fittedElement.current === mapElement) return
 
       // No geometry yet: wait for it to arrive on the current layer instances.
       for (const layer of layers) {

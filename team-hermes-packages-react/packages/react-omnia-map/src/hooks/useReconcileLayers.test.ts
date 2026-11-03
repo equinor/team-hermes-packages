@@ -61,6 +61,25 @@ describe('useReconcileLayers', () => {
     expect(mapLayers).toEqual([b, c])
   })
 
+  it('moves the layers to the new map when the map element is replaced', async () => {
+    const first = createMapElement()
+    const second = createMapElement()
+    const a = new GraphicsLayer()
+    const layers = [a]
+
+    const { rerender } = renderHook(({ element }) => useReconcileLayers(element, layers), {
+      initialProps: { element: first.element },
+    })
+    await flush()
+    expect(first.mapLayers).toEqual([a])
+
+    rerender({ element: second.element })
+    await flush()
+
+    expect(first.mapLayers).toEqual([])
+    expect(second.mapLayers).toEqual([a])
+  })
+
   it('treats a new array with the same instances as a no-op', async () => {
     const { element, map } = createMapElement()
     const a = new GraphicsLayer()

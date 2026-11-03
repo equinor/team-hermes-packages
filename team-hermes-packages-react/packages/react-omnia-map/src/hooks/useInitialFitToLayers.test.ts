@@ -63,6 +63,23 @@ describe('useInitialFitToLayers', () => {
     expect((target.ymin + target.ymax) / 2).toBeCloseTo(60)
   })
 
+  it('zooms again when the map element is replaced', async () => {
+    const first = createMapElement()
+    const second = createMapElement()
+    const layers = [pointLayer(60, 5)]
+
+    const { rerender } = renderHook(({ element }) => useInitialFitToLayers(element, layers), {
+      initialProps: { element: first.element },
+    })
+    await flush()
+    expect(first.goTo).toHaveBeenCalledTimes(1)
+
+    rerender({ element: second.element })
+    await flush()
+    expect(second.goTo).toHaveBeenCalledTimes(1)
+    expect(first.goTo).toHaveBeenCalledTimes(1)
+  })
+
   it('waits for layers with geometry to arrive', async () => {
     const { element, goTo } = createMapElement()
 
