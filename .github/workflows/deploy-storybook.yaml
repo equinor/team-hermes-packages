@@ -42,6 +42,10 @@ jobs:
       - name: "Build Storybook"
         run: vp exec storybook build
 
+      # The callback page must not be served from the shared equinor.github.io origin.
+      - name: "Remove the OAuth callback page"
+        run: rm storybook-static/oauth-callback.html
+
       - name: "Upload Pages artifact"
         uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4.0.0
         with:

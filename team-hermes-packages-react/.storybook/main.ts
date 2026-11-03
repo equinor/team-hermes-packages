@@ -2,6 +2,7 @@ import path from 'node:path'
 import type { StorybookConfig } from '@storybook/react-vite'
 
 const config: StorybookConfig = {
+  // oauth-callback.html is for local sign-in testing only; deploy-storybook.yaml removes it from the Pages build.
   staticDirs: ['./public'],
   stories: ['../packages/*/src/**/*.mdx', '../packages/*/src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
   addons: [
