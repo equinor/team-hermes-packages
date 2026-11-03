@@ -14,7 +14,10 @@ function createMapElement() {
       for (const layer of layers) mapLayers.splice(mapLayers.indexOf(layer), 1)
     }),
   }
-  const element = { map, viewOnReady: vi.fn(() => Promise.resolve()) } as unknown as ArcgisMap
+  const element = {
+    map,
+    viewOnReady: vi.fn(() => Promise.resolve()),
+  } as unknown as ArcgisMap
   return { element, map, mapLayers }
 }
 

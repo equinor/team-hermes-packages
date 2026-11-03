@@ -77,7 +77,9 @@ export function OmniaMap({
       onLayerClick(null, null)
       return
     }
-    const response = await event.target.hitTest(event.detail, { include: layers })
+    const response = await event.target.hitTest(event.detail, {
+      include: layers,
+    })
     const hit = response.results.find((result): result is GraphicHit => result.type === 'graphic')
     const layer = hit ? (layers.find((candidate) => candidate === hit.graphic.layer) ?? null) : null
     onLayerClick(layer, hit ?? null)
