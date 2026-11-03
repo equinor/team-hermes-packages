@@ -72,8 +72,9 @@ jobs:
       - name: "Build library"
         run: vp run build
 
+      # pnpm pack (unlike npm pack) rewrites catalog: specifiers in the published package.json.
       - name: "Create tarball"
-        run: npm pack
+        run: vp pm pack
 
       - name: "Upload tarball to release"
         env:
@@ -81,4 +82,4 @@ jobs:
         run: gh release upload "${{ matrix.package.tag }}" *.tgz --clobber
 
       - name: "Publish to npm"
-        run: npm publish --access public
+        run: npm publish ./*.tgz --access public
