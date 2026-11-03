@@ -13,7 +13,7 @@ hooks = [
   { id = "check-json" },
   { id = "trailing-whitespace", exclude = "CHANGELOG\\.md$" },
   { id = "end-of-file-fixer", exclude = "CHANGELOG\\.md$" },
-  { id = "mixed-line-ending", exclude = "CHANGELOG\\.md$" },
+  { id = "mixed-line-ending", exclude = "(CHANGELOG\\.md$|\\.gitignore$)" },
   { id = "check-case-conflict" },
   { id = "check-shebang-scripts-are-executable" },
   { id = "check-executables-have-shebangs" },
