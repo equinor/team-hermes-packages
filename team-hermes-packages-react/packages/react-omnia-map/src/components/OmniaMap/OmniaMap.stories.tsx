@@ -6,8 +6,9 @@ import '@arcgis/map-components/components/arcgis-home'
 import '@arcgis/map-components/components/arcgis-layer-list'
 import '@arcgis/map-components/components/arcgis-expand'
 
+import { OmniaMap } from '@/components'
 import { getLayersExtent } from '@/helpers/layers-extent'
-import { OmniaMap } from '@/OmniaMap'
+import { PUBLIC_WEB_MAP_ID, PUBLIC_BASE_MAPS, snippet } from '@/stories/helpers.ts'
 import {
   DEFAULT_VISIBLE_REFERENCE_LAYERS,
   ReferenceLayersExample,
@@ -16,32 +17,6 @@ import {
 import referenceLayersExampleSource from '@/stories/ReferenceLayersExample.tsx?raw'
 import { createPlacesLayer, NORWEGIAN_CITIES, SODIR_REFERENCE_LAYER_TITLES, US_CITIES } from '@/stories/sample-data'
 import sampleDataSource from '@/stories/sample-data.ts?raw'
-
-// Esri's public "Accidental Deaths" web map (US states), the item used by the "Load a basic WebMap" sample:
-// https://developers.arcgis.com/javascript/latest/sample-code/webmap-basic/
-const PUBLIC_WEB_MAP_ID = 'e691172598f04ea8881cd2a4adaa45ba'
-
-// The auto-generated snippet would show the local wrapper component and the serialized layer instances.
-const snippet = (code: string) => ({ docs: { source: { type: 'code' as const, code } } })
-
-const PUBLIC_BASEMAPS = [
-  'topo-vector',
-  'topo',
-  'streets-vector',
-  'streets',
-  'streets-night-vector',
-  'streets-navigation-vector',
-  'streets-relief-vector',
-  'gray-vector',
-  'gray',
-  'dark-gray-vector',
-  'dark-gray',
-  'satellite',
-  'hybrid',
-  'oceans',
-  'osm',
-  'terrain',
-]
 
 // Fill the story canvas (fullscreen layout, so no scrollbar). Docs sizes its iframe to the content, so a `vh` height
 // there feeds back on itself and the map never settles; use a fixed height like the other map stories instead.
@@ -68,7 +43,7 @@ const meta = {
     basemap: {
       description: 'A well-known basemap id, or a `Basemap` instance. Ignored when `itemId` is set.',
       control: 'select',
-      options: PUBLIC_BASEMAPS,
+      options: PUBLIC_BASE_MAPS,
     },
     layers: {
       description: 'Consumer-owned ArcGIS `Layer` instances, reconciled by identity. Memoize the array.',
