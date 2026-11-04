@@ -1,0 +1,14 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks'
+import * as OmniaMiniMapStories from './OmniaMiniMap.stories'
+
+<Meta of={OmniaMiniMapStories} />
+
+# Minimap
+
+Adapted from [Esri's overview-map sample](https://developers.arcgis.com/javascript/latest/sample-code/overview-map/).
+
+Pan, zoom or rotate the main map: the shaded footprint updates, and the overview re-centers when navigation stops.
+
+Synchronization is one-way; navigating the overview does not move the main map.
+
+<Canvas of={OmniaMiniMapStories.MiniMap} />
