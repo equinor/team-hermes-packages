@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useMemo } from 'react'
 
+import { OmniaMap } from '@/components'
 import { OmniaMapsAuthContextProvider, useOmniaMapsAuth } from '@/contexts/omnia-maps-auth-context'
-import { OmniaMap } from '@/OmniaMap'
 import { createPlacesLayer, NORWEGIAN_CITIES } from '@/stories/sample-data'
 
 const PLACEHOLDER_APP_ID = 'client_id_replace_me'

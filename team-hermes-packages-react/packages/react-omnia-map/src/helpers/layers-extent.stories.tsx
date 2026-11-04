@@ -5,8 +5,8 @@ import type { ArcgisMap } from '@arcgis/map-components/components/arcgis-map'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useMemo, useState } from 'react'
 
+import { OmniaMap } from '@/components'
 import { getLayersExtent } from '@/helpers/layers-extent'
-import { OmniaMap } from '@/OmniaMap'
 import { createPlacesLayer, NORWEGIAN_CITIES } from '@/stories/sample-data'
 
 const meta = {
