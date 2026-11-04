@@ -46,4 +46,15 @@ function HighlightExample() {
 
 export const Highlight: Story = {
   render: () => <HighlightExample />,
+  parameters: {
+    docs: {
+      source: {
+        type: 'code',
+        code: `const [mapElement, setMapElement] = useState<ArcgisMap | null>(null)
+useLayerHighlight(mapElement, highlightedLayers)
+
+<OmniaMap ref={setMapElement} basemap="topo-vector" layers={layers} />`,
+      },
+    },
+  },
 }

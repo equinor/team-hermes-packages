@@ -66,4 +66,15 @@ function PanExample() {
 
 export const PanOnHover: Story = {
   render: () => <PanExample />,
+  parameters: {
+    docs: {
+      source: {
+        type: 'code',
+        code: `const [mapElement, setMapElement] = useState<ArcgisMap | null>(null)
+usePanLayersIntoView(mapElement, hoveredLayers)
+
+<OmniaMap ref={setMapElement} basemap="topo-vector" initialFitToLayers={false} layers={layers} />`,
+      },
+    },
+  },
 }

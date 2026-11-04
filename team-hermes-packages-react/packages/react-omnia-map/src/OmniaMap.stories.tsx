@@ -9,6 +9,9 @@ import { createPlacesLayer, NORWEGIAN_CITIES, US_CITIES } from './stories/sample
 // https://developers.arcgis.com/javascript/latest/sample-code/webmap-basic/
 const PUBLIC_WEB_MAP_ID = 'e691172598f04ea8881cd2a4adaa45ba'
 
+// The auto-generated snippet would show the local wrapper component and the serialized layer instances.
+const snippet = (code: string) => ({ docs: { source: { type: 'code' as const, code } } })
+
 const meta = {
   title: 'Map/OmniaMap',
   component: OmniaMap,
@@ -52,13 +55,16 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
+export const Basic: Story = {
+  render: (args) => <BasicExample {...args} />,
+  parameters: snippet(`const layers = useMemo(() => [new GraphicsLayer({ title: 'Cities', graphics })], [graphics])
+
+<OmniaMap basemap="topo-vector" center="10,62" zoom={4} layers={layers} style={{ height: 480 }} />`),
+}
+
 function BasicExample(args: Story['args']) {
   const layers = useMemo(() => [createPlacesLayer(NORWEGIAN_CITIES, { title: 'Cities' })], [])
   return <OmniaMap {...args} layers={layers} />
-}
-
-export const Basic: Story = {
-  render: (args) => <BasicExample {...args} />,
 }
 
 function LayerClickExample(args: Story['args']) {
@@ -79,6 +85,11 @@ function LayerClickExample(args: Story['args']) {
 
 export const LayerClick: Story = {
   render: (args) => <LayerClickExample {...args} />,
+  parameters: snippet(`<OmniaMap
+  basemap="topo-vector"
+  layers={layers}
+  onLayerClick={(layer, hit) => console.log(layer?.title, hit?.graphic.attributes)}
+/>`),
 }
 
 function InitialFitExample(args: Story['args']) {
@@ -90,6 +101,9 @@ function InitialFitExample(args: Story['args']) {
 export const InitialFitToLayers: Story = {
   args: { center: '0,0', zoom: 2, initialFitToLayers: true },
   render: (args) => <InitialFitExample {...args} />,
+  parameters: snippet(`// Starts at 0,0 and zooms to the layers once, when the view is ready.
+// Set initialFitToLayers={false} to keep center and zoom.
+<OmniaMap basemap="topo-vector" center="0,0" zoom={2} layers={layers} />`),
 }
 
 function HideWebMapLayersExample(args: Story['args']) {
@@ -105,6 +119,9 @@ export const HideWebMapLayers: Story = {
     hideWebMapLayers: true,
   },
   render: (args) => <HideWebMapLayersExample {...args} />,
+  parameters: snippet(
+    `<OmniaMap itemId="<your web map id>" hideWebMapLayers layers={layers} style={{ height: 480 }} />`
+  ),
 }
 
 function SwitchMapExample(args: Story['args']) {
@@ -144,4 +161,15 @@ function SwitchMapExample(args: Story['args']) {
 
 export const SwitchMap: Story = {
   render: (args) => <SwitchMapExample {...args} />,
+  parameters: snippet(`const [mapElement, setMapElement] = useState<ArcgisMap | null>(null)
+useLayerHighlight(mapElement, highlightedLayers)
+
+// Changing itemId remounts the element; the layers and the highlight follow it.
+<OmniaMap
+  ref={setMapElement}
+  itemId={itemId}
+  basemap={itemId ? undefined : 'topo-vector'}
+  hideWebMapLayers
+  layers={layers}
+/>`),
 }
