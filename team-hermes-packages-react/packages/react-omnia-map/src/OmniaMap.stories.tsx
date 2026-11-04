@@ -98,7 +98,7 @@ export const LayerClick: Story = {
 }
 
 function InitialFitExample(args: Story['args']) {
-  const [initialFit, setInitialFit] = useState(false)
+  const [initialFit, setInitialFit] = useState(args?.initialFitToLayers ?? true)
   const layers = useMemo(() => [createPlacesLayer(NORWEGIAN_CITIES, { title: 'Cities' })], [])
   // The fit happens only on mount, so we remount when the control changes, using the key prop.
   return (
@@ -126,7 +126,8 @@ return (
       <span>| Initial Fit: {initialFit ? 'On' : 'Off'}</span>
     </div>
     <OmniaMap key={String(initialFit)} {...args} initialFitToLayers={initialFit} layers={layers} />
-  </>`),
+  </>
+)`),
 }
 
 function HideWebMapLayersExample(args: Story['args']) {
