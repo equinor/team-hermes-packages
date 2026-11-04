@@ -98,17 +98,35 @@ export const LayerClick: Story = {
 }
 
 function InitialFitExample(args: Story['args']) {
+  const [initialFit, setInitialFit] = useState(false)
   const layers = useMemo(() => [createPlacesLayer(NORWEGIAN_CITIES, { title: 'Cities' })], [])
-  // The fit happens once, so remount when the control changes.
-  return <OmniaMap key={String(args?.initialFitToLayers)} {...args} layers={layers} />
+  // The fit happens only on mount, so we remount when the control changes, using the key prop.
+  return (
+    <>
+      <div className="flex gap-2">
+        <button onClick={() => setInitialFit(!initialFit)}>Toggle Initial Fit</button>
+        <span>|</span>
+        <span>Initial Fit: {initialFit ? 'On' : 'Off'}</span>
+      </div>
+      <OmniaMap key={String(initialFit)} {...args} initialFitToLayers={initialFit} layers={layers} />
+    </>
+  )
 }
 
 export const InitialFitToLayers: Story = {
   args: { center: '0,0', zoom: 2, initialFitToLayers: true },
   render: (args) => <InitialFitExample {...args} />,
-  parameters: snippet(`// Starts at 0,0 and zooms to the layers once, when the view is ready.
-// Set initialFitToLayers={false} to keep center and zoom.
-<OmniaMap basemap="topo-vector" center="0,0" zoom={2} layers={layers} />`),
+  parameters: snippet(`const [initialFit, setInitialFit] = useState(args?.initialFitToLayers ?? true)
+const layers = useMemo(() => [createPlacesLayer(NORWEGIAN_CITIES, { title: 'Cities' })], [])
+// The fit happens once, so remount when the control changes.
+return (
+  <>
+    <div className="flex gap-2">
+      <button onClick={() => setInitialFit(!initialFit)}>Toggle Initial Fit</button>
+      <span>| Initial Fit: {initialFit ? 'On' : 'Off'}</span>
+    </div>
+    <OmniaMap key={String(initialFit)} {...args} initialFitToLayers={initialFit} layers={layers} />
+  </>`),
 }
 
 function HideWebMapLayersExample(args: Story['args']) {
