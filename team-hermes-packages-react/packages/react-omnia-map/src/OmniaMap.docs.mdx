@@ -91,11 +91,11 @@ Loads a public web map and hides its own layers, leaving only your `layers` on t
 
 <Canvas of={OmniaMapStories.HideWebMapLayers} />
 
-### Switch map
+### On-map controls
 
-Changing `itemId` swaps the backing map and remounts the element. The layers are moved to the new map, the view fits to them again, and `useLayerHighlight` re-applies the highlight on the northern hubs.
+ArcGIS components can be slotted into the map as children of `OmniaMap`. Register each one with an import (for example `@arcgis/map-components/components/arcgis-zoom`) and place it in a slot such as `top-left`. The example adds a zoom control and a home button that returns to the extent of the layers, computed with `getLayersExtent`.
 
-<Canvas of={OmniaMapStories.SwitchMap} />
+<Canvas of={OmniaMapStories.OnMapControls} />
 
 ## Props
 

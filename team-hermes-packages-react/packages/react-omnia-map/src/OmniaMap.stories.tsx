@@ -1,9 +1,14 @@
-import type { ArcgisMap } from '@arcgis/map-components/components/arcgis-map'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useMemo, useState } from 'react'
-import { useLayerHighlight } from './hooks/useLayerHighlight'
 import { OmniaMap } from './OmniaMap'
 import { createPlacesLayer, NORWEGIAN_CITIES, US_CITIES } from './stories/sample-data'
+import { getLayersExtent } from './helpers/layers-extent'
+import Viewpoint from '@arcgis/core/Viewpoint'
+
+import '@arcgis/map-components/components/arcgis-zoom'
+import '@arcgis/map-components/components/arcgis-home'
+import '@arcgis/map-components/components/arcgis-layer-list'
+import '@arcgis/map-components/components/arcgis-expand'
 
 // Esri's public "Accidental Deaths" web map (US states), the item used by the "Load a basic WebMap" sample:
 // https://developers.arcgis.com/javascript/latest/sample-code/webmap-basic/
@@ -124,52 +129,59 @@ export const HideWebMapLayers: Story = {
   ),
 }
 
-function SwitchMapExample(args: Story['args']) {
-  const [mapElement, setMapElement] = useState<ArcgisMap | null>(null)
-  const [itemId, setItemId] = useState<string | undefined>(PUBLIC_WEB_MAP_ID)
+function OnMapControlsExample(args: Story['args']) {
   const cities = useMemo(() => createPlacesLayer(NORWEGIAN_CITIES.slice(0, 3), { title: 'Cities' }), [])
   const hubs = useMemo(
     () => createPlacesLayer(NORWEGIAN_CITIES.slice(3), { title: 'Northern hubs', color: '#d9534f' }),
     []
   )
   const layers = useMemo(() => [cities, hubs], [cities, hubs])
-  const highlighted = useMemo(() => [hubs], [hubs])
 
-  useLayerHighlight(mapElement, highlighted)
+  const homeViewpoint = useMemo(() => {
+    const extent = getLayersExtent(layers)
+    return extent ? new Viewpoint({ targetGeometry: extent }) : undefined
+  }, [layers])
 
   return (
-    <>
-      <div style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
-        <button type="button" disabled={itemId === PUBLIC_WEB_MAP_ID} onClick={() => setItemId(PUBLIC_WEB_MAP_ID)}>
-          Web map
-        </button>
-        <button type="button" disabled={itemId === undefined} onClick={() => setItemId(undefined)}>
-          Topo basemap only
-        </button>
+    <OmniaMap {...args} itemId={PUBLIC_WEB_MAP_ID} layers={layers} hideWebMapLayers>
+      <div className="flex flex-col gap-1" slot="top-left">
+        <arcgis-zoom layout="vertical" />
+        <arcgis-home viewpoint={homeViewpoint} />
       </div>
-      <OmniaMap
-        {...args}
-        ref={setMapElement}
-        itemId={itemId}
-        basemap={itemId ? undefined : 'topo-vector'}
-        hideWebMapLayers
-        layers={layers}
-      />
-    </>
+      <arcgis-expand slot="top-right" mode="floating" expand-tooltip="Layer list">
+        <arcgis-layer-list />
+      </arcgis-expand>
+    </OmniaMap>
   )
 }
 
-export const SwitchMap: Story = {
-  render: (args) => <SwitchMapExample {...args} />,
-  parameters: snippet(`const [mapElement, setMapElement] = useState<ArcgisMap | null>(null)
-useLayerHighlight(mapElement, highlightedLayers)
+export const OnMapControls: Story = {
+  render: (args) => <OnMapControlsExample {...args} />,
+  parameters: snippet(`import Viewpoint from '@arcgis/core/Viewpoint'
+import { getLayersExtent, OmniaMap } from '@team-hermes/react-omnia-map'
 
-// Changing itemId remounts the element; the layers and the highlight follow it.
-<OmniaMap
-  ref={setMapElement}
-  itemId={itemId}
-  basemap={itemId ? undefined : 'topo-vector'}
-  hideWebMapLayers
-  layers={layers}
-/>`),
+// Each ArcGIS component must be imported once to register its custom element.
+// This can be done in each relevant component, or ahead of time in a top-level module,
+// if you know which components you will use.
+// If a component is not imported, it will generally just show an empty placeholder or fail silently.
+import '@arcgis/map-components/components/arcgis-zoom'
+import '@arcgis/map-components/components/arcgis-home'
+import '@arcgis/map-components/components/arcgis-expand'
+import '@arcgis/map-components/components/arcgis-layer-list'
+
+// The home button returns to the extent of the layers.
+const homeViewpoint = useMemo(() => {
+  const extent = getLayersExtent(layers)
+  return extent ? new Viewpoint({ targetGeometry: extent }) : undefined
+}, [layers])
+
+<OmniaMap itemId="<your web map id>" layers={layers} hideWebMapLayers>
+  <div slot="top-left">
+    <arcgis-zoom layout="vertical" />
+    <arcgis-home viewpoint={homeViewpoint} />
+  </div>
+  <arcgis-expand slot="top-right" mode="floating" expand-tooltip="Layer list">
+    <arcgis-layer-list />
+  </arcgis-expand>
+</OmniaMap>`),
 }
