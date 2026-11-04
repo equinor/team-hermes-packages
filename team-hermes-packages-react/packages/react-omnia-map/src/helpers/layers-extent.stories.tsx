@@ -76,4 +76,13 @@ function ExtentExample() {
 
 export const PaddedExtent: Story = {
   render: () => <ExtentExample />,
+  parameters: {
+    docs: {
+      source: {
+        type: 'code',
+        code: `const extent = getLayersExtent(layers) // or getLayersExtent(layers, 0.5) for 50% padding
+if (extent) await mapElement.view.goTo(extent)`,
+      },
+    },
+  },
 }
