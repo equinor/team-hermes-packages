@@ -8,6 +8,7 @@ const useCommitInfo = (versionUrl: string) => {
 
   useEffect(() => {
     let active = true
+    setResult(null)
     const fetchVersionFile = async () => {
       const response = await fetch(versionUrl)
       if (!response.ok) {
