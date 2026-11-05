@@ -43,6 +43,14 @@ const meta = {
       description: 'Tooltip text shown on hover over the chip content.',
       control: 'text',
     },
+    linkTo: {
+      description: 'Renders the chip itself as a link. Dismiss is not rendered when set.',
+      control: 'text',
+    },
+    LinkComponent: {
+      description: 'Router-aware link component (receives `to`). Falls back to a plain `<a>`.',
+      control: false,
+    },
     dismissTooltip: {
       description: 'Tooltip text shown on hover over the dismiss button.',
       control: 'text',
@@ -79,6 +87,14 @@ export const Interactive: Story = {
   args: {
     onClick: () => {},
     children: 'Click me',
+  },
+}
+
+export const Link: Story = {
+  args: {
+    linkTo: '/settings',
+    icon: settings,
+    children: 'Settings',
   },
 }
 

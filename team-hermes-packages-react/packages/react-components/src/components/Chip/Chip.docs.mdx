@@ -49,6 +49,12 @@ When `onClick` is provided, the chip content becomes a clickable button with hov
 
 <Canvas of={ChipStories.Interactive} />
 
+### Link
+
+When `linkTo` is provided, the chip itself is rendered as an `<a>` instead of a `div`. Pass `LinkComponent` (e.g. a router `Link` receiving `to`) for client-side navigation. `onDismiss` is not rendered for link chips, as interactive elements cannot be nested inside a link.
+
+<Canvas of={ChipStories.Link} />
+
 ### Dismissible
 
 When `onDismiss` is provided, a dismiss button appears on the right side of the chip.
