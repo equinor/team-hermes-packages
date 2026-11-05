@@ -2,13 +2,13 @@ import { ReactPlugin } from '@microsoft/applicationinsights-react-js'
 import { ApplicationInsights, type IExceptionTelemetry } from '@microsoft/applicationinsights-web'
 import type { Telemetry } from '../types'
 
-// JSON.stringify throws on circular references (and on BigInt values).
+// JSON.stringify can throw on circular references/BigInt or return undefined.
 // Telemetry reporting must never throw — a failure here would happen
 // inside error-handling code paths and could mask or replace the
 // original error. Fall back to a best-effort String() conversion.
 const safeStringify = (value: unknown): string => {
   try {
-    return JSON.stringify(value)
+    return JSON.stringify(value) ?? String(value)
   } catch {
     return String(value)
   }
@@ -58,6 +58,8 @@ export const createAppInsightsTelemetry = (): Telemetry => {
     config: {
       connectionString: buildConnectionString(),
       disableInstrumentationKeyValidation: true,
+      disableExceptionTracking: true,
+      enableUnhandledPromiseRejectionTracking: false,
       enableAutoRouteTracking: true,
       disableFetchTracking: false,
       autoTrackPageVisitTime: true,
