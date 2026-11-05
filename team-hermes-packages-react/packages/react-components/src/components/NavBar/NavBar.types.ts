@@ -71,7 +71,7 @@ export type NavBarProps = {
    */
   logOut?: () => void
   /**
-   * Whether the light/dark mode toggle is shown. Defaults to `true`.
+   * Whether the light/dark toggle and automatic color scheme control are shown. Defaults to `true`.
    */
   showColorSchemeToggle?: boolean
   /**
@@ -80,4 +80,6 @@ export type NavBarProps = {
    * Defaults to `"Dark mode"`.
    */
   colorSchemeToggleLabel?: string
+  /** Accessible name and tooltip for the Auto control. Defaults to `"Follow system color scheme"`. */
+  autoColorSchemeToggleLabel?: string
 }

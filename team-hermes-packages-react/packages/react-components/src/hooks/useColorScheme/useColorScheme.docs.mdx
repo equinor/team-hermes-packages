@@ -4,12 +4,12 @@ import { Meta } from '@storybook/addon-docs/blocks'
 
 # useColorScheme
 
-A hook and initializer for managing light/dark color scheme with system preference detection, localStorage persistence, and a toggle function.
+A hook and initializer for managing light, dark, and automatic color scheme preferences with system preference detection, best-effort localStorage persistence, and a toggle function.
 EDS color scheme is applied via the `data-color-scheme` attribute on the `<html>` element, which can be used in CSS to style components based on the current scheme.
 
 ## Setup
 
-Call `initColorScheme()` early in your app (before React renders) to apply the saved or system-preferred color scheme. This prevents a flash of incorrect colors on load.
+Call `initColorScheme()` early in your app (before React renders and before first paint) to apply the saved or system-preferred color scheme. If your application paints before its entry module runs, invoke the initializer from a render-blocking bootstrap instead. The initializer is synchronous; calling it from an effect is too late to prevent a flash.
 
 ```tsx
 import { initColorScheme } from '@team-hermes/react-components'
@@ -37,6 +37,27 @@ function ThemeToggle() {
 }
 ```
 
+For a three-way preference selector, use `colorSchemePreference` and `setColorScheme`:
+
+```tsx
+const { colorScheme, colorSchemePreference, setColorScheme } = useColorScheme()
+
+return (
+  <div>
+    <span>Active scheme: {colorScheme}</span>
+    <button aria-pressed={colorSchemePreference === 'light'} onClick={() => setColorScheme('light')}>
+      Light
+    </button>
+    <button aria-pressed={colorSchemePreference === 'dark'} onClick={() => setColorScheme('dark')}>
+      Dark
+    </button>
+    <button aria-pressed={colorSchemePreference === 'auto'} onClick={() => setColorScheme('auto')}>
+      Auto
+    </button>
+  </div>
+)
+```
+
 ## How it works
 
 1. **`initColorScheme()`** reads `localStorage` for a saved preference. If none exists, it falls back to the system preference via `prefers-color-scheme`. It then sets `data-color-scheme` on `<html>`.
@@ -45,11 +66,13 @@ function ThemeToggle() {
 
 3. **`toggleColorScheme()`** flips between `"light"` and `"dark"`, saves the choice to `localStorage`, and updates the DOM attribute. Where supported, the switch crossfades (see **Crossfade** below).
 
-4. If no stored preference exists, the hook listens for system preference changes (e.g. OS-level dark mode toggle) and applies them automatically.
+4. An absent, invalid, or inaccessible stored preference means `"auto"`. Automatic mode resolves to the current OS preference and follows live `matchMedia` changes while the hook is mounted. EDS always receives a resolved `"light"` or `"dark"` attribute, never `"auto"`.
+
+5. **`setColorScheme(preference)`** selects `"light"`, `"dark"`, or `"auto"`, using the same crossfade as the existing toggle. The preference is mirrored in `data-color-scheme-preference` on `<html>` so all hook consumers share it, even if localStorage reads or writes throw. Storage failures emit a warning but do not prevent theme changes; the in-page choice survives until reload. Storage events synchronize changes from other tabs, including clearing the stored preference.
 
 ## Crossfade
 
-`toggleColorScheme()` crossfades between the schemes:
+`toggleColorScheme()` and `setColorScheme()` crossfade between the schemes:
 
 - When the browser supports [view transitions](https://developer.mozilla.org/en-US/docs/Web/API/View_Transition_API), the change runs inside `document.startViewTransition()`. Components that use `useColorScheme` re-render before the new view is captured, so it already shows their updated state.
 - When view transitions are unsupported, or the user prefers reduced motion (`prefers-reduced-motion: reduce`), the change applies immediately.
@@ -105,12 +128,26 @@ Returns an object with:
       <td>The current active color scheme.</td>
     </tr>
     <tr>
+      <td>`colorSchemePreference`</td>
+      <td>`'light' | 'dark' | 'auto'`</td>
+      <td>The user's selected preference. Defaults to auto.</td>
+    </tr>
+    <tr>
+      <td>`setColorScheme`</td>
+      <td>`(preference: ColorSchemePreference) => void`</td>
+      <td>Selects and persists light, dark, or auto. Crossfades where supported.</td>
+    </tr>
+    <tr>
       <td>`toggleColorScheme`</td>
       <td>`() => void`</td>
       <td>Toggles between light and dark, persisting the choice to `localStorage`. Crossfades where supported.</td>
     </tr>
   </tbody>
 </table>
+
+`ColorScheme` (`'light' | 'dark'`) and `ColorSchemePreference` (`ColorScheme | 'auto'`) are exported types.
+Existing `colorScheme` and `toggleColorScheme()` callers retain their light/dark behavior.
+Toggling from auto selects the opposite of the currently resolved scheme as an explicit preference.
 
 ### `COLOR_SCHEME_TRANSITION_ATTRIBUTE`
 

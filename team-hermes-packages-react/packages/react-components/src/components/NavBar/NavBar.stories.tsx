@@ -205,12 +205,16 @@ const meta = {
       control: false,
     },
     showColorSchemeToggle: {
-      description: 'Whether the light/dark mode toggle is shown.',
+      description: 'Whether the light/dark toggle and Auto control are shown.',
       control: 'boolean',
     },
     colorSchemeToggleLabel: {
       description:
         'Accessible name of the light/dark mode toggle. Stays the same in both schemes; aria-pressed exposes whether dark mode is on.',
+      control: 'text',
+    },
+    autoColorSchemeToggleLabel: {
+      description: 'Accessible name and tooltip for the Auto control, which follows the OS color scheme.',
       control: 'text',
     },
   },
@@ -282,7 +286,8 @@ export const WithoutColorSchemeToggle: Story = {
 
 export const WithLocalizedColorSchemeToggle: Story = {
   args: {
-    colorSchemeToggleLabel: 'Dark mode',
+    colorSchemeToggleLabel: 'Mørk modus',
+    autoColorSchemeToggleLabel: 'Følg systemets fargevalg',
   },
 }
 
