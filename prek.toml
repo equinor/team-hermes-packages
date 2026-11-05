@@ -3,6 +3,8 @@
 #:schema https://www.schemastore.org/prek.json
 
 default_stages = ["pre-commit"]
+# Release-please generates changelogs in every package; skip them for all hooks
+exclude = "(^|/)CHANGELOG\\.md$"
 default_install_hook_types = ["pre-commit", "commit-msg"]
 
 [[repos]]
@@ -11,9 +13,9 @@ hooks = [
   { id = "check-merge-conflict" },
   { id = "detect-private-key" },
   { id = "check-json" },
-  { id = "trailing-whitespace", exclude = "CHANGELOG\\.md$" },
-  { id = "end-of-file-fixer", exclude = "CHANGELOG\\.md$" },
-  { id = "mixed-line-ending", exclude = "(CHANGELOG\\.md$|\\.gitignore$)" },
+  { id = "trailing-whitespace" },
+  { id = "end-of-file-fixer" },
+  { id = "mixed-line-ending", exclude = "\\.gitignore$" },
   { id = "check-case-conflict" },
   { id = "check-shebang-scripts-are-executable" },
   { id = "check-executables-have-shebangs" },
