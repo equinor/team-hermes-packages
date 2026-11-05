@@ -5,7 +5,7 @@
  * handling code paths and could mask the original error).
  */
 
-import { beforeEach, describe, expect, test, vi } from 'vitest'
+import { beforeEach, describe, expect, test, vi } from 'vite-plus/test'
 
 const trackExceptionMock = vi.fn()
 const trackEventMock = vi.fn()
@@ -34,9 +34,23 @@ vi.mock('@microsoft/applicationinsights-react-js', () => ({
 beforeEach(() => {
   trackExceptionMock.mockClear()
   trackEventMock.mockClear()
+  capturedConfig = undefined
 })
 
 describe('createAppInsightsTelemetry — safe stringify', () => {
+  test('toError falls back to String for values JSON.stringify cannot serialize', async () => {
+    const { createAppInsightsTelemetry } = await import('./appinsights')
+    const telemetry = createAppInsightsTelemetry()
+    const values: unknown[] = [undefined, () => {}, Symbol('unserializable')]
+
+    for (const value of values) {
+      telemetry.trackException(value)
+    }
+
+    const messages = trackExceptionMock.mock.calls.map(([payload]) => payload.exception.message)
+    expect(messages).toEqual(values.map(String))
+  })
+
   test('trackException does not throw on a circular error context', async () => {
     const { createAppInsightsTelemetry } = await import('./appinsights')
     const telemetry = createAppInsightsTelemetry()
@@ -77,6 +91,16 @@ describe('createAppInsightsTelemetry — safe stringify', () => {
 })
 
 describe('createAppInsightsTelemetry — correlationHeaderDomains', () => {
+  test('disables SDK exception tracking to avoid duplicate reports', async () => {
+    const { createAppInsightsTelemetry } = await import('./appinsights')
+    createAppInsightsTelemetry()
+
+    expect(capturedConfig).toMatchObject({
+      disableExceptionTracking: true,
+      enableUnhandledPromiseRejectionTracking: false,
+    })
+  })
+
   test('scopes correlation headers to location.host (host+port), not just hostname', async () => {
     const originalLocation = window.location
     Object.defineProperty(window, 'location', {
