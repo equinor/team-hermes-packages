@@ -15,7 +15,7 @@ export function NavBar(props: NavBarProps) {
     LinkComponent,
     applicationConfig,
     showColorSchemeToggle = true,
-    colorSchemeToggleLabel = 'Dark mode',
+    colorSchemeToggleLabel = 'Color scheme',
     autoColorSchemeToggleLabel = 'Follow system color scheme',
     colorSchemeOptionLabels,
     environment,

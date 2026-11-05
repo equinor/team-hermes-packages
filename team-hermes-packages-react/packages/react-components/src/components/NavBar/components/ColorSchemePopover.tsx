@@ -1,5 +1,5 @@
 import { Popover as BasePopover } from '@base-ui/react'
-import { Button, Icon } from '@equinor/eds-core-react'
+import { Button, Icon, Tooltip } from '@equinor/eds-core-react'
 import { close, dark_mode, invert_colors, sun, type IconData } from '@equinor/eds-icons'
 import { useId } from 'react'
 import { Popover } from '@/components'
@@ -22,6 +22,20 @@ type ColorSchemePopoverProps = {
   optionLabels: Record<ColorSchemePreference, string>
 }
 
+/**
+ * The Popover trigger receives its props from Base UI, so the Tooltip has to sit inside the
+ * trigger element to wrap the button. It is hidden while the popover is expanded.
+ */
+function TooltipButton({ tooltip, ...props }: React.ComponentProps<typeof Button> & { tooltip: string }) {
+  const isExpanded = props['aria-expanded'] === true || props['aria-expanded'] === 'true'
+
+  return (
+    <Tooltip title={tooltip} disabled={isExpanded}>
+      <Button {...props} />
+    </Tooltip>
+  )
+}
+
 export function ColorSchemePopover(props: ColorSchemePopoverProps) {
   const { label, autoDescription, optionLabels } = props
   const { colorSchemePreference, setColorScheme } = useColorScheme()
@@ -33,9 +47,9 @@ export function ColorSchemePopover(props: ColorSchemePopoverProps) {
   return (
     <Popover
       trigger={
-        <Button variant="ghost_icon" aria-label={label}>
+        <TooltipButton tooltip={label} variant="ghost_icon" aria-label={label}>
           <Icon aria-hidden data={ICONS[colorSchemePreference]} size={18} />
-        </Button>
+        </TooltipButton>
       }
     >
       <div className={styles.root()}>

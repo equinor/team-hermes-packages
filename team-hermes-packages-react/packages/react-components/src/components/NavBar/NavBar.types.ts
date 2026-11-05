@@ -77,7 +77,7 @@ export type NavBarProps = {
    */
   showColorSchemeToggle?: boolean
   /**
-   * Accessible name of the color scheme button and title of its popover. Defaults to `"Dark mode"`.
+   * Accessible name and hover tooltip of the color scheme button, and title of its popover. Defaults to `"Color scheme"`.
    */
   colorSchemeToggleLabel?: string
   /** Description of the Auto option, shown as its tooltip and accessible description. Defaults to `"Follow system color scheme"`. */

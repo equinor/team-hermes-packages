@@ -18,6 +18,8 @@ beforeEach(() => {
     addEventListener: () => {},
     removeEventListener: () => {},
   }))
+  // jsdom lacks the Popover API that the EDS Tooltip uses
+  Object.defineProperty(HTMLElement.prototype, 'showPopover', { configurable: true, value: vi.fn() })
   document.documentElement.setAttribute('data-color-scheme', 'light')
   vi.clearAllMocks()
 })
@@ -25,6 +27,7 @@ beforeEach(() => {
 afterEach(() => {
   cleanup()
   vi.unstubAllGlobals()
+  Reflect.deleteProperty(HTMLElement.prototype, 'showPopover')
   document.documentElement.removeAttribute('data-color-scheme')
   document.documentElement.removeAttribute('data-color-scheme-preference')
   localStorage.clear()
@@ -130,16 +133,16 @@ describe('NavBar navigation', () => {
 })
 
 describe('NavBar color scheme popover', () => {
-  const openPopover = async (name = 'Dark mode') => {
+  const openPopover = async (name = 'Color scheme') => {
     fireEvent.click(screen.getByRole('button', { name }))
     return screen.findByRole('dialog', { name })
   }
   const triggerIconPath = (trigger: HTMLElement) => trigger.querySelector('path')?.getAttribute('d')
 
-  it('is shown by default as a single button named "Dark mode" that opens a popover', async () => {
+  it('is shown by default as a single button named "Color scheme" that opens a popover', async () => {
     render(<NavBar {...defaultProps} showColorSchemeToggle={undefined} />)
 
-    const trigger = screen.getByRole('button', { name: 'Dark mode' })
+    const trigger = screen.getByRole('button', { name: 'Color scheme' })
     expect(screen.getAllByRole('button')).toEqual([trigger])
     expect(trigger).toHaveAttribute('aria-haspopup', 'dialog')
     expect(trigger).toHaveAttribute('aria-expanded', 'false')
@@ -148,8 +151,8 @@ describe('NavBar color scheme popover', () => {
 
     const popover = await openPopover()
     expect(trigger).toHaveAttribute('aria-expanded', 'true')
-    expect(within(popover).getByRole('heading', { name: 'Dark mode' })).toBeInTheDocument()
-    expect(within(popover).getByRole('radiogroup', { name: 'Dark mode' })).toBeInTheDocument()
+    expect(within(popover).getByRole('heading', { name: 'Color scheme' })).toBeInTheDocument()
+    expect(within(popover).getByRole('radiogroup', { name: 'Color scheme' })).toBeInTheDocument()
     expect(
       within(popover)
         .getAllByRole('radio')
@@ -176,7 +179,7 @@ describe('NavBar color scheme popover', () => {
       if (stored) localStorage.setItem('color-scheme', stored)
       render(<NavBar {...defaultProps} showColorSchemeToggle />)
 
-      const trigger = screen.getByRole('button', { name: 'Dark mode' })
+      const trigger = screen.getByRole('button', { name: 'Color scheme' })
       expect(triggerIconPath(trigger)).toBe(icon.svgPathData)
 
       const popover = await openPopover()
@@ -194,7 +197,7 @@ describe('NavBar color scheme popover', () => {
     async ({ option, preference, scheme, icon, initial }) => {
       localStorage.setItem('color-scheme', initial)
       render(<NavBar {...defaultProps} showColorSchemeToggle />)
-      const trigger = screen.getByRole('button', { name: 'Dark mode' })
+      const trigger = screen.getByRole('button', { name: 'Color scheme' })
       const popover = await openPopover()
 
       await act(async () => fireEvent.click(within(popover).getByRole('radio', { name: option })))
@@ -211,7 +214,7 @@ describe('NavBar color scheme popover', () => {
 
   it('closes with the close button', async () => {
     render(<NavBar {...defaultProps} showColorSchemeToggle />)
-    const trigger = screen.getByRole('button', { name: 'Dark mode' })
+    const trigger = screen.getByRole('button', { name: 'Color scheme' })
     const popover = await openPopover()
 
     fireEvent.click(within(popover).getByRole('button', { name: 'Close' }))
@@ -230,7 +233,7 @@ describe('NavBar color scheme popover', () => {
       />
     )
 
-    expect(screen.queryByRole('button', { name: 'Dark mode' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Color scheme' })).not.toBeInTheDocument()
     const popover = await openPopover('Mørk modus')
 
     expect(within(popover).getByRole('radiogroup', { name: 'Mørk modus' })).toBeInTheDocument()
@@ -261,7 +264,7 @@ describe('NavBar color scheme popover', () => {
           update()
           afterUpdate = {
             checked: screen.queryByRole<HTMLInputElement>('radio', { name: 'Dark' })?.checked,
-            icon: triggerIconPath(screen.getByRole('button', { name: 'Dark mode' })),
+            icon: triggerIconPath(screen.getByRole('button', { name: 'Color scheme' })),
           }
         })
         return { ready: finished, finished }
@@ -281,6 +284,58 @@ describe('NavBar color scheme popover', () => {
     }
   })
 
+  describe('trigger tooltip', () => {
+    // jsdom hides closed [popover] elements and the stubbed showPopover cannot open them
+    const findTooltip = () => screen.findByRole('tooltip', { hidden: true })
+    const queryTooltip = () => screen.queryByRole('tooltip', { hidden: true })
+
+    it.each([
+      { name: 'the default label', props: {}, label: 'Color scheme' },
+      { name: 'a custom label', props: { colorSchemeToggleLabel: 'Mørk modus' }, label: 'Mørk modus' },
+    ])('shows $name in a tooltip on hover', async ({ props, label }) => {
+      render(<NavBar {...defaultProps} showColorSchemeToggle {...props} />)
+      const trigger = screen.getByRole('button', { name: label })
+      expect(queryTooltip()).not.toBeInTheDocument()
+
+      fireEvent.mouseEnter(trigger)
+
+      expect(await findTooltip()).toHaveTextContent(label)
+      expect(trigger).toHaveAccessibleDescription(label)
+
+      fireEvent.mouseLeave(trigger)
+
+      await waitFor(() => expect(queryTooltip()).not.toBeInTheDocument())
+    })
+
+    it('shows the tooltip when the trigger receives keyboard focus', async () => {
+      render(<NavBar {...defaultProps} showColorSchemeToggle />)
+      const trigger = screen.getByRole('button', { name: 'Color scheme' })
+
+      fireEvent.keyDown(document.body, { key: 'Tab' })
+      act(() => trigger.focus())
+
+      expect(await findTooltip()).toHaveTextContent('Color scheme')
+    })
+
+    it('hides the tooltip while the popover is open', async () => {
+      render(<NavBar {...defaultProps} showColorSchemeToggle />)
+      const trigger = screen.getByRole('button', { name: 'Color scheme' })
+      fireEvent.mouseEnter(trigger)
+      await findTooltip()
+
+      await openPopover()
+
+      expect(queryTooltip()).not.toBeInTheDocument()
+
+      fireEvent.mouseLeave(trigger)
+      fireEvent.mouseEnter(trigger)
+      await act(() => new Promise((resolve) => setTimeout(resolve, 200)))
+
+      expect(queryTooltip()).not.toBeInTheDocument()
+      expect(trigger).toHaveAttribute('aria-expanded', 'true')
+    })
+  })
+
   it('comes before the user and support controls', () => {
     render(
       <NavBar
@@ -291,7 +346,7 @@ describe('NavBar color scheme popover', () => {
       />
     )
 
-    const toggle = screen.getByRole('button', { name: 'Dark mode' })
+    const toggle = screen.getByRole('button', { name: 'Color scheme' })
     expect(toggle.parentElement?.firstElementChild).toBe(toggle)
     expect(
       toggle.compareDocumentPosition(screen.getByRole('button', { name: 'Toggle user information popover' }))
