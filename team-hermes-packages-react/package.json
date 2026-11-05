@@ -7,15 +7,15 @@
     "build-storybook": "storybook build"
   },
   "devDependencies": {
-    "@chromatic-com/storybook": "^5.2.1",
-    "@storybook/addon-a11y": "^10.4.6",
-    "@storybook/addon-docs": "^10.4.6",
-    "@storybook/addon-mcp": "^0.6.0",
-    "@storybook/addon-themes": "^10.4.6",
-    "@storybook/react-vite": "^10.4.6",
+    "@chromatic-com/storybook": "^5.6.0",
+    "@storybook/addon-a11y": "^10.6.5",
+    "@storybook/addon-docs": "^10.6.5",
+    "@storybook/addon-mcp": "^10.6.5",
+    "@storybook/addon-themes": "^10.6.5",
+    "@storybook/react-vite": "^10.6.5",
     "@tailwindcss/vite": "catalog:",
     "@types/node": "catalog:",
-    "storybook": "^10.4.6",
+    "storybook": "^10.6.5",
     "tailwindcss": "catalog:",
     "typescript": "catalog:",
     "vite-plus": "catalog:"
