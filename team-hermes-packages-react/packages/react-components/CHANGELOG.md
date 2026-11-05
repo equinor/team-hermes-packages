@@ -1,5 +1,31 @@
 # Changelog
 
+## [1.12.0](https://github.com/equinor/team-hermes-packages/compare/team-hermes-packages-react-v1.11.0...team-hermes-packages-react-v1.12.0) (2026-11-05)
+
+
+### Features
+
+* add link support to Chip ([e1ea36d](https://github.com/equinor/team-hermes-packages/commit/e1ea36d0fbbab99e81ff80a9f9daad082fbd69fe))
+* **navbar:** add tooltip to color scheme button ([e1be3e7](https://github.com/equinor/team-hermes-packages/commit/e1be3e7cd090ec80b5f897b63eea10076f8e2c3c))
+* **navbar:** replace color scheme toggle with Auto/Light/Dark popover ([5e183b8](https://github.com/equinor/team-hermes-packages/commit/5e183b8d69705cc7bf33d1d98704a02f8e3d8e54))
+* **react-components:** add auto color scheme ([25d365e](https://github.com/equinor/team-hermes-packages/commit/25d365e378ea0110534d97dcfb8a4c9b72b532dd))
+
+
+### Bug Fixes
+
+* allow conditionally locking datagrid rows via isRowEditable ([1afc54c](https://github.com/equinor/team-hermes-packages/commit/1afc54c981396c902ddae039307e36caa39b28f9))
+* cancel open editor and avoid throwing lookup when row is locked or missing ([cb20a50](https://github.com/equinor/team-hermes-packages/commit/cb20a502d51dcf66d5ac70b29c011b2842f7271d))
+* datagrid sidebar visibility, smooth scroll and validation labels ([7fb40d5](https://github.com/equinor/team-hermes-packages/commit/7fb40d5f2605ec844b999d6b3eea62778bb5a2d7))
+* **navbar:** clear stale version on URL changes ([3605f9d](https://github.com/equinor/team-hermes-packages/commit/3605f9d3711c09f467650465dff36efefd0ea437))
+* **navbar:** handle version URLs and invalid data ([2a8a9e2](https://github.com/equinor/team-hermes-packages/commit/2a8a9e243f0d3c72d3d4823d7e0197dadda54576))
+* **navbar:** keep theme sync when control is hidden ([2c2de8b](https://github.com/equinor/team-hermes-packages/commit/2c2de8b54faed20b7922eb961cc0f38131e28e00))
+* **react-components:** handle non-serializable error values ([3648bfc](https://github.com/equinor/team-hermes-packages/commit/3648bfc4017f7a38b37861c34715434901076426))
+* **react-components:** handle string and null-prototype errors ([420a6b7](https://github.com/equinor/team-hermes-packages/commit/420a6b771f7ecd5caa5e60d2b031ce637ffa7fd6))
+* **react-components:** prevent duplicate exception telemetry ([7d48a68](https://github.com/equinor/team-hermes-packages/commit/7d48a6852e3f422e0c76aca8b56f0f1226575473))
+* **react-components:** reconcile theme preferences ([77fd01c](https://github.com/equinor/team-hermes-packages/commit/77fd01c9dd8f299ffba175738b2cd0b5c6bda467))
+* type Chip tooltip wrapper as a single element ([9e07817](https://github.com/equinor/team-hermes-packages/commit/9e07817686a771b9cdd14e9959ac0c469130df18))
+* wrap focusable Chip link in tooltip ([45ac05f](https://github.com/equinor/team-hermes-packages/commit/45ac05f19c4f9a90501ae78a3f2f80236a238c41))
+
 ## [1.11.0](https://github.com/equinor/team-hermes-packages/compare/team-hermes-packages-react-v1.10.1...team-hermes-packages-react-v1.11.0) (2026-10-22)
 
 
