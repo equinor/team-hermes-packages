@@ -27,7 +27,7 @@ The props of `OmniaMap` are typed out of the box. To use `<arcgis-map>` or other
 
 - `layers` are ArcGIS `Layer` instances that **you own**. They are added and removed by identity, so memoize the array and reuse the instances across renders. Draw order follows insertion order.
 - `OmniaMap` is **auth-unaware** and always renders. Gate rendering in your own wrapper (see below).
-- `initialFitToLayers` (default `true`) zooms to the extent of `layers` once, when the view is ready.
+- `initialFitToLayers` (default `true`) zooms to the extent of `layers` once, when the view is ready. Pass a subset of `layers` to fit to those only, e.g. to leave wide reference layers out of the fit.
 - `hideWebMapLayers` hides the web map's own operational layers (the basemap stays) so only `layers` remain.
 - Changing `itemId` or `map` remounts the `<arcgis-map>` element, because it swaps its backing map without telling React. Your `layers` are moved to the new map, `initialFitToLayers` fits again, and `ref` and the hooks below receive the new element. The view's camera is not preserved.
 - `onMapClick` receives the clicked map point. `onLayerClick` receives the topmost layer from `layers` under the pointer, or `null`.

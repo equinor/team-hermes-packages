@@ -52,7 +52,7 @@ export function Example() {
 ```
 
 - `layers` are ArcGIS `Layer` instances you own. They are reconciled by identity, so memoize the array.
-- `initialFitToLayers` (default `true`) zooms to the layers once, when the view is ready.
+- `initialFitToLayers` (default `true`) zooms to the layers once, when the view is ready. Pass a subset of `layers` to fit to those only, e.g. to leave wide reference layers out.
 - `hideWebMapLayers` hides the web map's own operational layers, leaving only `layers`.
 - `onMapClick` and `onLayerClick` report clicks on the map and on your layers.
 - Style the map with `className` / `style`. There is no CSS or UI-kit dependency.
