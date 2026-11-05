@@ -1,7 +1,8 @@
 import { render, screen } from '@testing-library/react'
-import { describe, expect, test } from 'vitest'
+import { describe, expect, test } from 'vite-plus/test'
 import type { ApiError } from '@/shared/platform/api'
 import { ErrorPanel } from './ErrorPanel'
+import { safeStringify } from './ErrorPanel.utils'
 
 describe('ErrorPanel', () => {
   test('renders a network error with traceId', () => {
@@ -54,5 +55,28 @@ describe('ErrorPanel', () => {
     circular.self = circular
     const { getByText } = render(<ErrorPanel error={circular} />)
     expect(getByText('Something went wrong')).toBeInTheDocument()
+  })
+
+  test('stringifies undefined errors', () => {
+    expect(safeStringify(undefined)).toBe('undefined')
+  })
+
+  test('stringifies function errors', () => {
+    const fn = function handleError() {}
+    expect(safeStringify(fn)).toBe(String(fn))
+  })
+
+  test('stringifies symbol errors', () => {
+    expect(safeStringify(Symbol('problem'))).toBe('Symbol(problem)')
+  })
+
+  test('falls back to a string for circular objects', () => {
+    const circular: Record<string, unknown> = { a: 1 }
+    circular.self = circular
+    expect(safeStringify(circular)).toBe('[object Object]')
+  })
+
+  test('serializes normal objects as JSON', () => {
+    expect(safeStringify({ message: 'problem' })).toBe('{"message":"problem"}')
   })
 })

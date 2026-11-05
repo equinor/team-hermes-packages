@@ -19,9 +19,9 @@ export const titleFor = (error: unknown): string => {
 // This runs while rendering the error UI itself, so a throw here would
 // crash the page trying to show an error — fall back to a best-effort
 // String() conversion instead.
-const safeStringify = (value: unknown): string => {
+export const safeStringify = (value: unknown): string => {
   try {
-    return JSON.stringify(value)
+    return JSON.stringify(value) ?? String(value)
   } catch {
     return String(value)
   }
