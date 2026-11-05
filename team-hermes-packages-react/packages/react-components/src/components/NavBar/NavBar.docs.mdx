@@ -109,6 +109,32 @@ Shows the support section with links to ServiceNow and GitHub.
 
 <Canvas of={NavBarStories.WithApplicationConfig} />
 
+#### Version file
+
+When `githubRepoName` is configured, the support dialog loads `/version.txt` from
+the origin root, independent of the current route. For apps deployed under a
+subpath, set `applicationConfig.versionUrl` to the version file's URL under the app's base path. The
+published library does not infer the consuming app's Vite configuration:
+
+```tsx
+<NavBar
+  categories={categories}
+  LinkComponent={RouterLink}
+  applicationConfig={{
+    name: 'MyApp',
+    githubRepoName: 'equinor/my-app',
+    versionUrl: `${import.meta.env.BASE_URL}version.txt`,
+  }}
+/>
+```
+
+Serve a plain-text file containing `hash: <commit hash>`, `date: <commit date>`,
+and `refs: <tag or branch>` on separate lines. Only `hash` is required; empty
+`refs` falls back to the hash. Values may contain colons, whitespace is trimmed,
+and blank or malformed lines are ignored. Failed requests, HTML responses, and
+files without a hash are logged to the console and show `unknown` without a commit
+link. The version also shows `unknown` while loading.
+
 ### External links
 
 Set `external: true` on a link to render it as a plain anchor with `target="_blank"` and
