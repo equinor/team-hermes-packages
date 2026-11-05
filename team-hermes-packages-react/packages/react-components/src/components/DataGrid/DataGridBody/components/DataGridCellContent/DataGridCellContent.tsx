@@ -1,6 +1,7 @@
 import { Icon } from '@equinor/eds-core-react'
 import { list, lock } from '@equinor/eds-icons'
 import { type Cell, flexRender } from '@tanstack/react-table'
+import { useEffect } from 'react'
 import { AttributeType } from '@/shared/types'
 import { Combobox, type ComboboxItem } from '@/index'
 import { formatDate, pluralize } from '@/shared/utils'
@@ -27,6 +28,12 @@ export const DataGridCellContent = <TData extends Record<string, any>>(props: Da
     tableBodyRef?.current?.focus({ preventScroll: true })
   }
 
+  // Cancel an open editor if its row becomes locked (e.g. after a data refresh)
+  const shouldCancelEditing = isEditing && showLocked
+  useEffect(() => {
+    if (shouldCancelEditing) cellActions.setActiveEditingCell(null)
+  }, [shouldCancelEditing])
+
   const onInputBlur = () => {
     commitCellEdit(cell.row.index, cell.column.id, cellActions.editingCellValue, dataType)
     clearCellEditing()
@@ -39,7 +46,7 @@ export const DataGridCellContent = <TData extends Record<string, any>>(props: Da
   }
 
   if (editable) {
-    if (isEditing) {
+    if (isEditing && !showLocked) {
       const CellEditor = cell.column.columnDef.meta?.cellEditorComponent
       if (CellEditor) {
         const onCommit = (columnId: string, value: any) => {
