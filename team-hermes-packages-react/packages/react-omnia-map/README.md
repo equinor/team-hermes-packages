@@ -62,6 +62,7 @@ export function Example() {
 
 - `useLayerHighlight(mapElement, layers)` highlights the graphics of `GraphicsLayer`s.
 - `usePanLayersIntoView(mapElement, layers, { delayMs })` pans the view so the layers' graphics become visible.
+- `useNearestFirstPopup(mapElement, enabled = true)` opens the click popup with the hit features ordered by planar distance to the click, closest first, instead of by layer order. Polygons are measured to their outlines so large surrounding areas do not outrank nearby points. It supports matching spatial references and WGS84/Web Mercator conversion; unmeasurable features sort last, preserving their original order. Disabling or unmounting restores the previous popup setting.
 - `getLayersExtent(layers, padding = 0.2)` returns the extent of the layers, padded by 20% by default, or `null`.
 
 Get `mapElement` through the `ref` of `OmniaMap`.
