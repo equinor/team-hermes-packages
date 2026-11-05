@@ -40,7 +40,9 @@ export const Chip = (props: ChipProps) => {
   const Root: React.ElementType = isLink ? (LinkComponent ?? 'a') : 'div'
   const linkProps = isLink ? (LinkComponent ? { to: linkTo } : { href: linkTo }) : {}
 
-  const withTooltip = (node: React.ReactNode) => <Tooltip title={chipTooltip}>{node}</Tooltip>
+  const withTooltip = (node: React.ReactElement<React.HTMLAttributes<HTMLElement>>) => (
+    <Tooltip title={chipTooltip}>{node}</Tooltip>
+  )
 
   return (
     <ConditionalWrapper condition={isLink} wrapper={withTooltip}>
