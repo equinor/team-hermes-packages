@@ -1,0 +1,63 @@
+import { Meta, Primary, Controls, Canvas, ArgTypes } from '@storybook/addon-docs/blocks'
+import * as OmniaMiniMapStories from './OmniaMiniMap.stories'
+
+<Meta of={OmniaMiniMapStories} />
+
+# OmniaMiniMap
+
+A small, non-interactive overview map that follows a main `OmniaMap` and outlines its current view extent. It is an `OmniaMap` underneath, so it accepts the same web map and basemap props; in most cases you pass it the same `itemId` or `basemap` as the main map.
+
+<Primary />
+
+<Controls />
+
+## Usage
+
+```tsx
+import type { ArcgisMap } from '@arcgis/map-components/components/arcgis-map'
+import { OmniaMap, OmniaMiniMap } from '@team-hermes/react-omnia-map'
+import { useState } from 'react'
+
+function Map({ layers }: Props) {
+  const [mainMap, setMainMap] = useState<ArcgisMap | null>(null)
+
+  return (
+    <div className="relative">
+      <OmniaMap ref={setMainMap} itemId="<your web map id>" layers={layers} style={{ height: 480 }} />
+      <OmniaMiniMap
+        mainMap={mainMap}
+        itemId="<your web map id>"
+        className="absolute right-4 bottom-4"
+        style={{ width: 200, height: 200 }}
+      />
+    </div>
+  )
+}
+```
+
+- `mainMap` is the main map's `<arcgis-map>` element, taken from `OmniaMap`'s `ref`. Pass a state setter as the ref (as above) so the minimap re-renders once the element mounts.
+- **Position and size it yourself.** The minimap is a regular element, typically absolutely positioned over the main map. It cannot be slotted into the main map's UI. Give it an explicit width and height.
+- **It follows the main map.** The minimap stays centred on the main map's centre, `zoomOffset` zoom levels further out (default `5`, i.e. 32× the width), and never zooms out further than the whole world fits the element's height. Moves are instant so the outline never lags. Because the component drives the camera, `center`, `zoom`, `scale` and `extent` are not accepted as props.
+- **Non-interactive by default** (`pointer-events: none`). To let users pan the minimap, add `pointer-events-auto` to `className` (or set `pointerEvents` via `style`). Note that the follow behavior resets the camera on the next main map move.
+- `extentSymbol` is a `SimpleLineSymbol` properties object for the outline. The default is a 2 px translucent blue line.
+- `hideWebMapLayers` is on by default so only the basemap shows. Pass `hideWebMapLayers={false}` to show the web map's own layers too.
+- Styling is via `className` / `style`, like `OmniaMap`.
+
+### Good to know
+
+- The minimap frees itself from the basemap's zoom levels so it can show the whole world at any pixel size. Beyond the basemap's outermost level the tiles are upscaled and look slightly soft.
+- The world fits by height; horizontally the map wraps around, so a wide minimap shows the world repeated rather than empty space.
+- The outline is drawn as a line (not a filled polygon) so it stays a single rectangle when the main map straddles the dateline.
+- Main maps in a spatial reference other than WGS84 or Web Mercator are not supported: the outline and centre are not reprojected.
+
+## Examples
+
+### Follow
+
+Pan and zoom the main map; the minimap follows and outlines the visible area. Zoom all the way out to see it clamp at the world, and pan across the dateline to see the outline stay whole.
+
+<Canvas of={OmniaMiniMapStories.Follow} />
+
+## Props
+
+<ArgTypes of={OmniaMiniMapStories} />

@@ -6,4 +6,4 @@ export {
 export { getLayersExtent } from './helpers/layers-extent'
 export { useLayerHighlight } from './hooks/useLayerHighlight'
 export { usePanLayersIntoView } from './hooks/usePanLayersIntoView'
-export { OmniaMap, type OmniaMapProps } from './OmniaMap'
+export { OmniaMap, type OmniaMapProps } from './components/OmniaMap/OmniaMap'

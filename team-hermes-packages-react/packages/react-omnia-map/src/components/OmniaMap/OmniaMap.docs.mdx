@@ -33,6 +33,7 @@ The props of `OmniaMap` are typed out of the box. To use `<arcgis-map>` or other
 - `onMapClick` receives the clicked map point. `onLayerClick` receives the topmost layer from `layers` under the pointer, or `null`.
 - Styling is done through `className` / `style` only. Give the map an explicit height.
 - To slot widgets (zoom, legend, ...) into the map, import and register them next to where you use them, e.g. `import '@arcgis/map-components/components/arcgis-zoom'`.
+- For an overview map that follows this map and outlines its visible area, see `OmniaMiniMap`.
 
 ```tsx
 const layers = useMemo(() => [new GraphicsLayer({ graphics })], [graphics])

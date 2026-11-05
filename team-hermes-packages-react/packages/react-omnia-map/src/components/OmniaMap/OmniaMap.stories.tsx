@@ -1,21 +1,20 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { OmniaMap } from './OmniaMap'
-import { createPlacesLayer, NORWEGIAN_CITIES, US_CITIES } from './stories/sample-data'
-import { getLayersExtent } from './helpers/layers-extent'
+import { createPlacesLayer, NORWEGIAN_CITIES, US_CITIES } from '../../stories/sample-data'
+import { getLayersExtent } from '../../helpers/layers-extent'
 import Viewpoint from '@arcgis/core/Viewpoint'
 
 import '@arcgis/map-components/components/arcgis-zoom'
 import '@arcgis/map-components/components/arcgis-home'
 import '@arcgis/map-components/components/arcgis-layer-list'
 import '@arcgis/map-components/components/arcgis-expand'
-
-// Esri's public "Accidental Deaths" web map (US states), the item used by the "Load a basic WebMap" sample:
-// https://developers.arcgis.com/javascript/latest/sample-code/webmap-basic/
-const PUBLIC_WEB_MAP_ID = 'e691172598f04ea8881cd2a4adaa45ba'
-
-// The auto-generated snippet would show the local wrapper component and the serialized layer instances.
-const snippet = (code: string) => ({ docs: { source: { type: 'code' as const, code } } })
+import type { ArcgisMap } from '@arcgis/map-components/components/arcgis-map'
+import Extent from '@arcgis/core/geometry/Extent'
+import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
+import Graphic from '@arcgis/core/Graphic'
+import Polygon from '@arcgis/core/geometry/Polygon'
+import { PUBLIC_WEB_MAP_ID, snippet } from '../../stories/constants'
 
 const meta = {
   title: 'Map/OmniaMap',
@@ -203,4 +202,65 @@ const homeViewpoint = useMemo(() => {
     <arcgis-layer-list />
   </arcgis-expand>
 </OmniaMap>`),
+}
+
+function MiniMapExample(args: Story['args']) {
+  const layers = useMemo(() => [createPlacesLayer(NORWEGIAN_CITIES, { title: 'Cities' })], [])
+
+  const miniMapRef = useRef<ArcgisMap | null>(null)
+
+  const [miniMapExtentGraphic] = useState(
+    () =>
+      new Graphic({
+        geometry: layers[0].fullExtent ? Polygon.fromExtent(layers[0].fullExtent) : undefined,
+        attributes: { name: 'Mini Map Extent' },
+        symbol: { type: 'simple-line', color: '#0044ff80', width: 2, join: 'round' },
+      })
+  )
+  const miniMapExtentLayer = useMemo(
+    () =>
+      new GraphicsLayer({
+        title: 'Mini Map',
+        graphics: [miniMapExtentGraphic],
+      }),
+    [miniMapExtentGraphic]
+  )
+
+  function syncMapExtent(extent: Extent | null | undefined) {
+    if (extent) miniMapExtentGraphic.geometry = Polygon.fromExtent(extent)
+  }
+
+  return (
+    <div className="relative">
+      <OmniaMap
+        {...args}
+        itemId={PUBLIC_WEB_MAP_ID}
+        layers={layers}
+        hideWebMapLayers
+        // Update the main map extent whenever the view is ready, changes, or is dragged.
+        onarcgisViewReadyChange={(event) => syncMapExtent(event.target.view?.extent)}
+        onarcgisViewChange={(event) => syncMapExtent(event.target.view?.extent)}
+        onarcgisViewDrag={(event) => syncMapExtent(event.target.view?.extent)}
+      />
+      <div className="absolute right-10 bottom-10">
+        <OmniaMap
+          {...args}
+          ref={miniMapRef}
+          itemId={PUBLIC_WEB_MAP_ID}
+          layers={[miniMapExtentLayer]}
+          hideWebMapLayers
+          initialFitToLayers={false}
+          style={{ width: 256, height: 256 }}
+          className="pointer-events-none"
+          center="0,0"
+          zoom={0}
+        />
+      </div>
+    </div>
+  )
+}
+
+export const MiniMap: Story = {
+  render: (args) => <MiniMapExample {...args} />,
+  parameters: snippet(`TODO`),
 }

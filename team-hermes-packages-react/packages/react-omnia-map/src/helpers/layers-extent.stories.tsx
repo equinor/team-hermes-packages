@@ -4,7 +4,7 @@ import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
 import type { ArcgisMap } from '@arcgis/map-components/components/arcgis-map'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useMemo, useState } from 'react'
-import { OmniaMap } from '../OmniaMap'
+import { OmniaMap } from '../components/OmniaMap/OmniaMap'
 import { createPlacesLayer, NORWEGIAN_CITIES } from '../stories/sample-data'
 import { getLayersExtent } from './layers-extent'
 
