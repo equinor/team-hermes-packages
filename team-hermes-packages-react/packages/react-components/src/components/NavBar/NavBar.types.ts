@@ -35,6 +35,8 @@ export type ApplicationConfig = {
   serviceNowLink?: string
   /** GitHub repository name (e.g. "equinor/my-repo"). Shown in the support dialog. */
   githubRepoName?: string
+  /** Version file URL, defaulting to "/version.txt". Set this for apps hosted under a base path. */
+  versionUrl?: string
 }
 
 export type NavBarProps = {

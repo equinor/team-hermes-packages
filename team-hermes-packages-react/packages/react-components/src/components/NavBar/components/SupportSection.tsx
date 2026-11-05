@@ -6,7 +6,7 @@ import type { ApplicationConfig } from '../NavBar.types'
 import { VersionText } from './VersionText'
 
 export const SupportSection = ({ applicationConfig }: { applicationConfig?: ApplicationConfig }) => {
-  const { serviceNowLink, githubRepoName } = applicationConfig || {}
+  const { serviceNowLink, githubRepoName, versionUrl } = applicationConfig || {}
   const [showSupportModal, setShowSupportModal] = useState<boolean>(false)
   return (
     <>
@@ -51,7 +51,7 @@ export const SupportSection = ({ applicationConfig }: { applicationConfig?: Appl
               </Button>
             </>
           )}
-          {githubRepoName && <VersionText githubRepoName={githubRepoName} />}
+          {githubRepoName && <VersionText githubRepoName={githubRepoName} versionUrl={versionUrl} />}
         </Stack>
       </Dialog>
     </>

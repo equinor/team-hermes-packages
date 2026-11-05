@@ -1,51 +1,70 @@
 import { Typography } from '@equinor/eds-core-react'
 import { useEffect, useState } from 'react'
+import { parseVersionFile } from './VersionText.utils'
+import type { CommitInfo } from './VersionText.utils'
 
-type CommitInfo = {
-  hash: string
-  date: string
-  refs: string
-}
-
-const useCommitInfo = () => {
-  const [commitInfo, setCommitInfo] = useState<CommitInfo>({
-    hash: '',
-    date: '',
-    refs: '',
-  })
+const useCommitInfo = (versionUrl: string) => {
+  const [result, setResult] = useState<{ url: string; commitInfo: CommitInfo } | null>(null)
 
   useEffect(() => {
+    let active = true
     const fetchVersionFile = async () => {
-      try {
-        return Object.fromEntries(
-          (await (await fetch('version.txt')).text()).split('\n').map((line) => line.split(': '))
-        )
-      } catch (error) {
-        throw new Error(`Could not read version file, ${error as string}`)
+      const response = await fetch(versionUrl)
+      if (!response.ok) {
+        throw new Error(`Could not read version file: HTTP ${response.status}`)
       }
+      if (/html/i.test(response.headers.get('content-type') ?? '')) {
+        throw new Error('Could not read version file: received HTML')
+      }
+
+      const commitInfo = parseVersionFile(await response.text())
+      if (!commitInfo) {
+        throw new Error('Could not read version file: invalid version data')
+      }
+      return commitInfo
     }
     fetchVersionFile()
-      .then((commitInfo) => setCommitInfo(commitInfo))
-      .catch((error) => console.error(error))
-  }, [])
+      .then((commitInfo) => {
+        if (active) setResult({ url: versionUrl, commitInfo })
+      })
+      .catch((error: unknown) => {
+        if (active) {
+          setResult(null)
+          console.error('Could not load version information', error)
+        }
+      })
+    return () => {
+      active = false
+    }
+  }, [versionUrl])
 
-  return commitInfo
+  return result?.url === versionUrl ? result.commitInfo : null
 }
 
-export const VersionText = ({ githubRepoName }: { githubRepoName: string }) => {
-  const commitInfo = useCommitInfo()
+export const VersionText = ({
+  githubRepoName,
+  versionUrl = '/version.txt',
+}: {
+  githubRepoName: string
+  versionUrl?: string
+}) => {
+  const commitInfo = useCommitInfo(versionUrl)
 
   return (
-    <Typography>
+    <div>
       <Typography variant="h6">Version</Typography>
-      <Typography
-        link
-        href={`https://github.com/${githubRepoName}/commit/${commitInfo.hash}`}
-        rel="noopener noreferrer"
-      >
-        {commitInfo.refs === '' ? commitInfo.hash : commitInfo.refs}
-      </Typography>
-      &nbsp;({commitInfo.date})
-    </Typography>
+      {commitInfo ? (
+        <Typography
+          link
+          href={`https://github.com/${githubRepoName}/commit/${commitInfo.hash}`}
+          rel="noopener noreferrer"
+        >
+          {commitInfo.refs || commitInfo.hash}
+        </Typography>
+      ) : (
+        <Typography>unknown</Typography>
+      )}
+      {commitInfo?.date && <>&nbsp;({commitInfo.date})</>}
+    </div>
   )
 }
