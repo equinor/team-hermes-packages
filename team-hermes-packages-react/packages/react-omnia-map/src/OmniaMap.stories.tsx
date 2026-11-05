@@ -1,7 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import { useMemo, useState } from 'react'
-import { OmniaMap } from './OmniaMap'
-import { createPlacesLayer, NORWEGIAN_CITIES, US_CITIES } from './stories/sample-data'
 import { getLayersExtent } from './helpers/layers-extent'
 import Viewpoint from '@arcgis/core/Viewpoint'
 
@@ -9,6 +6,16 @@ import '@arcgis/map-components/components/arcgis-zoom'
 import '@arcgis/map-components/components/arcgis-home'
 import '@arcgis/map-components/components/arcgis-layer-list'
 import '@arcgis/map-components/components/arcgis-expand'
+import { useMemo, useState } from 'react'
+import { OmniaMap } from './OmniaMap'
+import {
+  DEFAULT_VISIBLE_REFERENCE_LAYERS,
+  ReferenceLayersExample,
+  type ReferenceLayersArgs,
+} from './stories/ReferenceLayersExample'
+import referenceLayersExampleSource from './stories/ReferenceLayersExample.tsx?raw'
+import sampleDataSource from './stories/sample-data.ts?raw'
+import { createPlacesLayer, NORWEGIAN_CITIES, SODIR_REFERENCE_LAYER_TITLES, US_CITIES } from './stories/sample-data'
 
 // Esri's public "Accidental Deaths" web map (US states), the item used by the "Load a basic WebMap" sample:
 // https://developers.arcgis.com/javascript/latest/sample-code/webmap-basic/
@@ -17,24 +24,61 @@ const PUBLIC_WEB_MAP_ID = 'e691172598f04ea8881cd2a4adaa45ba'
 // The auto-generated snippet would show the local wrapper component and the serialized layer instances.
 const snippet = (code: string) => ({ docs: { source: { type: 'code' as const, code } } })
 
+const PUBLIC_BASEMAPS = [
+  'topo-vector',
+  'topo',
+  'streets-vector',
+  'streets',
+  'streets-night-vector',
+  'streets-navigation-vector',
+  'streets-relief-vector',
+  'gray-vector',
+  'gray',
+  'dark-gray-vector',
+  'dark-gray',
+  'satellite',
+  'hybrid',
+  'oceans',
+  'osm',
+  'terrain',
+]
+
+// Fill the story canvas (fullscreen layout, so no scrollbar). Docs sizes its iframe to the content, so a `vh` height
+// there feeds back on itself and the map never settles; use a fixed height like the other map stories instead.
+const STORY_MAP_HEIGHT = '95vh'
+const DOCS_MAP_HEIGHT = 480
+
 const meta = {
   title: 'Map/OmniaMap',
   component: OmniaMap,
+  parameters: { layout: 'fullscreen' },
+  decorators: [
+    (Story, { viewMode, args }) => (
+      <Story
+        args={{ ...args, style: { height: viewMode === 'docs' ? DOCS_MAP_HEIGHT : STORY_MAP_HEIGHT, ...args.style } }}
+      />
+    ),
+  ],
   args: {
-    basemap: 'topo-vector',
+    basemap: 'gray-vector',
     center: '10,62',
     zoom: 4,
-    style: { height: 480 },
   },
   argTypes: {
+    basemap: {
+      description: 'A well-known basemap id, or a `Basemap` instance. Ignored when `itemId` is set.',
+      control: 'select',
+      options: PUBLIC_BASEMAPS,
+    },
     layers: {
       description: 'Consumer-owned ArcGIS `Layer` instances, reconciled by identity. Memoize the array.',
       control: false,
     },
     initialFitToLayers: {
-      description: 'Zoom to the extent of `layers` once, when the view is ready. Overrides `center`/`zoom`/`extent`.',
+      description:
+        'Zoom to the extent of `layers` once, when the view is ready. Overrides `center`/`zoom`/`extent`. Pass a subset of `layers` to fit to those only.',
       control: 'boolean',
-      table: { defaultValue: { summary: 'true' } },
+      table: { defaultValue: { summary: 'true' }, type: { summary: 'boolean | readonly Layer[]' } },
     },
     hideWebMapLayers: {
       description:
@@ -203,4 +247,28 @@ const homeViewpoint = useMemo(() => {
     <arcgis-layer-list />
   </arcgis-expand>
 </OmniaMap>`),
+}
+
+const REFERENCE_LAYERS_SOURCE = `// File: sample-data.ts
+${sampleDataSource}
+// File: ReferenceLayersExample.tsx (save beside sample-data.ts)
+${referenceLayersExampleSource.replace("from '../index'", "from '@team-hermes/react-omnia-map'")}`
+
+export const ReferenceLayers: StoryObj<ReferenceLayersArgs> = {
+  parameters: {
+    controls: { exclude: ['ref', 'layers', 'initialFitToLayers'] },
+    docs: { source: { code: REFERENCE_LAYERS_SOURCE, language: 'tsx' } },
+  },
+  args: {
+    basemap: 'gray-vector',
+    visibleReferenceLayers: DEFAULT_VISIBLE_REFERENCE_LAYERS,
+  },
+  argTypes: {
+    visibleReferenceLayers: {
+      description: 'Story-only: toggles `visible` on the Sodir reference layers.',
+      control: 'check',
+      options: SODIR_REFERENCE_LAYER_TITLES,
+    },
+  },
+  render: (args) => <ReferenceLayersExample {...args} />,
 }

@@ -97,6 +97,16 @@ ArcGIS components can be slotted into the map as children of `OmniaMap`. Registe
 
 <Canvas of={OmniaMapStories.OnMapControls} />
 
+### Reference layers
+
+The example combines 16 public [Sodir FactMaps](https://factmaps.sodir.no/) layers with city graphics. `visibleReferenceLayers` selects the visible layers. Initial fitting uses only the cities. Click a Sodir feature to see the fields included in ArcGIS's generated popup, in service order and with integer values shown without digit separators. Simple polygon fills are capped at 50% opacity; CIM and picture fills are unchanged.
+
+"Show code" reads the files used by the story. Save its two sections as adjacent `sample-data.ts` and `ReferenceLayersExample.tsx` files, then render `<ReferenceLayersExample />`. This requires React 19, ArcGIS dependencies (^5.1), and a version of `@team-hermes/react-omnia-map` that exports `useNearestFirstPopup` and supports layer subsets in `initialFitToLayers`. Add `/// <reference types="@arcgis/map-components/types/react" />` to your app's type declarations.
+
+Use titles from `SODIR_REFERENCE_LAYER_TITLES` to select layers, or `[]` to hide them all. `basemap` and `style` can be overridden; height defaults to 480 px outside Storybook. The wrapper owns `ref`, `layers` and `initialFitToLayers` and does not accept them as props. Replace the city graphics with your own data when adapting it.
+
+<Canvas of={OmniaMapStories.ReferenceLayers} />
+
 ## Props
 
 <ArgTypes of={OmniaMapStories} />
