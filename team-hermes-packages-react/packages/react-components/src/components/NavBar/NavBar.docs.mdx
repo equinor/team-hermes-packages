@@ -131,7 +131,9 @@ to tell screen readers whether dark mode is on. Pass `colorSchemeToggleLabel` to
 name. Keep it naming dark mode, and don't change it with the scheme.
 The adjacent **Auto** control restores automatic mode; its pressed state indicates the selected
 preference, independently of the resolved scheme. Use `autoColorSchemeToggleLabel` to translate
-its accessible name and tooltip. Clicking the light/dark toggle leaves automatic mode.
+the description in its accessible name and tooltip. Both are automatically prefixed with
+`Auto: ` to include the visible label even when localized (for example,
+`Auto: Følg systemets fargevalg`). Clicking the light/dark toggle leaves automatic mode.
 
 ```tsx
 <NavBar

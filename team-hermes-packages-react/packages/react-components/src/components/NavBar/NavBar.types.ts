@@ -80,6 +80,6 @@ export type NavBarProps = {
    * Defaults to `"Dark mode"`.
    */
   colorSchemeToggleLabel?: string
-  /** Accessible name and tooltip for the Auto control. Defaults to `"Follow system color scheme"`. */
+  /** Description for the Auto control's accessible name and tooltip, prefixed with `"Auto: "`. Defaults to `"Follow system color scheme"`. */
   autoColorSchemeToggleLabel?: string
 }

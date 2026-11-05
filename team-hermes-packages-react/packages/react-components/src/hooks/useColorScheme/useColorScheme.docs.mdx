@@ -68,7 +68,7 @@ return (
 
 4. An absent, invalid, or inaccessible stored preference means `"auto"`. Automatic mode resolves to the current OS preference and follows live `matchMedia` changes while the hook is mounted. EDS always receives a resolved `"light"` or `"dark"` attribute, never `"auto"`.
 
-5. **`setColorScheme(preference)`** selects `"light"`, `"dark"`, or `"auto"`, using the same crossfade as the existing toggle. The preference is mirrored in `data-color-scheme-preference` on `<html>` so all hook consumers share it, even if localStorage reads or writes throw. Storage failures emit a warning but do not prevent theme changes; the in-page choice survives until reload. Storage events synchronize changes from other tabs, including clearing the stored preference.
+5. **`setColorScheme(preference)`** selects `"light"`, `"dark"`, or `"auto"`, using the same crossfade as the existing toggle. The preference is mirrored in `data-color-scheme-preference` on `<html>` so all hook consumers share it, even if localStorage reads or writes throw. Storage failures emit a warning but do not prevent theme changes; the in-page choice survives until reload. Only localStorage events synchronize changes from other tabs, including clearing the stored preference; sessionStorage events are ignored. When consumers remount after all subscriptions ended, saved preferences are reconciled without overwriting a choice whose write failed or a current preference when reads are blocked.
 
 ## Crossfade
 

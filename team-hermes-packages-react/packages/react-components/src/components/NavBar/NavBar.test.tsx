@@ -133,7 +133,7 @@ describe('NavBar color scheme toggle', () => {
   it('offers Auto and returns to an explicit scheme with the existing dark mode toggle', async () => {
     localStorage.setItem('color-scheme', 'light')
     render(<NavBar {...defaultProps} showColorSchemeToggle autoColorSchemeToggleLabel="Use OS preference" />)
-    const auto = screen.getByRole('button', { name: 'Use OS preference', pressed: false })
+    const auto = screen.getByRole('button', { name: 'Auto: Use OS preference', pressed: false })
 
     await act(async () => fireEvent.click(auto))
     expect(auto).toHaveAttribute('aria-pressed', 'true')
@@ -149,6 +149,7 @@ describe('NavBar color scheme toggle', () => {
     render(<NavBar {...defaultProps} showColorSchemeToggle={undefined} />)
 
     expect(screen.getByRole('button', { name: 'Dark mode' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Auto: Follow system color scheme' })).toHaveTextContent('Auto')
   })
 
   it('uses colorSchemeToggleLabel as the accessible name', () => {

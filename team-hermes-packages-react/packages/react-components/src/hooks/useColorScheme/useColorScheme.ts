@@ -13,6 +13,7 @@ export const COLOR_SCHEME_TRANSITION_ATTRIBUTE = 'data-color-scheme-transition'
 
 const listeners = new Set<() => void>()
 let activeTransition: ViewTransition | null = null
+let unsavedPreference: ColorSchemePreference | null = null
 
 function getSystemPreference(): ColorScheme {
   return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
@@ -22,19 +23,19 @@ function isPreference(value: string | null): value is ColorSchemePreference {
   return value === 'light' || value === 'dark' || value === 'auto'
 }
 
-function getStoredPreference(): ColorSchemePreference {
+function getStoredPreference(): ColorSchemePreference | null {
   try {
     const stored = window.localStorage.getItem(STORAGE_KEY)
     return isPreference(stored) ? stored : 'auto'
   } catch (error) {
     console.warn('Unable to read color scheme preference from localStorage:', error)
-    return 'auto'
+    return null
   }
 }
 
 function getPreference(): ColorSchemePreference {
   const preference = document.documentElement.getAttribute(PREFERENCE_ATTRIBUTE)
-  return isPreference(preference) ? preference : getStoredPreference()
+  return isPreference(preference) ? preference : (getStoredPreference() ?? 'auto')
 }
 
 function resolveScheme(preference: ColorSchemePreference): ColorScheme {
@@ -51,6 +52,13 @@ function getSnapshot(): ColorScheme {
 }
 
 function subscribe(callback: () => void) {
+  if (listeners.size === 0 && document.documentElement.hasAttribute(PREFERENCE_ATTRIBUTE)) {
+    const currentPreference = getPreference()
+    const preference =
+      unsavedPreference === currentPreference ? currentPreference : (getStoredPreference() ?? currentPreference)
+    document.documentElement.setAttribute(PREFERENCE_ATTRIBUTE, preference)
+    applyScheme(resolveScheme(preference))
+  }
   listeners.add(callback)
   const observer = new MutationObserver((mutations) => {
     for (const mutation of mutations) {
@@ -68,9 +76,14 @@ function subscribe(callback: () => void) {
     }
   }
   const handleStorageChange = (event: StorageEvent) => {
-    if (event.key === STORAGE_KEY || event.key === null) {
-      initColorScheme()
+    if (event.key !== STORAGE_KEY && event.key !== null) return
+    try {
+      if (event.storageArea !== window.localStorage) return
+    } catch (error) {
+      console.warn('Unable to identify color scheme storage event:', error)
+      return
     }
+    initColorScheme()
   }
   mediaQuery.addEventListener('change', handleSystemChange)
   window.addEventListener('storage', handleStorageChange)
@@ -90,7 +103,9 @@ function applyPreference(preference: ColorSchemePreference) {
   document.documentElement.setAttribute(PREFERENCE_ATTRIBUTE, preference)
   try {
     window.localStorage.setItem(STORAGE_KEY, preference)
+    unsavedPreference = null
   } catch (error) {
+    unsavedPreference = preference
     console.warn('Unable to save color scheme preference to localStorage:', error)
   }
   applyScheme(resolveScheme(preference))
@@ -142,7 +157,8 @@ function toggleColorScheme() {
 }
 
 export function initColorScheme() {
-  const preference = getStoredPreference()
+  const preference = getStoredPreference() ?? 'auto'
+  unsavedPreference = null
   document.documentElement.setAttribute(PREFERENCE_ATTRIBUTE, preference)
   applyScheme(resolveScheme(preference))
   for (const listener of listeners) {
