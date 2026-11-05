@@ -8,6 +8,7 @@ import type { TargetedEvent } from '@esri/calcite-components'
 import type { JSX, Ref } from 'react'
 import { useRef } from 'react'
 import { backingMapKey } from './helpers/backing-map-key'
+import { resolveInitialFitLayers } from './helpers/initial-fit-layers'
 import { useForwardedElementState } from './hooks/useForwardedElementState'
 import { useInitialFitToLayers } from './hooks/useInitialFitToLayers'
 import { useReconcileLayers } from './hooks/useReconcileLayers'
@@ -23,9 +24,10 @@ export type OmniaMapProps = Omit<ArcgisMapElementProps, 'ref'> & {
   layers?: readonly Layer[]
   /**
    * Zoom to the extent of `layers` once per map, the first time its view is ready and the layers contain any
-   * geometry. Overrides `center`/`zoom`/`extent` at that point. Defaults to true.
+   * geometry. Overrides `center`/`zoom`/`extent` at that point. Pass a subset of `layers` to fit to those only, e.g.
+   * to leave wide reference layers (such as a FeatureLayer covering a whole region) out of the fit. Defaults to true.
    */
-  initialFitToLayers?: boolean
+  initialFitToLayers?: boolean | readonly Layer[]
   /**
    * Hide the web map's own operational layers (the basemap stays visible), leaving only `layers`. Applied to each
    * layer once, when its layer view is created, so toggling it after load has no effect. Defaults to false.
@@ -58,9 +60,10 @@ export function OmniaMap({
 }: OmniaMapProps) {
   const [mapElement, mapElementRef] = useForwardedElementState(ref)
   const latestClick = useRef(0)
+  const fitLayers = resolveInitialFitLayers(layers, initialFitToLayers)
 
   useReconcileLayers(mapElement, layers)
-  useInitialFitToLayers(mapElement, layers, initialFitToLayers)
+  useInitialFitToLayers(mapElement, fitLayers ?? NO_LAYERS, fitLayers !== null)
 
   function handleLayerviewCreate(event: TargetedEvent<ArcgisMap, LayerViewCreateEvent>) {
     arcgisMapProps.onarcgisViewLayerviewCreate?.(event)
