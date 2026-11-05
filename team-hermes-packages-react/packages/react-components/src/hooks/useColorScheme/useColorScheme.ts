@@ -128,7 +128,7 @@ function changeColorScheme(update: () => void) {
 
   const transition = document.startViewTransition(() => {
     // The MutationObserver notifies subscribers asynchronously. Notify them inside flushSync instead, so
-    // components (like the toggle's icon and aria-pressed) are updated before the new view is captured.
+    // components (like the navbar button's icon and the selected option) are updated before the new view is captured.
     flushSync(() => {
       update()
     })

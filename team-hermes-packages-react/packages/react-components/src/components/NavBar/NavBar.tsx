@@ -1,9 +1,9 @@
 import { NavigationMenu } from '@base-ui/react/navigation-menu'
-import { Button, Icon } from '@equinor/eds-core-react'
+import { Icon } from '@equinor/eds-core-react'
 import { NavListItem } from './components/NavListItem'
-import { chevron_down, light, lightbulb } from '@equinor/eds-icons'
-import { useColorScheme } from '@/hooks'
+import { chevron_down } from '@equinor/eds-icons'
 import { navbar } from './NavBar.styles'
+import { ColorSchemePopover } from './components/ColorSchemePopover'
 import { SupportSection } from './components/SupportSection'
 import { UserPopover } from './components/UserPopover'
 import type { NavBarProps } from './NavBar.types'
@@ -17,9 +17,9 @@ export function NavBar(props: NavBarProps) {
     showColorSchemeToggle = true,
     colorSchemeToggleLabel = 'Dark mode',
     autoColorSchemeToggleLabel = 'Follow system color scheme',
+    colorSchemeOptionLabels,
     environment,
   } = props
-  const { colorScheme, colorSchemePreference, setColorScheme, toggleColorScheme } = useColorScheme()
   const groupPath = location.pathname.split('/')[1] // Get the first segment of the path
 
   const navbarStyles = navbar()
@@ -60,30 +60,15 @@ export function NavBar(props: NavBarProps) {
       </NavigationMenu.List>
       <div className="flex items-center gap-2">
         {showColorSchemeToggle && (
-          <>
-            <Button
-              variant="ghost_icon"
-              aria-label={colorSchemeToggleLabel}
-              aria-pressed={colorScheme === 'dark'}
-              onClick={toggleColorScheme}
-            >
-              <Icon
-                aria-hidden
-                className={colorScheme === 'light' ? '' : 'rotate-180'}
-                data={colorScheme === 'light' ? lightbulb : light}
-                size={18}
-              />
-            </Button>
-            <Button
-              variant="ghost"
-              aria-label={`Auto: ${autoColorSchemeToggleLabel}`}
-              title={`Auto: ${autoColorSchemeToggleLabel}`}
-              aria-pressed={colorSchemePreference === 'auto'}
-              onClick={() => setColorScheme('auto')}
-            >
-              Auto
-            </Button>
-          </>
+          <ColorSchemePopover
+            label={colorSchemeToggleLabel}
+            autoDescription={autoColorSchemeToggleLabel}
+            optionLabels={{
+              auto: colorSchemeOptionLabels?.auto ?? 'Auto',
+              light: colorSchemeOptionLabels?.light ?? 'Light',
+              dark: colorSchemeOptionLabels?.dark ?? 'Dark',
+            }}
+          />
         )}
         {props.user && (
           <UserPopover

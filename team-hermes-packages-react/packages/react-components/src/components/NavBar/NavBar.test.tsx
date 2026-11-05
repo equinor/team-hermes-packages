@@ -1,5 +1,5 @@
-import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
-import { home, world } from '@equinor/eds-icons'
+import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react'
+import { dark_mode, home, invert_colors, sun, world } from '@equinor/eds-icons'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vite-plus/test'
 import { NavBar } from './NavBar'
 import type { NavBarProps } from './NavBar.types'
@@ -129,34 +129,35 @@ describe('NavBar navigation', () => {
   })
 })
 
-describe('NavBar color scheme toggle', () => {
-  it('offers Auto and returns to an explicit scheme with the existing dark mode toggle', async () => {
-    localStorage.setItem('color-scheme', 'light')
-    render(<NavBar {...defaultProps} showColorSchemeToggle autoColorSchemeToggleLabel="Use OS preference" />)
-    const auto = screen.getByRole('button', { name: 'Auto: Use OS preference', pressed: false })
+describe('NavBar color scheme popover', () => {
+  const openPopover = async (name = 'Dark mode') => {
+    fireEvent.click(screen.getByRole('button', { name }))
+    return screen.findByRole('dialog', { name })
+  }
+  const triggerIconPath = (trigger: HTMLElement) => trigger.querySelector('path')?.getAttribute('d')
 
-    await act(async () => fireEvent.click(auto))
-    expect(auto).toHaveAttribute('aria-pressed', 'true')
-    expect(localStorage.getItem('color-scheme')).toBe('auto')
-    expect(document.documentElement).toHaveAttribute('data-color-scheme', 'light')
-
-    await act(async () => fireEvent.click(screen.getByRole('button', { name: 'Dark mode' })))
-    expect(auto).toHaveAttribute('aria-pressed', 'false')
-    expect(localStorage.getItem('color-scheme')).toBe('dark')
-  })
-
-  it('is shown by default with the accessible name "Dark mode"', () => {
+  it('is shown by default as a single button named "Dark mode" that opens a popover', async () => {
     render(<NavBar {...defaultProps} showColorSchemeToggle={undefined} />)
 
-    expect(screen.getByRole('button', { name: 'Dark mode' })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Auto: Follow system color scheme' })).toHaveTextContent('Auto')
-  })
+    const trigger = screen.getByRole('button', { name: 'Dark mode' })
+    expect(screen.getAllByRole('button')).toEqual([trigger])
+    expect(trigger).toHaveAttribute('aria-haspopup', 'dialog')
+    expect(trigger).toHaveAttribute('aria-expanded', 'false')
+    expect(trigger).toHaveTextContent('')
+    expect(trigger.querySelector('svg')).toHaveAttribute('aria-hidden', 'true')
 
-  it('uses colorSchemeToggleLabel as the accessible name', () => {
-    render(<NavBar {...defaultProps} showColorSchemeToggle colorSchemeToggleLabel="Mørk modus" />)
-
-    expect(screen.getByRole('button', { name: 'Mørk modus' })).toBeInTheDocument()
-    expect(screen.queryByRole('button', { name: 'Dark mode' })).not.toBeInTheDocument()
+    const popover = await openPopover()
+    expect(trigger).toHaveAttribute('aria-expanded', 'true')
+    expect(within(popover).getByRole('heading', { name: 'Dark mode' })).toBeInTheDocument()
+    expect(within(popover).getByRole('radiogroup', { name: 'Dark mode' })).toBeInTheDocument()
+    expect(
+      within(popover)
+        .getAllByRole('radio')
+        .map((radio) => radio.getAttribute('value'))
+    ).toEqual(['auto', 'light', 'dark'])
+    expect(within(popover).getByRole('radio', { name: 'Auto' })).toHaveAccessibleDescription(
+      'Follow system color scheme'
+    )
   })
 
   it('is not rendered when showColorSchemeToggle is false', () => {
@@ -166,53 +167,101 @@ describe('NavBar color scheme toggle', () => {
   })
 
   it.each([
-    { colorScheme: 'light', pressed: false },
-    { colorScheme: 'dark', pressed: true },
-  ])('has aria-pressed=$pressed and a decorative icon in the $colorScheme scheme', ({ colorScheme, pressed }) => {
-    document.documentElement.setAttribute('data-color-scheme', colorScheme)
-    render(<NavBar {...defaultProps} showColorSchemeToggle />)
+    { stored: null, preference: 'auto', icon: invert_colors },
+    { stored: 'light', preference: 'light', icon: sun },
+    { stored: 'dark', preference: 'dark', icon: dark_mode },
+  ])(
+    'checks $preference and shows its icon when the stored preference is $stored',
+    async ({ stored, preference, icon }) => {
+      if (stored) localStorage.setItem('color-scheme', stored)
+      render(<NavBar {...defaultProps} showColorSchemeToggle />)
 
-    const toggle = screen.getByRole('button', { name: 'Dark mode' })
-    expect(toggle).toHaveAttribute('aria-pressed', String(pressed))
-    expect(toggle).toHaveTextContent('')
-    const icon = toggle.querySelector('svg')
-    expect(icon).toHaveAttribute('aria-hidden', 'true')
-    expect(icon).not.toHaveAttribute('role')
-    if (pressed) {
-      expect(icon).toHaveClass('rotate-180')
-    } else {
-      expect(icon).not.toHaveClass('rotate-180')
+      const trigger = screen.getByRole('button', { name: 'Dark mode' })
+      expect(triggerIconPath(trigger)).toBe(icon.svgPathData)
+
+      const popover = await openPopover()
+      const checked = within(popover).getByRole('radio', { checked: true })
+      expect(checked).toHaveAttribute('value', preference)
     }
-  })
+  )
 
-  it('toggles data-color-scheme, localStorage and aria-pressed when clicked', async () => {
+  it.each([
+    { option: 'Dark', preference: 'dark', scheme: 'dark', icon: dark_mode, initial: 'light' },
+    { option: 'Light', preference: 'light', scheme: 'light', icon: sun, initial: 'dark' },
+    { option: 'Auto', preference: 'auto', scheme: 'light', icon: invert_colors, initial: 'dark' },
+  ])(
+    'applies $option immediately and keeps the popover open',
+    async ({ option, preference, scheme, icon, initial }) => {
+      localStorage.setItem('color-scheme', initial)
+      render(<NavBar {...defaultProps} showColorSchemeToggle />)
+      const trigger = screen.getByRole('button', { name: 'Dark mode' })
+      const popover = await openPopover()
+
+      await act(async () => fireEvent.click(within(popover).getByRole('radio', { name: option })))
+
+      expect(document.documentElement).toHaveAttribute('data-color-scheme', scheme)
+      expect(document.documentElement).toHaveAttribute('data-color-scheme-preference', preference)
+      expect(localStorage.getItem('color-scheme')).toBe(preference)
+      expect(within(popover).getByRole('radio', { name: option })).toBeChecked()
+      expect(within(popover).getAllByRole('radio', { checked: true })).toHaveLength(1)
+      expect(triggerIconPath(trigger)).toBe(icon.svgPathData)
+      expect(trigger).toHaveAttribute('aria-expanded', 'true')
+    }
+  )
+
+  it('closes with the close button', async () => {
     render(<NavBar {...defaultProps} showColorSchemeToggle />)
-    const toggle = screen.getByRole('button', { name: 'Dark mode', pressed: false })
+    const trigger = screen.getByRole('button', { name: 'Dark mode' })
+    const popover = await openPopover()
 
-    fireEvent.click(toggle)
+    fireEvent.click(within(popover).getByRole('button', { name: 'Close' }))
 
-    expect(document.documentElement).toHaveAttribute('data-color-scheme', 'dark')
-    expect(localStorage.getItem('color-scheme')).toBe('dark')
-    expect(await screen.findByRole('button', { name: 'Dark mode', pressed: true })).toBe(toggle)
-
-    fireEvent.click(toggle)
-
-    expect(document.documentElement).toHaveAttribute('data-color-scheme', 'light')
-    expect(localStorage.getItem('color-scheme')).toBe('light')
-    expect(await screen.findByRole('button', { name: 'Dark mode', pressed: false })).toBe(toggle)
+    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'false'))
   })
 
-  it('updates aria-pressed and the icon before the view transition captures the new view', async () => {
-    let afterUpdate: { pressed: string | null; rotated: boolean | undefined } | undefined
+  it('uses the localized title, option labels, and Auto description', async () => {
+    render(
+      <NavBar
+        {...defaultProps}
+        showColorSchemeToggle
+        colorSchemeToggleLabel="Mørk modus"
+        autoColorSchemeToggleLabel="Følg systemets fargevalg"
+        colorSchemeOptionLabels={{ auto: 'Automatisk', light: 'Lys', dark: 'Mørk' }}
+      />
+    )
+
+    expect(screen.queryByRole('button', { name: 'Dark mode' })).not.toBeInTheDocument()
+    const popover = await openPopover('Mørk modus')
+
+    expect(within(popover).getByRole('radiogroup', { name: 'Mørk modus' })).toBeInTheDocument()
+    expect(within(popover).getByRole('radio', { name: 'Automatisk' })).toHaveAccessibleDescription(
+      'Følg systemets fargevalg'
+    )
+    expect(within(popover).getByRole('radio', { name: 'Lys' })).toBeInTheDocument()
+    expect(within(popover).getByRole('radio', { name: 'Mørk' })).toBeInTheDocument()
+  })
+
+  it('falls back to the default label for options without a custom label', async () => {
+    render(<NavBar {...defaultProps} showColorSchemeToggle colorSchemeOptionLabels={{ dark: 'Mørk' }} />)
+    const popover = await openPopover()
+
+    expect(
+      within(popover)
+        .getAllByRole('radio')
+        .map((radio) => radio.closest('label')?.textContent)
+    ).toEqual(['Auto', 'Light', 'Mørk'])
+  })
+
+  it('updates the selection and trigger icon before the view transition captures the new view', async () => {
+    let afterUpdate: { checked: boolean | undefined; icon: string | null | undefined } | undefined
     Object.defineProperty(document, 'startViewTransition', {
       configurable: true,
       value: (update: () => void) => {
         const finished = Promise.resolve().then(() => {
           update()
-          const toggle = screen.getByRole('button', { name: 'Dark mode' })
           afterUpdate = {
-            pressed: toggle.getAttribute('aria-pressed'),
-            rotated: toggle.querySelector('svg')?.classList.contains('rotate-180'),
+            checked: screen.queryByRole<HTMLInputElement>('radio', { name: 'Dark' })?.checked,
+            icon: triggerIconPath(screen.getByRole('button', { name: 'Dark mode' })),
           }
         })
         return { ready: finished, finished }
@@ -220,10 +269,12 @@ describe('NavBar color scheme toggle', () => {
     })
 
     try {
+      localStorage.setItem('color-scheme', 'light')
       render(<NavBar {...defaultProps} showColorSchemeToggle />)
-      await act(async () => fireEvent.click(screen.getByRole('button', { name: 'Dark mode' })))
+      const popover = await openPopover()
+      await act(async () => fireEvent.click(within(popover).getByRole('radio', { name: 'Dark' })))
 
-      expect(afterUpdate).toEqual({ pressed: 'true', rotated: true })
+      expect(afterUpdate).toEqual({ checked: true, icon: dark_mode.svgPathData })
       expect(document.documentElement).toHaveAttribute('data-color-scheme', 'dark')
     } finally {
       Reflect.deleteProperty(document, 'startViewTransition')
@@ -366,7 +417,7 @@ describe('NavBar custom actions', () => {
     const customAction = screen.getByRole('button', { name: 'Custom action' })
     const rightSection = customAction.parentElement!
 
-    expect(rightSection.querySelectorAll('button')).toHaveLength(5)
+    expect(rightSection.querySelectorAll('button')).toHaveLength(4)
     expect(rightSection.lastElementChild).toBe(customAction)
     expect(screen.getByRole('link', { name: 'MyApp' })).toBeInTheDocument()
   })
@@ -380,6 +431,6 @@ describe('NavBar custom actions', () => {
   it.each([undefined, null, false])('keeps existing controls when customActions is %s', (customActions) => {
     render(<NavBar {...defaultProps} showColorSchemeToggle customActions={customActions} />)
 
-    expect(screen.getAllByRole('button')).toHaveLength(2)
+    expect(screen.getAllByRole('button')).toHaveLength(1)
   })
 })
