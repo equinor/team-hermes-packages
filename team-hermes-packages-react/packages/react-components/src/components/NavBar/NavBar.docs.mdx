@@ -129,6 +129,8 @@ Hides both color scheme controls from the navbar.
 The color scheme toggle keeps the same accessible name in both schemes and uses `aria-pressed`
 to tell screen readers whether dark mode is on. Pass `colorSchemeToggleLabel` to translate the
 name. Keep it naming dark mode, and don't change it with the scheme.
+The [WAI-ARIA toggle button pattern](https://www.w3.org/WAI/ARIA/apg/patterns/button/) requires a stable label because `aria-pressed` conveys the state; changing the name could announce "Light mode, pressed" while dark mode is on.
+The decorative icon changes with the scheme, but the accessible name stays constant.
 The adjacent **Auto** control restores automatic mode; its pressed state indicates the selected
 preference, independently of the resolved scheme. Use `autoColorSchemeToggleLabel` to translate
 the description in its accessible name and tooltip. Both are automatically prefixed with
