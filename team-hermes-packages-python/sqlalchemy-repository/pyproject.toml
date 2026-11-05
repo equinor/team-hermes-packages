@@ -10,9 +10,9 @@ readme = "README.md"
 license-files = ["LICENSE"]
 requires-python = ">=3.12"
 dependencies = [
-  "team-hermes-core>=0.1.0,<0.2.0",
-  "team-hermes-query>=0.1.0,<0.2.0",
-  "team-hermes-sqlalchemy-core>=0.1.0,<0.2.0",
+  "team-hermes-core>=0.1.0",
+  "team-hermes-query>=0.1.0",
+  "team-hermes-sqlalchemy-core>=0.1.0",
   "sqlalchemy",
 ]
 classifiers = [
