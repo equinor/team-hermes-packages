@@ -98,6 +98,45 @@ describe('VersionText', () => {
     expect(screen.queryByRole('link')).not.toBeInTheDocument()
   })
 
+  it('shows unknown when returning to a previously loaded URL until its new request resolves', async () => {
+    let resolveB: (response: Response) => void = () => {}
+    let resolveNewA: (response: Response) => void = () => {}
+    const requestB = new Promise<Response>((resolve) => {
+      resolveB = resolve
+    })
+    const newRequestA = new Promise<Response>((resolve) => {
+      resolveNewA = resolve
+    })
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(new Response(versionFile))
+      .mockReturnValueOnce(requestB)
+      .mockReturnValueOnce(newRequestA)
+    vi.stubGlobal('fetch', fetchMock)
+    const { rerender } = render(<VersionText githubRepoName="equinor/my-app" versionUrl="/a/version.txt" />)
+    await screen.findByRole('link', { name: 'tag: v1.2.3' })
+
+    rerender(<VersionText githubRepoName="equinor/my-app" versionUrl="/b/version.txt" />)
+    rerender(<VersionText githubRepoName="equinor/my-app" versionUrl="/a/version.txt" />)
+
+    expect(fetchMock.mock.calls).toEqual([['/a/version.txt'], ['/b/version.txt'], ['/a/version.txt']])
+    expect(screen.getByText('unknown')).toBeInTheDocument()
+    expect(screen.queryByRole('link')).not.toBeInTheDocument()
+    expect(screen.queryByText('(2026-11-05)')).not.toBeInTheDocument()
+
+    await act(async () => resolveB(new Response('hash: stale-b')))
+    expect(screen.getByText('unknown')).toBeInTheDocument()
+    expect(screen.queryByRole('link')).not.toBeInTheDocument()
+
+    await act(async () => resolveNewA(new Response('hash: fresh-a\ndate: 2026-11-06')))
+    expect(screen.getByRole('link', { name: 'fresh-a' })).toHaveAttribute(
+      'href',
+      'https://github.com/equinor/my-app/commit/fresh-a'
+    )
+    expect(screen.getByText('(2026-11-06)')).toBeInTheDocument()
+    expect(screen.queryByText('unknown')).not.toBeInTheDocument()
+  })
+
   it('hides previous details when the URL changes and ignores stale responses', async () => {
     let resolveOldRequest: (response: Response) => void = () => {}
     const oldRequest = new Promise<Response>((resolve) => {
