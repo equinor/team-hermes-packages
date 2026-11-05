@@ -205,17 +205,20 @@ const meta = {
       control: false,
     },
     showColorSchemeToggle: {
-      description: 'Whether the light/dark toggle and Auto control are shown.',
+      description: 'Whether the color scheme button, which opens the Auto/Light/Dark popover, is shown.',
       control: 'boolean',
     },
     colorSchemeToggleLabel: {
-      description:
-        'Accessible name of the light/dark mode toggle. Stays the same in both schemes; aria-pressed exposes whether dark mode is on.',
+      description: 'Accessible name of the color scheme button and title of its popover.',
       control: 'text',
     },
     autoColorSchemeToggleLabel: {
-      description: 'Description for the Auto control, prefixed with "Auto: " in its accessible name and tooltip.',
+      description: 'Description of the Auto option, shown as its tooltip and accessible description.',
       control: 'text',
+    },
+    colorSchemeOptionLabels: {
+      description: 'Visible labels of the Auto, Light, and Dark options. Missing labels fall back to the defaults.',
+      control: 'object',
     },
   },
 } satisfies Meta<typeof NavBar>
@@ -286,8 +289,9 @@ export const WithoutColorSchemeToggle: Story = {
 
 export const WithLocalizedColorSchemeToggle: Story = {
   args: {
-    colorSchemeToggleLabel: 'Mørk modus',
+    colorSchemeToggleLabel: 'Fargemodus',
     autoColorSchemeToggleLabel: 'Følg systemets fargevalg',
+    colorSchemeOptionLabels: { auto: 'Automatisk', light: 'Lys', dark: 'Mørk' },
   },
 }
 

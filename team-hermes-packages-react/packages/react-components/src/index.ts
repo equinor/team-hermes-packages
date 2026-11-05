@@ -57,7 +57,7 @@ export { Message } from './components/Message/Message'
 // NAVIGATION COMPONENTS
 export { NavBar } from './components/NavBar/NavBar'
 export { NavListItem } from './components/NavBar/components/NavListItem'
-export type { ApplicationConfig, NavLinkType } from './components/NavBar/NavBar.types'
+export type { ApplicationConfig, ColorSchemeOptionLabels, NavLinkType } from './components/NavBar/NavBar.types'
 export { Popover } from './components/Popover/Popover'
 // CALL-TO-ACTION COMPONENTS
 export { QuickAccessButton } from './components/QuickAccessButton/QuickAccessButton'

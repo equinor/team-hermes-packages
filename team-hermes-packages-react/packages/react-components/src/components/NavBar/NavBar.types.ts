@@ -73,15 +73,21 @@ export type NavBarProps = {
    */
   logOut?: () => void
   /**
-   * Whether the light/dark toggle and automatic color scheme control are shown. Defaults to `true`.
+   * Whether the color scheme button is shown. It opens a popover for choosing Auto, Light, or Dark. Defaults to `true`.
    */
   showColorSchemeToggle?: boolean
   /**
-   * Accessible name of the light/dark mode toggle. The toggle exposes dark mode as its pressed state
-   * (`aria-pressed`), so the label should name dark mode and stay the same in both schemes.
-   * Defaults to `"Dark mode"`.
+   * Accessible name of the color scheme button and title of its popover. Defaults to `"Dark mode"`.
    */
   colorSchemeToggleLabel?: string
-  /** Description for the Auto control's accessible name and tooltip, prefixed with `"Auto: "`. Defaults to `"Follow system color scheme"`. */
+  /** Description of the Auto option, shown as its tooltip and accessible description. Defaults to `"Follow system color scheme"`. */
   autoColorSchemeToggleLabel?: string
+  /** Visible labels of the Auto, Light, and Dark options. Defaults to `"Auto"`, `"Light"`, and `"Dark"`. */
+  colorSchemeOptionLabels?: ColorSchemeOptionLabels
+}
+
+export type ColorSchemeOptionLabels = {
+  auto?: string
+  light?: string
+  dark?: string
 }

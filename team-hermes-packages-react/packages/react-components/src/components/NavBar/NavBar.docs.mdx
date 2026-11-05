@@ -5,7 +5,7 @@ import * as NavBarStories from './NavBar.stories'
 
 # NavBar
 
-A top-level navigation bar that provides category-based navigation with dropdown menus, a color scheme toggle, optional user information popover, and a help/support section. The application name displayed in the navbar is configured via `applicationConfig.name`.
+A top-level navigation bar that provides category-based navigation with dropdown menus, a color scheme popover, optional user information popover, and a help/support section. The application name displayed in the navbar is configured via `applicationConfig.name`.
 
 <Primary />
 
@@ -58,7 +58,7 @@ import { NavBar } from '@team-hermes/react-components'
 - **Category navigation** — Groups links under collapsible dropdown menus.
 - **Active indicator** — Highlights the category matching the current route.
 - **External links** — Links marked with `external: true` open in a new tab and show the EDS external link icon.
-- **Color scheme controls** — Switch between light and dark mode with a short crossfade, or select **Auto** to follow the OS preference live. Screen readers announce the "Dark mode" toggle as pressed while the resolved scheme is dark, and the Auto control as pressed while the preference is automatic.
+- **Color scheme popover** — A single button opens a popover for choosing **Auto**, **Light**, or **Dark**. The choice applies immediately with a short crossfade and is saved for later visits. **Auto** follows the OS preference live. The button shows the icon of the current choice.
 - **User popover** — Displays user info and permissions when `user` is provided.
 - **Support section** — Shows help/support dialog with ServiceNow and GitHub links.
 
@@ -83,7 +83,7 @@ right-side controls are unchanged.
 
 ### Custom actions
 
-Pass `customActions` to append actions after the color scheme toggle, user popover,
+Pass `customActions` to append actions after the color scheme button, user popover,
 and support control. Each built-in control retains its existing prop-based
 visibility. Custom actions also render when all built-in controls are hidden.
 
@@ -146,29 +146,29 @@ navigation. The chevron is replaced by the EDS external link icon, and screen re
 
 ### Without color scheme toggle
 
-Hides both color scheme controls from the navbar.
+Set `showColorSchemeToggle={false}` to hide the color scheme button.
 
 <Canvas of={NavBarStories.WithoutColorSchemeToggle} />
 
-### Localized color scheme toggle
+### Localized color scheme popover
 
-The color scheme toggle keeps the same accessible name in both schemes and uses `aria-pressed`
-to tell screen readers whether dark mode is on. Pass `colorSchemeToggleLabel` to translate the
-name. Keep it naming dark mode, and don't change it with the scheme.
-The [WAI-ARIA toggle button pattern](https://www.w3.org/WAI/ARIA/apg/patterns/button/) requires a stable label because `aria-pressed` conveys the state; changing the name could announce "Light mode, pressed" while dark mode is on.
-The decorative icon changes with the scheme, but the accessible name stays constant.
-The adjacent **Auto** control restores automatic mode; its pressed state indicates the selected
-preference, independently of the resolved scheme. Use `autoColorSchemeToggleLabel` to translate
-the description in its accessible name and tooltip. Both are automatically prefixed with
-`Auto: ` to include the visible label even when localized (for example,
-`Auto: Følg systemets fargevalg`). Clicking the light/dark toggle leaves automatic mode.
+The color scheme button opens a popover with a radio group of three options. Its title also names
+the button and the radio group. The selected option is the one checked. Each option applies immediately.
+Escape, clicking outside, or the close button dismisses the popover.
+
+- `colorSchemeToggleLabel` sets the button's accessible name and the popover title (default `"Dark mode"`).
+- `colorSchemeOptionLabels` sets the visible option labels (defaults `"Auto"`, `"Light"`, and `"Dark"`).
+  Omitted labels keep their defaults.
+- `autoColorSchemeToggleLabel` describes the Auto option in its tooltip and accessible description
+  (default `"Follow system color scheme"`).
 
 ```tsx
 <NavBar
   categories={categories}
   LinkComponent={RouterLink}
-  colorSchemeToggleLabel="Mørk modus"
+  colorSchemeToggleLabel="Fargemodus"
   autoColorSchemeToggleLabel="Følg systemets fargevalg"
+  colorSchemeOptionLabels={{ auto: 'Automatisk', light: 'Lys', dark: 'Mørk' }}
 />
 ```
 
