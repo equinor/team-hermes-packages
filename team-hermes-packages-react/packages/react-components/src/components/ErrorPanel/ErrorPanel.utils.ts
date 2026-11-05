@@ -23,7 +23,15 @@ export const safeStringify = (value: unknown): string => {
   try {
     return JSON.stringify(value) ?? String(value)
   } catch {
-    return String(value)
+    try {
+      return String(value)
+    } catch {
+      try {
+        return Object.prototype.toString.call(value)
+      } catch {
+        return '[Unserializable value]'
+      }
+    }
   }
 }
 
@@ -31,6 +39,7 @@ export const messageFor = (error: unknown): string => {
   if (isApiError(error)) return error.message
   if (error instanceof Response) return `${error.status} ${error.statusText || 'Error'}`.trim()
   if (error instanceof Error) return error.message
+  if (typeof error === 'string') return error
   if (error == null) return 'Unknown error'
   return safeStringify(error)
 }

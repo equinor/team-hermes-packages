@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react'
 import { describe, expect, test } from 'vite-plus/test'
 import type { ApiError } from '@/shared/platform/api'
 import { ErrorPanel } from './ErrorPanel'
-import { safeStringify } from './ErrorPanel.utils'
+import { messageFor, safeStringify } from './ErrorPanel.utils'
 
 describe('ErrorPanel', () => {
   test('renders a network error with traceId', () => {
@@ -57,6 +57,18 @@ describe('ErrorPanel', () => {
     expect(getByText('Something went wrong')).toBeInTheDocument()
   })
 
+  test('renders circular null-prototype errors without throwing', () => {
+    const circular = Object.create(null) as Record<string, unknown>
+    circular.self = circular
+    render(<ErrorPanel error={circular} />)
+    expect(screen.getByText('[object Object]')).toBeInTheDocument()
+  })
+
+  test('renders thrown strings without JSON quotes', () => {
+    render(<ErrorPanel error="boom" />)
+    expect(screen.getByText('boom')).toBeInTheDocument()
+  })
+
   test('stringifies undefined errors', () => {
     expect(safeStringify(undefined)).toBe('undefined')
   })
@@ -74,6 +86,16 @@ describe('ErrorPanel', () => {
     const circular: Record<string, unknown> = { a: 1 }
     circular.self = circular
     expect(safeStringify(circular)).toBe('[object Object]')
+  })
+
+  test('falls back for circular null-prototype objects', () => {
+    const circular = Object.create(null) as Record<string, unknown>
+    circular.self = circular
+    expect(safeStringify(circular)).toBe('[object Object]')
+  })
+
+  test('returns thrown string values without JSON quotes', () => {
+    expect(messageFor('boom')).toBe('boom')
   })
 
   test('serializes normal objects as JSON', () => {
