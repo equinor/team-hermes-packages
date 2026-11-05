@@ -1,5 +1,6 @@
 import { NavigationMenu } from '@base-ui/react/navigation-menu'
 import { Icon } from '@equinor/eds-core-react'
+import { useColorScheme } from '@/hooks'
 import { NavListItem } from './components/NavListItem'
 import { chevron_down } from '@equinor/eds-icons'
 import { navbar } from './NavBar.styles'
@@ -20,6 +21,8 @@ export function NavBar(props: NavBarProps) {
     colorSchemeOptionLabels,
     environment,
   } = props
+  // Keep theme synchronization active even when the control is hidden.
+  const { colorSchemePreference, setColorScheme } = useColorScheme()
   const groupPath = location.pathname.split('/')[1] // Get the first segment of the path
 
   const navbarStyles = navbar()
@@ -61,6 +64,8 @@ export function NavBar(props: NavBarProps) {
       <div className="flex items-center gap-2">
         {showColorSchemeToggle && (
           <ColorSchemePopover
+            colorSchemePreference={colorSchemePreference}
+            setColorScheme={setColorScheme}
             label={colorSchemeToggleLabel}
             autoDescription={autoColorSchemeToggleLabel}
             optionLabels={{

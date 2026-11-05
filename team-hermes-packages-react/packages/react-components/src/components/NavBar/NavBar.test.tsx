@@ -1,6 +1,7 @@
 import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import { dark_mode, home, invert_colors, sun, world } from '@equinor/eds-icons'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vite-plus/test'
+import { initColorScheme } from '@/hooks'
 import { NavBar } from './NavBar'
 import type { NavBarProps } from './NavBar.types'
 import { SupportSection } from './components/SupportSection'
@@ -168,6 +169,64 @@ describe('NavBar color scheme popover', () => {
 
     expect(screen.queryByRole('button')).not.toBeInTheDocument()
   })
+
+  it.each([false, true])(
+    'follows OS changes with the control hidden (initially shown: %s)',
+    async (initiallyShown) => {
+      let dark = false
+      const mediaQuery = new EventTarget()
+      vi.stubGlobal('matchMedia', (query: string) => ({
+        matches: query === '(prefers-color-scheme: dark)' && dark,
+        media: query,
+        addEventListener: mediaQuery.addEventListener.bind(mediaQuery),
+        removeEventListener: mediaQuery.removeEventListener.bind(mediaQuery),
+      }))
+      initColorScheme()
+      const { rerender } = render(<NavBar {...defaultProps} showColorSchemeToggle={initiallyShown} />)
+      rerender(<NavBar {...defaultProps} showColorSchemeToggle={false} />)
+
+      expect(screen.queryByRole('button')).not.toBeInTheDocument()
+      expect(document.documentElement).toHaveAttribute('data-color-scheme', 'light')
+
+      for (const systemDark of [true, false]) {
+        await act(async () => {
+          dark = systemDark
+          mediaQuery.dispatchEvent(new Event('change'))
+        })
+
+        expect(document.documentElement).toHaveAttribute('data-color-scheme', systemDark ? 'dark' : 'light')
+        expect(document.documentElement).toHaveAttribute('data-color-scheme-preference', 'auto')
+      }
+    }
+  )
+
+  it.each([false, true])(
+    'syncs cross-tab preferences with the control hidden (initially shown: %s)',
+    async (initiallyShown) => {
+      initColorScheme()
+      const { rerender } = render(<NavBar {...defaultProps} showColorSchemeToggle={initiallyShown} />)
+      rerender(<NavBar {...defaultProps} showColorSchemeToggle={false} />)
+
+      expect(screen.queryByRole('button')).not.toBeInTheDocument()
+      expect(document.documentElement).toHaveAttribute('data-color-scheme', 'light')
+
+      await act(async () => {
+        localStorage.setItem('color-scheme', 'dark')
+        window.dispatchEvent(new StorageEvent('storage', { key: 'color-scheme', storageArea: localStorage }))
+      })
+
+      expect(document.documentElement).toHaveAttribute('data-color-scheme', 'dark')
+      expect(document.documentElement).toHaveAttribute('data-color-scheme-preference', 'dark')
+
+      await act(async () => {
+        localStorage.clear()
+        window.dispatchEvent(new StorageEvent('storage', { key: null, storageArea: localStorage }))
+      })
+
+      expect(document.documentElement).toHaveAttribute('data-color-scheme', 'light')
+      expect(document.documentElement).toHaveAttribute('data-color-scheme-preference', 'auto')
+    }
+  )
 
   it.each([
     { stored: null, preference: 'auto', icon: invert_colors },
