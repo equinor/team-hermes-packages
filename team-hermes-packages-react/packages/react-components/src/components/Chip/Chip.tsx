@@ -11,8 +11,10 @@ type ChipProps = {
   onDismiss?: () => void
   chipTooltip?: string
   dismissTooltip?: string
-  ref?: React.Ref<HTMLDivElement>
-} & Omit<React.HTMLAttributes<HTMLDivElement>, 'onClick'>
+  linkTo?: string
+  LinkComponent?: React.ComponentType<React.ComponentProps<'a'> & { to: string }>
+  ref?: React.Ref<HTMLElement>
+} & Omit<React.HTMLAttributes<HTMLElement>, 'onClick'>
 
 export const Chip = (props: ChipProps) => {
   const {
@@ -24,23 +26,30 @@ export const Chip = (props: ChipProps) => {
     onDismiss,
     chipTooltip,
     dismissTooltip,
+    linkTo,
+    LinkComponent,
     className,
     ref,
     ...rest
   } = props
 
-  const { root, content, dismiss } = chip({ size: fontSize, interactive: !!onClick })
+  const isLink = !!linkTo
+  const { root, content, dismiss } = chip({ size: fontSize, interactive: !!onClick || isLink })
+
+  const Root: React.ElementType = isLink ? (LinkComponent ?? 'a') : 'div'
+  const linkProps = isLink ? (LinkComponent ? { to: linkTo } : { href: linkTo }) : {}
 
   return (
-    <div
+    <Root
       data-color-appearance={theme}
       data-font-size={fontSize}
       className={root({ class: className })}
       ref={ref}
+      {...linkProps}
       {...rest}
     >
       <Tooltip title={chipTooltip}>
-        {onClick ? (
+        {onClick && !isLink ? (
           <button type="button" className={content({ class: `${className}_content` })} onClick={onClick}>
             {icon && <Icon data={icon} size={16} />}
             {children}
@@ -52,7 +61,7 @@ export const Chip = (props: ChipProps) => {
           </span>
         )}
       </Tooltip>
-      {onDismiss && (
+      {onDismiss && !isLink && (
         <Tooltip title={dismissTooltip}>
           <button
             type="button"
@@ -64,6 +73,6 @@ export const Chip = (props: ChipProps) => {
           </button>
         </Tooltip>
       )}
-    </div>
+    </Root>
   )
 }
