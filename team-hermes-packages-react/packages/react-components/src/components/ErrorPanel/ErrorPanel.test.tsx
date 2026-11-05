@@ -94,6 +94,20 @@ describe('ErrorPanel', () => {
     expect(safeStringify(circular)).toBe('[object Object]')
   })
 
+  test('returns a final fallback when all string conversions throw', () => {
+    const unstringifiable = Object.create(null) as Record<string | symbol, unknown>
+    unstringifiable.toJSON = () => {
+      throw new Error('serialization failed')
+    }
+    Object.defineProperty(unstringifiable, Symbol.toStringTag, {
+      get() {
+        throw new Error('tag lookup failed')
+      },
+    })
+
+    expect(safeStringify(unstringifiable)).toBe('[Unserializable value]')
+  })
+
   test('returns thrown string values without JSON quotes', () => {
     expect(messageFor('boom')).toBe('boom')
   })

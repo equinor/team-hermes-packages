@@ -15,24 +15,23 @@ export const titleFor = (error: unknown): string => {
   }
 }
 
-// JSON.stringify throws on circular references (and on BigInt values).
-// This runs while rendering the error UI itself, so a throw here would
-// crash the page trying to show an error — fall back to a best-effort
-// String() conversion instead.
+// This runs while rendering the error UI itself, so serialization and fallback
+// conversions must not throw.
 export const safeStringify = (value: unknown): string => {
   try {
-    return JSON.stringify(value) ?? String(value)
-  } catch {
-    try {
-      return String(value)
-    } catch {
-      try {
-        return Object.prototype.toString.call(value)
-      } catch {
-        return '[Unserializable value]'
-      }
-    }
-  }
+    const json = JSON.stringify(value)
+    if (json !== undefined) return json
+  } catch {}
+
+  try {
+    return String(value)
+  } catch {}
+
+  try {
+    return Object.prototype.toString.call(value)
+  } catch {}
+
+  return '[Unserializable value]'
 }
 
 export const messageFor = (error: unknown): string => {
