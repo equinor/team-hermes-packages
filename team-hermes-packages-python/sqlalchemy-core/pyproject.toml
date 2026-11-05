@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "team-hermes-sqlalchemy-core"
-version = "0.1.0"
+version = "0.2.0"
 description = "SQLAlchemy filter compilation for Team Hermes query contracts"
 readme = "README.md"
 license-files = ["LICENSE"]
