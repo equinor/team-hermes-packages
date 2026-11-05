@@ -79,6 +79,8 @@ export {
   useColorScheme,
   initColorScheme,
   COLOR_SCHEME_TRANSITION_ATTRIBUTE,
+  type ColorScheme,
+  type ColorSchemePreference,
 } from './hooks/useColorScheme/useColorScheme'
 export { useCopyToClipboard } from './hooks/useCopyToClipboard/useCopyToClipboard'
 export { useUrlFilters } from './hooks/useUrlFilters/useUrlFilters'

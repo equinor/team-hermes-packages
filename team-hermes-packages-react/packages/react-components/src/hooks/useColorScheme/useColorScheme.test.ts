@@ -1,6 +1,6 @@
-import { act, renderHook } from '@testing-library/react'
+import { act, cleanup, renderHook } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vite-plus/test'
-import { COLOR_SCHEME_TRANSITION_ATTRIBUTE, useColorScheme } from './useColorScheme'
+import { COLOR_SCHEME_TRANSITION_ATTRIBUTE, initColorScheme, useColorScheme } from './useColorScheme'
 
 const root = document.documentElement
 
@@ -14,13 +14,28 @@ function createDeferred() {
   return { promise, resolve, reject }
 }
 
-function stubMatchMedia({ reducedMotion = false } = {}) {
+function stubMatchMedia({ reducedMotion = false, dark = false } = {}) {
+  const mediaQuery = new EventTarget()
+  const addEventListener = vi.fn((type: string, listener: EventListenerOrEventListenerObject) =>
+    mediaQuery.addEventListener(type, listener)
+  )
+  const removeEventListener = vi.fn((type: string, listener: EventListenerOrEventListenerObject) =>
+    mediaQuery.removeEventListener(type, listener)
+  )
   vi.stubGlobal('matchMedia', (query: string) => ({
-    matches: reducedMotion && query === '(prefers-reduced-motion: reduce)',
+    matches: query === '(prefers-color-scheme: dark)' ? dark : reducedMotion,
     media: query,
-    addEventListener: () => {},
-    removeEventListener: () => {},
+    addEventListener,
+    removeEventListener,
   }))
+  return {
+    changeSystemPreference: (next: boolean) => {
+      dark = next
+      mediaQuery.dispatchEvent(new Event('change'))
+    },
+    addEventListener,
+    removeEventListener,
+  }
 }
 
 function setStartViewTransition(value: unknown) {
@@ -49,14 +64,109 @@ beforeEach(() => {
 })
 
 afterEach(() => {
+  cleanup()
+  vi.restoreAllMocks()
   vi.unstubAllGlobals()
   Reflect.deleteProperty(document, 'startViewTransition')
   root.removeAttribute('data-color-scheme')
+  root.removeAttribute('data-color-scheme-preference')
   root.removeAttribute(COLOR_SCHEME_TRANSITION_ATTRIBUTE)
   localStorage.clear()
 })
 
 describe('useColorScheme', () => {
+  it.each([false, true])('uses the OS preference without initialization (dark=%s)', (dark) => {
+    stubMatchMedia({ dark })
+    root.removeAttribute('data-color-scheme')
+    const { result } = renderHook(() => useColorScheme())
+
+    expect(result.current.colorSchemePreference).toBe('auto')
+    expect(result.current.colorScheme).toBe(dark ? 'dark' : 'light')
+    expect(root).toHaveAttribute('data-color-scheme', dark ? 'dark' : 'light')
+  })
+
+  it('follows live OS changes only in auto mode and shares the preference between consumers', async () => {
+    const { changeSystemPreference } = stubMatchMedia()
+    const first = renderHook(() => useColorScheme())
+    const second = renderHook(() => useColorScheme())
+
+    await act(async () => first.result.current.setColorScheme('dark'))
+    expect(second.result.current.colorSchemePreference).toBe('dark')
+    act(() => changeSystemPreference(false))
+    expect(first.result.current.colorScheme).toBe('dark')
+
+    await act(async () => first.result.current.setColorScheme('auto'))
+    expect(second.result.current.colorSchemePreference).toBe('auto')
+    expect(second.result.current.colorScheme).toBe('light')
+    expect(localStorage.getItem('color-scheme')).toBe('auto')
+    act(() => changeSystemPreference(true))
+    expect(second.result.current.colorScheme).toBe('dark')
+    expect(root).toHaveAttribute('data-color-scheme', 'dark')
+  })
+
+  it('keeps an explicit choice in memory when localStorage reads and writes throw', async () => {
+    const { changeSystemPreference } = stubMatchMedia()
+    const warning = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
+      throw new DOMException('Blocked', 'SecurityError')
+    })
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+      throw new DOMException('Full', 'QuotaExceededError')
+    })
+    initColorScheme()
+    const { result } = renderHook(() => useColorScheme())
+    await act(async () => result.current.setColorScheme('dark'))
+    act(() => changeSystemPreference(false))
+
+    expect(result.current.colorSchemePreference).toBe('dark')
+    expect(result.current.colorScheme).toBe('dark')
+    expect(warning).toHaveBeenCalled()
+    await act(async () => result.current.setColorScheme('auto'))
+    expect(result.current.colorScheme).toBe('light')
+    act(() => changeSystemPreference(true))
+    expect(result.current.colorScheme).toBe('dark')
+  })
+
+  it('tolerates access to the localStorage property itself being denied', () => {
+    stubMatchMedia({ dark: true })
+    vi.spyOn(console, 'warn').mockImplementation(() => {})
+    vi.spyOn(window, 'localStorage', 'get').mockImplementation(() => {
+      throw new DOMException('Blocked', 'SecurityError')
+    })
+
+    expect(() => initColorScheme()).not.toThrow()
+    expect(root).toHaveAttribute('data-color-scheme', 'dark')
+    const { result } = renderHook(() => useColorScheme())
+    act(() => result.current.setColorScheme('light'))
+    expect(result.current.colorScheme).toBe('light')
+  })
+
+  it('synchronizes preferences from storage events, including clearing storage', async () => {
+    stubMatchMedia()
+    const { result } = renderHook(() => useColorScheme())
+    await act(async () => {
+      localStorage.setItem('color-scheme', 'dark')
+      window.dispatchEvent(new StorageEvent('storage', { key: 'color-scheme' }))
+    })
+    expect(result.current.colorSchemePreference).toBe('dark')
+    expect(result.current.colorScheme).toBe('dark')
+    await act(async () => {
+      localStorage.clear()
+      window.dispatchEvent(new StorageEvent('storage', { key: null }))
+    })
+    expect(result.current.colorSchemePreference).toBe('auto')
+    expect(result.current.colorScheme).toBe('light')
+  })
+
+  it('removes system listeners on unmount', () => {
+    const { addEventListener, removeEventListener } = stubMatchMedia()
+    const { unmount } = renderHook(() => useColorScheme())
+    unmount()
+
+    expect(addEventListener).toHaveBeenCalled()
+    expect(removeEventListener.mock.calls).toEqual(addEventListener.mock.calls)
+  })
+
   it('reads the scheme from the data-color-scheme attribute', () => {
     stubMatchMedia()
     root.setAttribute('data-color-scheme', 'dark')
@@ -65,9 +175,55 @@ describe('useColorScheme', () => {
 
     expect(result.current.colorScheme).toBe('dark')
   })
+
+  it('continues observing externally applied resolved schemes', async () => {
+    stubMatchMedia()
+    const { result } = renderHook(() => useColorScheme())
+    await act(async () => root.setAttribute('data-color-scheme', 'dark'))
+
+    expect(result.current.colorScheme).toBe('dark')
+  })
+
+  describe('initColorScheme', () => {
+    it.each([
+      { stored: null, dark: false, preference: 'auto', scheme: 'light' },
+      { stored: null, dark: true, preference: 'auto', scheme: 'dark' },
+      { stored: 'auto', dark: true, preference: 'auto', scheme: 'dark' },
+      { stored: 'invalid', dark: false, preference: 'auto', scheme: 'light' },
+      { stored: 'light', dark: true, preference: 'light', scheme: 'light' },
+      { stored: 'dark', dark: false, preference: 'dark', scheme: 'dark' },
+    ])('applies $stored with system dark=$dark synchronously', ({ stored, dark, preference, scheme }) => {
+      stubMatchMedia({ dark })
+      if (stored !== null) localStorage.setItem('color-scheme', stored)
+      initColorScheme()
+
+      expect(root).toHaveAttribute('data-color-scheme', scheme)
+      expect(root).toHaveAttribute('data-color-scheme-preference', preference)
+    })
+  })
 })
 
 describe('toggleColorScheme', () => {
+  it('resolves consecutive toggles when each transition update runs', async () => {
+    stubMatchMedia()
+    const { transitions } = mockStartViewTransition()
+    const { result } = renderHook(() => useColorScheme())
+
+    act(() => {
+      result.current.toggleColorScheme()
+      result.current.toggleColorScheme()
+    })
+    for (const transition of transitions) {
+      act(() => transition.update())
+      transition.ready.resolve()
+      transition.finished.resolve()
+      await transition.finished.promise
+    }
+
+    expect(result.current.colorScheme).toBe('light')
+    expect(result.current.colorSchemePreference).toBe('light')
+  })
+
   it('applies the change directly when view transitions are not supported', async () => {
     stubMatchMedia()
     setStartViewTransition(undefined)

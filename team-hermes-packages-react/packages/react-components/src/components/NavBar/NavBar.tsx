@@ -16,9 +16,10 @@ export function NavBar(props: NavBarProps) {
     applicationConfig,
     showColorSchemeToggle = true,
     colorSchemeToggleLabel = 'Dark mode',
+    autoColorSchemeToggleLabel = 'Follow system color scheme',
     environment,
   } = props
-  const { colorScheme, toggleColorScheme } = useColorScheme()
+  const { colorScheme, colorSchemePreference, setColorScheme, toggleColorScheme } = useColorScheme()
   const groupPath = location.pathname.split('/')[1] // Get the first segment of the path
 
   const navbarStyles = navbar()
@@ -59,19 +60,30 @@ export function NavBar(props: NavBarProps) {
       </NavigationMenu.List>
       <div className="flex items-center gap-2">
         {showColorSchemeToggle && (
-          <Button
-            variant="ghost_icon"
-            aria-label={colorSchemeToggleLabel}
-            aria-pressed={colorScheme === 'dark'}
-            onClick={toggleColorScheme}
-          >
-            <Icon
-              aria-hidden
-              className={colorScheme === 'light' ? '' : 'rotate-180'}
-              data={colorScheme === 'light' ? lightbulb : light}
-              size={18}
-            />
-          </Button>
+          <>
+            <Button
+              variant="ghost_icon"
+              aria-label={colorSchemeToggleLabel}
+              aria-pressed={colorScheme === 'dark'}
+              onClick={toggleColorScheme}
+            >
+              <Icon
+                aria-hidden
+                className={colorScheme === 'light' ? '' : 'rotate-180'}
+                data={colorScheme === 'light' ? lightbulb : light}
+                size={18}
+              />
+            </Button>
+            <Button
+              variant="ghost"
+              aria-label={autoColorSchemeToggleLabel}
+              title={autoColorSchemeToggleLabel}
+              aria-pressed={colorSchemePreference === 'auto'}
+              onClick={() => setColorScheme('auto')}
+            >
+              Auto
+            </Button>
+          </>
         )}
         {props.user && (
           <UserPopover

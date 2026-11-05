@@ -23,8 +23,10 @@ beforeEach(() => {
 })
 
 afterEach(() => {
+  cleanup()
   vi.unstubAllGlobals()
   document.documentElement.removeAttribute('data-color-scheme')
+  document.documentElement.removeAttribute('data-color-scheme-preference')
   localStorage.clear()
 })
 
@@ -128,6 +130,21 @@ describe('NavBar navigation', () => {
 })
 
 describe('NavBar color scheme toggle', () => {
+  it('offers Auto and returns to an explicit scheme with the existing dark mode toggle', async () => {
+    localStorage.setItem('color-scheme', 'light')
+    render(<NavBar {...defaultProps} showColorSchemeToggle autoColorSchemeToggleLabel="Use OS preference" />)
+    const auto = screen.getByRole('button', { name: 'Use OS preference', pressed: false })
+
+    await act(async () => fireEvent.click(auto))
+    expect(auto).toHaveAttribute('aria-pressed', 'true')
+    expect(localStorage.getItem('color-scheme')).toBe('auto')
+    expect(document.documentElement).toHaveAttribute('data-color-scheme', 'light')
+
+    await act(async () => fireEvent.click(screen.getByRole('button', { name: 'Dark mode' })))
+    expect(auto).toHaveAttribute('aria-pressed', 'false')
+    expect(localStorage.getItem('color-scheme')).toBe('dark')
+  })
+
   it('is shown by default with the accessible name "Dark mode"', () => {
     render(<NavBar {...defaultProps} showColorSchemeToggle={undefined} />)
 
@@ -348,7 +365,7 @@ describe('NavBar custom actions', () => {
     const customAction = screen.getByRole('button', { name: 'Custom action' })
     const rightSection = customAction.parentElement!
 
-    expect(rightSection.querySelectorAll('button')).toHaveLength(4)
+    expect(rightSection.querySelectorAll('button')).toHaveLength(5)
     expect(rightSection.lastElementChild).toBe(customAction)
     expect(screen.getByRole('link', { name: 'MyApp' })).toBeInTheDocument()
   })
@@ -362,6 +379,6 @@ describe('NavBar custom actions', () => {
   it.each([undefined, null, false])('keeps existing controls when customActions is %s', (customActions) => {
     render(<NavBar {...defaultProps} showColorSchemeToggle customActions={customActions} />)
 
-    expect(screen.getAllByRole('button')).toHaveLength(1)
+    expect(screen.getAllByRole('button')).toHaveLength(2)
   })
 })
