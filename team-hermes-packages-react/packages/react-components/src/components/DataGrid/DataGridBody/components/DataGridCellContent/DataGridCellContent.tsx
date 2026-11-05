@@ -5,6 +5,7 @@ import { AttributeType } from '@/shared/types'
 import { Combobox, type ComboboxItem } from '@/index'
 import { formatDate, pluralize } from '@/shared/utils'
 import { useDataGridContext } from '../../../context/DataGridContext'
+import { isCellEditable } from '../../../utils/cellUtils'
 import { useDataGridUpdates } from '../../../hooks/useDataGridUpdates/useDataGridUpdates'
 import { DataGridTextEditor } from '../DataGridEditor/DataGridTextEditor/DataGridTextEditor'
 
@@ -19,7 +20,7 @@ export const DataGridCellContent = <TData extends Record<string, any>>(props: Da
   const { options, isEditing, dataType, cell } = props
   const { table, cellActions, tableBodyRef, history, editable } = useDataGridContext<TData>()
   const { commitCellEdit, updateCellValue } = useDataGridUpdates(table, history.record)
-  const showLocked = editable && cell.column.columnDef.meta?.editable === false
+  const showLocked = editable && !isCellEditable(table, cell.column.id, editable, cell.row.id)
 
   const clearCellEditing = () => {
     cellActions.setActiveEditingCell(null)
@@ -99,13 +100,18 @@ export const DataGridCellContent = <TData extends Record<string, any>>(props: Da
   if (dataType === AttributeType.DATE_STRING) {
     const dateValue = cell.getValue() as string
     const formattedDate = formatDate(dateValue)
-    return <div className={`flex justify-end w-full ${showLocked ? 'opacity-80' : ''}`}>{formattedDate}</div>
+    return (
+      <div className={`flex justify-end items-center w-full ${showLocked ? 'opacity-80 gap-1' : ''}`}>
+        {showLocked && <Icon data={lock} size={16} />}
+        {formattedDate}
+      </div>
+    )
   }
 
   if (dataType === AttributeType.NUMBER) {
     return (
-      <div className={`flex justify-end w-full ${showLocked ? 'opacity-80' : ''}`}>
-        {showLocked && <Icon data={lock} size={16} className="mr-auto" />}
+      <div className={`flex justify-end items-center w-full ${showLocked ? 'opacity-80 gap-1' : ''}`}>
+        {showLocked && <Icon data={lock} size={16} />}
         {(cell.getValue() as number) ?? '\u00A0'}
       </div>
     )
@@ -113,8 +119,8 @@ export const DataGridCellContent = <TData extends Record<string, any>>(props: Da
 
   if (dataType === AttributeType.TEXT) {
     return (
-      <div className={`flex w-full ${showLocked ? 'opacity-80' : ''}`}>
-        {showLocked && <Icon data={lock} size={16} className="mr-auto" />}
+      <div className={`flex w-full items-center ${showLocked ? 'opacity-80 gap-1' : ''}`}>
+        {showLocked && <Icon data={lock} size={16} />}
         {(cell.getValue() as string) ?? '\u00A0'}
       </div>
     )

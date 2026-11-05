@@ -27,10 +27,11 @@ type CreateTestTableOptions = {
   columns?: ColumnDef<TestRow>[]
   validationErrors?: Record<string, string>
   validationWarnings?: Record<string, string>
+  isRowEditable?: (row: TestRow) => boolean
 }
 
 export function createTestTable(options: CreateTestTableOptions = {}) {
-  const { data = testData, columns = testColumns, validationErrors, validationWarnings } = options
+  const { data = testData, columns = testColumns, validationErrors, validationWarnings, isRowEditable } = options
 
   return createTable({
     columns,
@@ -44,6 +45,7 @@ export function createTestTable(options: CreateTestTableOptions = {}) {
     meta: {
       validationErrors,
       validationWarnings,
+      isRowEditable,
     },
   })
 }

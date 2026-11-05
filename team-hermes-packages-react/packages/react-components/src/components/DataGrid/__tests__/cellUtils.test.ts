@@ -148,5 +148,14 @@ describe('cellUtils', () => {
       expect(isCellEditable(table, 'name', true)).toBe(false)
       expect(isCellEditable(table, 'depth', true)).toBe(true)
     })
+
+    it('should return false for rows rejected by meta.isRowEditable', () => {
+      const table = createTestTable({ isRowEditable: (row) => row.name !== 'Sample B' })
+      const lockedId = table.getRowModel().rows[1].id
+      const openId = table.getRowModel().rows[0].id
+      expect(isCellEditable(table, 'name', true, lockedId)).toBe(false)
+      expect(isCellEditable(table, 'name', true, openId)).toBe(true)
+      expect(isCellEditable(table, 'name', true)).toBe(true)
+    })
   })
 })

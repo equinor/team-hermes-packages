@@ -2,6 +2,7 @@ import { Menu, Menubar } from '@base-ui/react'
 import { Icon, Tooltip } from '@equinor/eds-core-react'
 import { check, comment_add, copy, edit_text, keyboard_backspace, paste, redo, undo } from '@equinor/eds-icons'
 import { useDataGridContext } from '../context/DataGridContext'
+import { isCellEditable as isCellEditableUtil } from '../utils/cellUtils'
 import { dataGridActionsBar } from './DataGridActionsBar.styles'
 import { DataGridAddRow } from './DataGridAddRow/DataGridAddRow'
 import { DataGridShortenDecimals } from './DataGridShortenDecimals/DataGridShortenDecimals'
@@ -15,10 +16,10 @@ export function DataGridActionsBar<TData extends Record<string, any>>() {
 
   const hasSelection = cellActions?.selectedCells?.length > 0
   const hasOneSelection = cellActions?.selectedCells?.length === 1
-  const selectedCellColumnId = hasOneSelection ? cellActions.selectedCells[0]?.columnId : null
-  const selectedCellColumn = selectedCellColumnId ? table.getColumn(selectedCellColumnId || '') : null
-  const isSelectedCellEditable = selectedCellColumn ? selectedCellColumn.columnDef.meta?.editable !== false : false
-  const isCellEditable = isSelectedCellEditable && editable
+  const selectedCell = hasOneSelection ? cellActions.selectedCells[0] : null
+  const isCellEditable = selectedCell
+    ? isCellEditableUtil(table, selectedCell.columnId, editable, selectedCell.rowId)
+    : false
 
   return (
     <Menubar className="w-full flex left-0 bottom-0 sticky z-1 bg-surface border-t border-stroke-subtle">

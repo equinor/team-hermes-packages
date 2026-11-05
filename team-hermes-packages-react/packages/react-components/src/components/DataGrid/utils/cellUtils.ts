@@ -8,13 +8,24 @@ export type CellCoordinates = {
 }
 
 /**
+ * Check whether a row is editable according to the optional `isRowEditable` table meta predicate.
+ */
+export function isRowEditable(table: Table<any>, rowId: string): boolean {
+  const predicate = table.options.meta?.isRowEditable
+  if (!predicate) return true
+  const row = table.getRowModel().rowsById[rowId] ?? table.getRow(rowId, true)
+  return !row || predicate(row.original) !== false
+}
+
+/**
  * Check whether a cell is editable based on table-level and column-level settings.
  */
-export function isCellEditable(table: Table<any>, columnId: string, editable = false): boolean {
+export function isCellEditable(table: Table<any>, columnId: string, editable = false, rowId?: string): boolean {
   if (!editable) return false
   const column = table.getColumn(columnId)
   if (!column) return false
   if (column.columnDef.meta?.editable === false) return false
+  if (rowId !== undefined && !isRowEditable(table, rowId)) return false
   const dataType = column.columnDef.meta?.dataType
   if (dataType === AttributeType.NUMBER_ARRAY || dataType === AttributeType.TEXT_ARRAY) return false
   return true
@@ -177,7 +188,7 @@ export function mutateCells(
   const pending: PendingMutation[] = []
 
   for (const coord of cells) {
-    if (!isCellEditable(table, coord.columnId, editable)) continue
+    if (!isCellEditable(table, coord.columnId, editable, coord.rowId)) continue
     const tableRow = rowLookupById[coord.rowId]
     const rowIndex = tableRow?.index
     if (rowIndex === undefined) continue
