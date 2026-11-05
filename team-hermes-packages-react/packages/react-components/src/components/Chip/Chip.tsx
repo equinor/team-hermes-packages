@@ -1,5 +1,6 @@
 import { Icon, Tooltip } from '@equinor/eds-core-react'
 import { close, type IconData } from '@equinor/eds-icons'
+import { ConditionalWrapper } from '@/shared/components/ConditionalWrapper'
 import { chip } from './Chip.styles'
 
 type ChipProps = {
@@ -39,40 +40,44 @@ export const Chip = (props: ChipProps) => {
   const Root: React.ElementType = isLink ? (LinkComponent ?? 'a') : 'div'
   const linkProps = isLink ? (LinkComponent ? { to: linkTo } : { href: linkTo }) : {}
 
+  const withTooltip = (node: React.ReactNode) => <Tooltip title={chipTooltip}>{node}</Tooltip>
+
   return (
-    <Root
-      data-color-appearance={theme}
-      data-font-size={fontSize}
-      className={root({ class: className })}
-      ref={ref}
-      {...linkProps}
-      {...rest}
-    >
-      <Tooltip title={chipTooltip}>
-        {onClick && !isLink ? (
-          <button type="button" className={content({ class: `${className}_content` })} onClick={onClick}>
-            {icon && <Icon data={icon} size={16} />}
-            {children}
-          </button>
-        ) : (
-          <span className={content({ class: `${className}_content` })}>
-            {icon && <Icon data={icon} size={16} />}
-            {children}
-          </span>
+    <ConditionalWrapper condition={isLink} wrapper={withTooltip}>
+      <Root
+        data-color-appearance={theme}
+        data-font-size={fontSize}
+        className={root({ class: className })}
+        ref={ref}
+        {...linkProps}
+        {...rest}
+      >
+        <ConditionalWrapper condition={!isLink} wrapper={withTooltip}>
+          {onClick && !isLink ? (
+            <button type="button" className={content({ class: `${className}_content` })} onClick={onClick}>
+              {icon && <Icon data={icon} size={16} />}
+              {children}
+            </button>
+          ) : (
+            <span className={content({ class: `${className}_content` })}>
+              {icon && <Icon data={icon} size={16} />}
+              {children}
+            </span>
+          )}
+        </ConditionalWrapper>
+        {onDismiss && !isLink && (
+          <Tooltip title={dismissTooltip}>
+            <button
+              type="button"
+              className={dismiss({ class: `${className}_dismiss` })}
+              aria-label="Dismiss"
+              onClick={onDismiss}
+            >
+              <Icon data={close} size={16} />
+            </button>
+          </Tooltip>
         )}
-      </Tooltip>
-      {onDismiss && !isLink && (
-        <Tooltip title={dismissTooltip}>
-          <button
-            type="button"
-            className={dismiss({ class: `${className}_dismiss` })}
-            aria-label="Dismiss"
-            onClick={onDismiss}
-          >
-            <Icon data={close} size={16} />
-          </button>
-        </Tooltip>
-      )}
-    </Root>
+      </Root>
+    </ConditionalWrapper>
   )
 }
