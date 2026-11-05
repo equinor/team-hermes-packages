@@ -3,6 +3,7 @@ import { comment_chat, error_outlined, warning_outlined } from '@equinor/eds-ico
 import type { Cell } from '@tanstack/react-table'
 import { memo, useId, useMemo, useRef, useState } from 'react'
 import { useDataGridContext } from '../../context/DataGridContext'
+import { isCellEditable } from '../../utils/cellUtils'
 import { AttributeType } from '@/shared/types'
 import { dataGridBody } from '../DataGridBody.styles'
 import { DataGridCellContent } from './DataGridCellContent/DataGridCellContent'
@@ -43,8 +44,7 @@ export const DataGridCell = memo(<TData extends Record<string, any>>(props: Data
       onArrayCellClick?.(cell.row.original, cell.getValue(), cell.column.id)
       return
     }
-    if (!editable) return
-    if (cell.column.columnDef.meta?.editable === false) return
+    if (!isCellEditable(table, cell.column.id, editable, cell.row.id)) return
     cellActions.handleDoubleClick(cell)
   }
 

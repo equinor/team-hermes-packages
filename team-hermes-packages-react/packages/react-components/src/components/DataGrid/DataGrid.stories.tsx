@@ -193,6 +193,7 @@ function DataGridStory(props: {
       setData,
       validationErrors,
       validationWarnings,
+      isRowEditable: (row: WellSample) => row.name !== 'Sample C',
       defaultRowFactory: () => ({
         uid: crypto.randomUUID(),
         name: '',

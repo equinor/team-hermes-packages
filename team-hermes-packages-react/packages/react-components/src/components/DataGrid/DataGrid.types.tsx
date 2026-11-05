@@ -20,6 +20,8 @@ declare module '@tanstack/react-table' {
     validationKeyPrefix?: 'rowIndex' | 'rowId'
     /** Callback after any batch of cell mutations (edit, paste, delete, undo/redo). */
     onCellsChanged?: (changes: { rowIndex: number; columnId: string; value: unknown }[]) => void
+    /** Return `false` to lock an entire row from editing (typing, paste, delete, cut, fill, undo/redo). */
+    isRowEditable?: (row: TData) => boolean
     /** Default row shape used when adding new rows via DataGrid. Clone of this is used for each new row. */
     defaultRowValue?: Partial<TData>
     /** Factory function that creates a new default row. Takes precedence over defaultRowValue when both are provided. */

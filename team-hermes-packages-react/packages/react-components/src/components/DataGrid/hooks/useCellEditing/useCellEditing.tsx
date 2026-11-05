@@ -43,7 +43,7 @@ export function useCellEditing({ table, tableBodyRef, selectedCells, editable }:
    */
   const handleDoubleClick = useCallback(
     (cell: Cell<any, any>) => {
-      if (!editable) return
+      if (!isCellEditable(table, cell.column.id, editable, cell.row.id)) return
       if (cell.column.columnDef.meta?.dataType === AttributeType.DATE_STRING) {
         setEditingCellValue(formatDateForInput(cell.getValue()) || '')
       } else {
@@ -62,6 +62,7 @@ export function useCellEditing({ table, tableBodyRef, selectedCells, editable }:
     if (selectedCells.length !== 1) return
     if (!editable) return
     const selected = selectedCells[0]
+    if (!isCellEditable(table, selected.columnId, editable, selected.rowId)) return
     const column = table.getColumn(selected.columnId)
     if (!column) return
     const accessorKey = getAccessorKey(column)
@@ -76,7 +77,7 @@ export function useCellEditing({ table, tableBodyRef, selectedCells, editable }:
     (value: InputValue) => {
       if (selectedCells.length !== 1) return
       const selected = selectedCells[0]
-      if (!isCellEditable(table, selected.columnId, editable)) return
+      if (!isCellEditable(table, selected.columnId, editable, selected.rowId)) return
       setEditingCellValue(value)
       setActiveEditingCell(selected)
     },

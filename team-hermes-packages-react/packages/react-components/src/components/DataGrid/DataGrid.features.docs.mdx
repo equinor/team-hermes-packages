@@ -63,6 +63,17 @@ Supply `meta.cellEditorComponent` with a React component that receives `{ cell, 
 
 ### Per-column editability
 
+Pass `isRowEditable` in the table `meta` to lock entire rows based on their data. Returning `false` blocks typing, double-click editing, paste, clear and cut for every cell in that row, and shows the lock icon.
+
+```tsx
+const table = useReactTable({
+  data,
+  columns,
+  getCoreRowModel: getCoreRowModel(),
+  meta: { setData, isRowEditable: (row) => row.status !== 'Approved' },
+})
+```
+
 Set `meta: { editable: false }` on individual columns to lock them even when the grid-level `editable` is `true`.
 
 ---
