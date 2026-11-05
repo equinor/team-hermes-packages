@@ -13,8 +13,8 @@ export type CellCoordinates = {
 export function isRowEditable(table: Table<any>, rowId: string): boolean {
   const predicate = table.options.meta?.isRowEditable
   if (!predicate) return true
-  const row = table.getRowModel().rowsById[rowId] ?? table.getRow(rowId, true)
-  return !row || predicate(row.original) !== false
+  const row = table.getCoreRowModel().rowsById[rowId]
+  return !!row && predicate(row.original) !== false
 }
 
 /**

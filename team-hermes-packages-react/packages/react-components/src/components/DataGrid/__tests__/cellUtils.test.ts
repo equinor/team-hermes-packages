@@ -157,5 +157,10 @@ describe('cellUtils', () => {
       expect(isCellEditable(table, 'name', true, openId)).toBe(true)
       expect(isCellEditable(table, 'name', true)).toBe(true)
     })
+
+    it('should treat a missing row as non-editable instead of throwing', () => {
+      const table = createTestTable({ isRowEditable: () => true })
+      expect(isCellEditable(table, 'name', true, 'missing')).toBe(false)
+    })
   })
 })
