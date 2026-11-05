@@ -3,7 +3,7 @@ import { Button, Icon, Tooltip } from '@equinor/eds-core-react'
 import { close, dark_mode, invert_colors, sun, type IconData } from '@equinor/eds-icons'
 import { useId } from 'react'
 import { Popover } from '@/components'
-import { useColorScheme, type ColorSchemePreference } from '@/hooks'
+import type { ColorSchemePreference } from '@/hooks'
 import { colorSchemePopover } from '../NavBar.styles'
 
 const PREFERENCES = ['auto', 'light', 'dark'] as const satisfies readonly ColorSchemePreference[]
@@ -15,6 +15,8 @@ const ICONS: Record<ColorSchemePreference, IconData> = {
 }
 
 type ColorSchemePopoverProps = {
+  colorSchemePreference: ColorSchemePreference
+  setColorScheme: (preference: ColorSchemePreference) => void
   /** Accessible name of the trigger and the popover title. */
   label: string
   /** Description of the Auto option. */
@@ -37,8 +39,7 @@ function TooltipButton({ tooltip, ...props }: React.ComponentProps<typeof Button
 }
 
 export function ColorSchemePopover(props: ColorSchemePopoverProps) {
-  const { label, autoDescription, optionLabels } = props
-  const { colorSchemePreference, setColorScheme } = useColorScheme()
+  const { colorSchemePreference, setColorScheme, label, autoDescription, optionLabels } = props
   const titleId = useId()
   const radioName = useId()
   const autoDescriptionId = useId()

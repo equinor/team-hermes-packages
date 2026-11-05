@@ -74,6 +74,7 @@ export type NavBarProps = {
   logOut?: () => void
   /**
    * Whether the color scheme button is shown. It opens a popover for choosing Auto, Light, or Dark. Defaults to `true`.
+   * Hiding the button does not disable theme synchronization.
    */
   showColorSchemeToggle?: boolean
   /**
