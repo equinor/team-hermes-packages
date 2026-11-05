@@ -76,8 +76,8 @@ export function NavBar(props: NavBarProps) {
             </Button>
             <Button
               variant="ghost"
-              aria-label={autoColorSchemeToggleLabel}
-              title={autoColorSchemeToggleLabel}
+              aria-label={`Auto: ${autoColorSchemeToggleLabel}`}
+              title={`Auto: ${autoColorSchemeToggleLabel}`}
               aria-pressed={colorSchemePreference === 'auto'}
               onClick={() => setColorScheme('auto')}
             >

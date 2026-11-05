@@ -214,7 +214,7 @@ const meta = {
       control: 'text',
     },
     autoColorSchemeToggleLabel: {
-      description: 'Accessible name and tooltip for the Auto control, which follows the OS color scheme.',
+      description: 'Description for the Auto control, prefixed with "Auto: " in its accessible name and tooltip.',
       control: 'text',
     },
   },

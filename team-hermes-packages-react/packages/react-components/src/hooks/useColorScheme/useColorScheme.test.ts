@@ -146,16 +146,101 @@ describe('useColorScheme', () => {
     const { result } = renderHook(() => useColorScheme())
     await act(async () => {
       localStorage.setItem('color-scheme', 'dark')
-      window.dispatchEvent(new StorageEvent('storage', { key: 'color-scheme' }))
+      window.dispatchEvent(new StorageEvent('storage', { key: 'color-scheme', storageArea: localStorage }))
     })
     expect(result.current.colorSchemePreference).toBe('dark')
     expect(result.current.colorScheme).toBe('dark')
     await act(async () => {
       localStorage.clear()
-      window.dispatchEvent(new StorageEvent('storage', { key: null }))
+      window.dispatchEvent(new StorageEvent('storage', { key: null, storageArea: localStorage }))
     })
     expect(result.current.colorSchemePreference).toBe('auto')
     expect(result.current.colorScheme).toBe('light')
+  })
+
+  it.each(['color-scheme', null])('ignores sessionStorage events with key %s after a failed write', async (key) => {
+    stubMatchMedia()
+    localStorage.setItem('color-scheme', 'light')
+    initColorScheme()
+    vi.spyOn(console, 'warn').mockImplementation(() => {})
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+      throw new DOMException('Full', 'QuotaExceededError')
+    })
+    const { result } = renderHook(() => useColorScheme())
+    await act(async () => result.current.setColorScheme('dark'))
+    await act(async () => {
+      window.dispatchEvent(new StorageEvent('storage', { key, storageArea: sessionStorage }))
+    })
+
+    expect(result.current.colorSchemePreference).toBe('dark')
+    expect(result.current.colorScheme).toBe('dark')
+    expect(localStorage.getItem('color-scheme')).toBe('light')
+  })
+
+  it('tolerates a blocked localStorage getter while identifying a storage event', async () => {
+    stubMatchMedia()
+    initColorScheme()
+    const { result } = renderHook(() => useColorScheme())
+    const event = new StorageEvent('storage', { key: null, storageArea: sessionStorage })
+    const warning = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    vi.spyOn(window, 'localStorage', 'get').mockImplementation(() => {
+      throw new DOMException('Blocked', 'SecurityError')
+    })
+    await act(async () => window.dispatchEvent(event))
+
+    expect(result.current.colorSchemePreference).toBe('auto')
+    expect(warning).toHaveBeenCalledWith('Unable to identify color scheme storage event:', expect.any(DOMException))
+  })
+
+  it.each(['dark', null])('reconciles a missed persisted change to %s when consumers remount', async (stored) => {
+    stubMatchMedia({ dark: true })
+    localStorage.setItem('color-scheme', 'light')
+    initColorScheme()
+    const first = renderHook(() => useColorScheme())
+    expect(first.result.current.colorScheme).toBe('light')
+    first.unmount()
+    if (stored === null) localStorage.clear()
+    else localStorage.setItem('color-scheme', stored)
+
+    const second = renderHook(() => useColorScheme())
+    expect(second.result.current.colorSchemePreference).toBe(stored ?? 'auto')
+    expect(second.result.current.colorScheme).toBe('dark')
+    expect(root).toHaveAttribute('data-color-scheme', 'dark')
+  })
+
+  it('preserves an unpersisted choice when consumers remount', async () => {
+    stubMatchMedia()
+    localStorage.setItem('color-scheme', 'light')
+    initColorScheme()
+    vi.spyOn(console, 'warn').mockImplementation(() => {})
+    const write = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+      throw new DOMException('Full', 'QuotaExceededError')
+    })
+    const first = renderHook(() => useColorScheme())
+    await act(async () => first.result.current.setColorScheme('dark'))
+    first.unmount()
+    write.mockRestore()
+
+    const second = renderHook(() => useColorScheme())
+    expect(second.result.current.colorSchemePreference).toBe('dark')
+    expect(second.result.current.colorScheme).toBe('dark')
+    expect(localStorage.getItem('color-scheme')).toBe('light')
+  })
+
+  it('keeps the current preference if reading storage fails on remount', () => {
+    stubMatchMedia()
+    localStorage.setItem('color-scheme', 'dark')
+    initColorScheme()
+    const first = renderHook(() => useColorScheme())
+    first.unmount()
+    vi.spyOn(console, 'warn').mockImplementation(() => {})
+    vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
+      throw new DOMException('Blocked', 'SecurityError')
+    })
+
+    const second = renderHook(() => useColorScheme())
+    expect(second.result.current.colorSchemePreference).toBe('dark')
+    expect(second.result.current.colorScheme).toBe('dark')
   })
 
   it('removes system listeners on unmount', () => {
