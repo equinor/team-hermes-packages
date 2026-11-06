@@ -1,6 +1,6 @@
 {
   "name": "@team-hermes/react-omnia-map",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "React wrapper around the ArcGIS <arcgis-map> web component for Team Hermes.",
   "homepage": "https://github.com/equinor/team-hermes-packages#readme",
   "bugs": {
