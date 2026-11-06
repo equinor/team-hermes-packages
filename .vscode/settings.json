@@ -1,31 +1,20 @@
 {
   "editor.defaultFormatter": "oxc.oxc-vscode",
-  "[javascript]": {
+  "[javascript][typescript][javascriptreact][typescriptreact]": {
     "editor.defaultFormatter": "oxc.oxc-vscode",
     "editor.formatOnSave": true,
-    "editor.formatOnSaveMode": "file"
+    "editor.formatOnSaveMode": "file",
+    "js/ts.preferences.importModuleSpecifier": "non-relative"
   },
-  "[javascriptreact]": {
-    "editor.defaultFormatter": "oxc.oxc-vscode",
-    "editor.formatOnSave": true,
-    "editor.formatOnSaveMode": "file"
-  },
-  "[typescript]": {
-    "editor.defaultFormatter": "oxc.oxc-vscode",
-    "editor.formatOnSave": true,
-    "editor.formatOnSaveMode": "file"
-  },
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "oxc.oxc-vscode",
-    "editor.formatOnSave": true,
-    "editor.formatOnSaveMode": "file"
-  },
-  "oxc.fmt.configPath": "./team-hermes-packages-react/vite.config.ts",
   "editor.formatOnSave": true,
   "editor.formatOnSaveMode": "file",
   "editor.codeActionsOnSave": {
     "source.fixAll.oxc": "explicit"
   },
   "npm.scriptRunner": "vp",
-  "biome.enabled": false
+  "biome.enabled": false,
+  "oxc.enable": true,
+  "oxc.configPath": "./team-hermes-packages-react/vite.config.ts",
+  "oxc.tsConfigPath": "./team-hermes-packages-react/tsconfig.json",
+  "oxc.path.tsgolint": "./team-hermes-packages-react/node_modules/.bin/tsgolint"
 }
