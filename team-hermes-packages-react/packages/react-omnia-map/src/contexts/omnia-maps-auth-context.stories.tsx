@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useMemo } from 'react'
+
 import { OmniaMap } from '../OmniaMap'
 import { createPlacesLayer, NORWEGIAN_CITIES } from '../stories/sample-data'
 import { OmniaMapsAuthContextProvider, useOmniaMapsAuth } from './omnia-maps-auth-context'

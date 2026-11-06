@@ -3,6 +3,7 @@
 import { DndContext, DragOverlay } from '@dnd-kit/core'
 import { restrictToHorizontalAxis } from '@dnd-kit/modifiers'
 import { EdsProvider } from '@equinor/eds-core-react'
+
 import { DataGridProvider, useDataGridContext } from './context/DataGridContext'
 import type { DataGridProps } from './DataGrid.types'
 import { DataGridActionsBar } from './DataGridActionsBar/DataGridActionsBar'

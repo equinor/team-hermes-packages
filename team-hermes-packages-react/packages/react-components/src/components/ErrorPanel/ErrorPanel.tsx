@@ -1,5 +1,6 @@
 import { Icon, Typography } from '@equinor/eds-core-react'
 import { error_outlined } from '@equinor/eds-icons'
+
 import { messageFor, titleFor, traceIdFor } from './ErrorPanel.utils'
 
 /**

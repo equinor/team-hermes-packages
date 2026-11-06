@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useState } from 'react'
 import { useQueryState } from 'nuqs'
+import { useEffect, useMemo, useState } from 'react'
+
 import { useFinderPagination } from '../../../hooks/useFinderPagination/useFinderPagination'
 import { useRangeFilters } from '../../../hooks/useRangeFilters/useRangeFilters'
 import { useTermFilters } from '../../../hooks/useTermFilters/useTermFilters'

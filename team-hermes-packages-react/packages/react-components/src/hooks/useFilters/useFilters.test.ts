@@ -1,7 +1,9 @@
 import type { ColumnDef } from '@tanstack/react-table'
 import { renderHook } from '@testing-library/react'
 import { describe, expect, it } from 'vite-plus/test'
+
 import { AttributeType, FilterOperator } from '@/shared/types'
+
 import { useFilters } from './useFilters'
 
 const setup = () => renderHook(() => useFilters()).result.current

@@ -1,6 +1,7 @@
 /** biome-ignore-all lint/a11y/useSemanticElements: using flex table strategy */
 /** biome-ignore-all lint/a11y/useFocusableInteractive: using different focus strategy */
 import type { Header, HeaderGroup } from '@tanstack/react-table'
+
 import { useDataGridContext } from '../context/DataGridContext'
 import { dataGridHeader } from '../DataGridHeader/DataGridHeader.styles'
 import { DataGridSearchCell } from './DataGridSearchCell'

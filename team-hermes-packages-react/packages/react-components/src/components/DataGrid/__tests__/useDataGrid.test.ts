@@ -1,7 +1,9 @@
 import type { ColumnDef } from '@tanstack/react-table'
 import { act, renderHook } from '@testing-library/react'
 import { describe, expect, it } from 'vite-plus/test'
+
 import { AttributeType } from '@/shared/types'
+
 import { useDataGrid, type UseDataGridOptions } from '../useDataGrid'
 import { type TestRow, testData } from './testUtils'
 

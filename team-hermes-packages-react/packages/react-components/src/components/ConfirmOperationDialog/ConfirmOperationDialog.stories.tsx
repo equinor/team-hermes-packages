@@ -1,5 +1,6 @@
 import { Button } from '@equinor/eds-core-react'
 import type { Meta, StoryObj } from '@storybook/react-vite'
+
 import { ConfirmOperationDialog } from './ConfirmOperationDialog'
 
 const meta = {

@@ -1,8 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { NuqsTestingAdapter } from 'nuqs/adapters/testing'
-import type { Facet } from '../../shared/types/facet.types'
+
 import { useRangeFilters } from '../../hooks/useRangeFilters/useRangeFilters'
 import { useTermFilters } from '../../hooks/useTermFilters/useTermFilters'
+import type { Facet } from '../../shared/types/facet.types'
 import { FacetSidebar, type FacetSidebarProps } from './FacetSidebar'
 
 const facets: Facet[] = [

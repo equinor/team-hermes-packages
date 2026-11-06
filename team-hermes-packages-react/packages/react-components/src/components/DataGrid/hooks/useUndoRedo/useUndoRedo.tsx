@@ -1,6 +1,8 @@
 import type { Table } from '@tanstack/react-table'
 import { useCallback, useEffect, useRef, useState } from 'react'
+
 import { deepSet } from '@/shared/utils'
+
 import type { CellChange } from '../../utils/cellUtils'
 
 type HistoryEntry = {

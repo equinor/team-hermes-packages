@@ -1,12 +1,12 @@
-import type { Meta, StoryObj } from '@storybook/react-vite'
-import { getLayersExtent } from './helpers/layers-extent'
 import Viewpoint from '@arcgis/core/Viewpoint'
-
+import type { Meta, StoryObj } from '@storybook/react-vite'
+import { useMemo, useState } from 'react'
 import '@arcgis/map-components/components/arcgis-zoom'
 import '@arcgis/map-components/components/arcgis-home'
 import '@arcgis/map-components/components/arcgis-layer-list'
 import '@arcgis/map-components/components/arcgis-expand'
-import { useMemo, useState } from 'react'
+
+import { getLayersExtent } from './helpers/layers-extent'
 import { OmniaMap } from './OmniaMap'
 import {
   DEFAULT_VISIBLE_REFERENCE_LAYERS,
@@ -14,8 +14,8 @@ import {
   type ReferenceLayersArgs,
 } from './stories/ReferenceLayersExample'
 import referenceLayersExampleSource from './stories/ReferenceLayersExample.tsx?raw'
-import sampleDataSource from './stories/sample-data.ts?raw'
 import { createPlacesLayer, NORWEGIAN_CITIES, SODIR_REFERENCE_LAYER_TITLES, US_CITIES } from './stories/sample-data'
+import sampleDataSource from './stories/sample-data.ts?raw'
 
 // Esri's public "Accidental Deaths" web map (US states), the item used by the "Load a basic WebMap" sample:
 // https://developers.arcgis.com/javascript/latest/sample-code/webmap-basic/

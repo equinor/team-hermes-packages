@@ -1,6 +1,7 @@
 import { Accordion } from '@base-ui/react/accordion'
 import { fireEvent, render, screen } from '@testing-library/react'
 import { describe, expect, test, vi } from 'vite-plus/test'
+
 import { CollapsableSection } from './CollapsableSection'
 
 function renderSection(props: Partial<React.ComponentProps<typeof CollapsableSection>> = {}) {

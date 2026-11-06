@@ -1,4 +1,5 @@
 import { Typography } from '@equinor/eds-core-react'
+
 import { Chip } from '../Chip/Chip'
 import type { ReleaseCardProps } from './WhatsNewPanel.types'
 

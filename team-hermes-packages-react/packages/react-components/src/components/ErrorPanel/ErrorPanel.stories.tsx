@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
+
 import type { ApiError } from '@/shared/platform/api'
+
 import { ErrorPanel } from './ErrorPanel'
 
 const meta = {

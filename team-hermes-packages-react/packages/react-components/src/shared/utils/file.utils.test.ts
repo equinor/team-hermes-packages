@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vite-plus/test'
+
 import { formatFileSize, isAcceptedFileType } from './file.utils'
 
 const file = (name: string, type: string) => new File(['x'], name, { type })

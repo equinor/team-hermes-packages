@@ -1,11 +1,12 @@
-import Graphic from '@arcgis/core/Graphic'
 import Extent from '@arcgis/core/geometry/Extent'
 import Point from '@arcgis/core/geometry/Point'
+import Graphic from '@arcgis/core/Graphic'
 import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
 import type Layer from '@arcgis/core/layers/Layer'
 import type { ArcgisMap } from '@arcgis/map-components/components/arcgis-map'
 import { act, renderHook } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vite-plus/test'
+
 import { useInitialFitToLayers } from './useInitialFitToLayers'
 
 function createMapElement() {

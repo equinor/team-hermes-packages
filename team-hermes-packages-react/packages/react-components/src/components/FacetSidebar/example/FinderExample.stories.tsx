@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { NuqsTestingAdapter } from 'nuqs/adapters/testing'
+
 import { FinderExample } from './FinderExample'
 
 const meta: Meta<typeof FinderExample> = {

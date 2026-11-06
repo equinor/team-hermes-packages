@@ -1,4 +1,5 @@
 import type { ToastContentProps } from 'react-toastify'
+
 import { Message } from '@/components'
 import type { Theme } from '@/shared/types'
 

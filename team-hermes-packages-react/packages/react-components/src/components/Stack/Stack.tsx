@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react'
+
 import { defaultProps, type SpacingType, type StackProps } from './types'
 
 const formatSpacing = (value: SpacingType | undefined): string | undefined => {

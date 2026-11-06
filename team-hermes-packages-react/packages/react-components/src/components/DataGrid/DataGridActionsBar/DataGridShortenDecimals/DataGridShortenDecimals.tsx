@@ -3,6 +3,7 @@ import { Button, Icon, Radio, Tooltip, Typography } from '@equinor/eds-core-reac
 import { format_indent_decrease } from '@equinor/eds-icons'
 import type { RefObject } from 'react'
 import { useState } from 'react'
+
 import { FormTextField } from '../../../FormTextField/FormTextField'
 import type { CellActions } from '../../context/DataGridContext'
 import { dataGridActionsBar } from '../DataGridActionsBar.styles'

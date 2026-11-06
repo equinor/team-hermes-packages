@@ -1,6 +1,7 @@
 import { Accordion } from '@base-ui/react/accordion'
 import { Icon } from '@equinor/eds-core-react'
 import { chevron_down, close } from '@equinor/eds-icons'
+
 import { Chip } from '../Chip/Chip'
 
 export type CollapsableSectionProps = {

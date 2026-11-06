@@ -3,6 +3,7 @@ import type Layer from '@arcgis/core/layers/Layer'
 import type { ArcgisMap } from '@arcgis/map-components/components/arcgis-map'
 import { act, renderHook } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vite-plus/test'
+
 import { useReconcileLayers } from './useReconcileLayers'
 
 function createMapElement() {

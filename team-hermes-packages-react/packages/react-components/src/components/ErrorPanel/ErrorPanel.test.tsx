@@ -1,6 +1,8 @@
 import { render, screen } from '@testing-library/react'
 import { describe, expect, test } from 'vite-plus/test'
+
 import type { ApiError } from '@/shared/platform/api'
+
 import { ErrorPanel } from './ErrorPanel'
 import { messageFor, safeStringify } from './ErrorPanel.utils'
 

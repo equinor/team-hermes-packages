@@ -2,7 +2,9 @@
 import { Icon } from '@equinor/eds-core-react'
 import { filter_list } from '@equinor/eds-icons'
 import type { Table } from '@tanstack/react-table'
+
 import { MenuCheckboxList } from '@/components'
+
 import { useDataGridContext } from '../context/DataGridContext'
 import { dataGridHeader } from '../DataGridHeader/DataGridHeader.styles'
 import { dataGridFiltering } from './DataGridFiltering.styles'

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+
 import { FacetOption } from '../FacetOption/FacetOption'
 
 const INITIAL_VISIBLE_COUNT = 8

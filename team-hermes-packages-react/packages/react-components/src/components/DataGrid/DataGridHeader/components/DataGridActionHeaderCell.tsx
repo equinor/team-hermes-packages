@@ -1,5 +1,6 @@
 /** biome-ignore-all lint/a11y/useSemanticElements: different table strategy */
 import type { Table } from '@tanstack/react-table'
+
 import { useDataGridContext } from '../../context/DataGridContext'
 import { dataGridHeader } from '../DataGridHeader.styles'
 

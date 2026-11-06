@@ -1,5 +1,6 @@
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vite-plus/test'
+
 import { SupportSection } from './SupportSection'
 import { VersionText } from './VersionText'
 

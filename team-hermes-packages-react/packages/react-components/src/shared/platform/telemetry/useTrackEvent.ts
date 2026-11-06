@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef } from 'react'
+
 import { useTelemetry } from './TelemetryContext'
 
 // Returns a stable callback that emits a custom event through whichever

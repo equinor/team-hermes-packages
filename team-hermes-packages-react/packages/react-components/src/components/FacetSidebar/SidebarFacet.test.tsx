@@ -2,6 +2,7 @@ import { Accordion } from '@base-ui/react/accordion'
 import { fireEvent, render, screen } from '@testing-library/react'
 import { useState } from 'react'
 import { describe, expect, it, vi } from 'vite-plus/test'
+
 import type { Facet } from '../../shared/types/facet.types'
 import { SidebarFacet } from './SidebarFacet'
 

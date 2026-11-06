@@ -1,6 +1,7 @@
 import type { Cell, RowData } from '@tanstack/react-table'
 import { act, renderHook } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
+
 import { useCellEditing } from '../hooks/useCellEditing/useCellEditing'
 import { createTestTable } from './testUtils'
 

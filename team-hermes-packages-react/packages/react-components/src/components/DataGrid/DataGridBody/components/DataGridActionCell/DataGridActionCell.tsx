@@ -2,6 +2,7 @@ import { Icon } from '@equinor/eds-core-react'
 import { add, check_circle_outlined, copy, delete_forever, error_outlined, warning_outlined } from '@equinor/eds-icons'
 import type { Row } from '@tanstack/react-table'
 import { useRef, useState } from 'react'
+
 import { ContextMenu } from '../../../../ContextMenu/ContextMenu'
 import { useDataGridContext } from '../../../context/DataGridContext'
 

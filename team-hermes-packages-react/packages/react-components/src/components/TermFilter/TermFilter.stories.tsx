@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useState } from 'react'
+
 import { TermFilter } from './TermFilter'
 
 const fewBuckets = [

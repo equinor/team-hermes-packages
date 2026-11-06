@@ -1,6 +1,8 @@
 import { Icon } from '@equinor/eds-core-react'
 import { chevron_left, chevron_right } from '@equinor/eds-icons'
+
 import { Stack } from '@/components'
+
 import { useDataGridContext, type CellActions } from '../../context/DataGridContext'
 
 type DataGridValidationSectionProps = {

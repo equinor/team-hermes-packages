@@ -1,6 +1,7 @@
 import { renderHook } from '@testing-library/react'
-import { describe, expect, it } from 'vite-plus/test'
 import { withNuqsTestingAdapter } from 'nuqs/adapters/testing'
+import { describe, expect, it } from 'vite-plus/test'
+
 import { useFinderPagination } from './useFinderPagination'
 
 describe('useFinderPagination', () => {

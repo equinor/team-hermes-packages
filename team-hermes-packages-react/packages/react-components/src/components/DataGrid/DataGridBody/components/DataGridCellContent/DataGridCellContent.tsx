@@ -2,12 +2,14 @@ import { Icon } from '@equinor/eds-core-react'
 import { list, lock } from '@equinor/eds-icons'
 import { type Cell, flexRender } from '@tanstack/react-table'
 import { useEffect } from 'react'
-import { AttributeType } from '@/shared/types'
+
 import { Combobox, type ComboboxItem } from '@/index'
+import { AttributeType } from '@/shared/types'
 import { formatDate, pluralize } from '@/shared/utils'
+
 import { useDataGridContext } from '../../../context/DataGridContext'
-import { isCellEditable } from '../../../utils/cellUtils'
 import { useDataGridUpdates } from '../../../hooks/useDataGridUpdates/useDataGridUpdates'
+import { isCellEditable } from '../../../utils/cellUtils'
 import { DataGridTextEditor } from '../DataGridEditor/DataGridTextEditor/DataGridTextEditor'
 
 type DataGridCellContentProps<TData extends Record<string, any>> = {

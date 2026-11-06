@@ -1,7 +1,9 @@
 import type { Cell, Table } from '@tanstack/react-table'
 import { useCallback, useState } from 'react'
-import { formatDateForInput, getNestedValue } from '@/shared/utils'
+
 import { AttributeType } from '@/shared/types'
+import { formatDateForInput, getNestedValue } from '@/shared/utils'
+
 import type { InputValue } from '../../DataGridBody/components/DataGridCell'
 import type { CellCoordinates } from '../../utils/cellUtils'
 import { getAccessorKey, isCellEditable } from '../../utils/cellUtils'

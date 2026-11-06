@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
+
 import { WhatsNewPanel } from './WhatsNewPanel'
 import type { Release } from './WhatsNewPanel.types'
 import { parseReleaseNotes, toIsoDate } from './WhatsNewPanel.utils'

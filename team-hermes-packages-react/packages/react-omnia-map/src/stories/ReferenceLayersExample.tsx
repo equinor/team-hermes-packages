@@ -1,5 +1,6 @@
 import type { ArcgisMap } from '@arcgis/map-components/components/arcgis-map'
 import { useEffect, useMemo, useState } from 'react'
+
 import { OmniaMap, type OmniaMapProps, useNearestFirstPopup } from '../index'
 import { createPlacesLayer, createSodirReferenceLayers, NORWEGIAN_CITIES } from './sample-data'
 

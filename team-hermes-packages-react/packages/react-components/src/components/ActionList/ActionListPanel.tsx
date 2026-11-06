@@ -1,5 +1,6 @@
 import { Typography } from '@equinor/eds-core-react'
 import type { IconData } from '@equinor/eds-icons'
+
 import { IconContainer } from '@/components'
 import type { Theme } from '@/shared/types'
 

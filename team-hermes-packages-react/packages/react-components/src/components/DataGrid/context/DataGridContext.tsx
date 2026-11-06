@@ -3,6 +3,7 @@
 import type { Cell, Column, Table } from '@tanstack/react-table'
 import { useVirtualizer, type Virtualizer } from '@tanstack/react-virtual'
 import { createContext, useCallback, useContext, useMemo, useRef } from 'react'
+
 import type { DataGridCommentConfig } from '../DataGrid.types'
 import type { InputValue } from '../DataGridBody/components/DataGridCell'
 import { useCellClipboard } from '../hooks/useCellClipboard/useCellClipboard'

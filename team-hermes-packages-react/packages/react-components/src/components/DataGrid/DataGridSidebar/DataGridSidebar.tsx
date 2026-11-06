@@ -1,7 +1,9 @@
 import { Button, Icon } from '@equinor/eds-core-react'
 import { check_circle_outlined, collapse, comment_chat, error_outlined, warning_outlined } from '@equinor/eds-icons'
 import { useState } from 'react'
+
 import { Stack } from '@/components'
+
 import { useDataGridContext } from '../context/DataGridContext'
 import { DataGridCommentSection } from './DataGridCommentSection/DataGridCommentSection'
 import { DataGridSidebarSection } from './DataGridSidebarSection/DataGridSidebarSection'

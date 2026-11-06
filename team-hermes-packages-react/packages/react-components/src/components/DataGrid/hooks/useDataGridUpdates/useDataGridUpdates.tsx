@@ -1,6 +1,8 @@
 import type { Table } from '@tanstack/react-table'
-import { deepSet, getNestedValue } from '@/shared/utils'
+
 import { AttributeType } from '@/shared/types'
+import { deepSet, getNestedValue } from '@/shared/utils'
+
 import type { CellChange } from '../../utils/cellUtils'
 
 /**

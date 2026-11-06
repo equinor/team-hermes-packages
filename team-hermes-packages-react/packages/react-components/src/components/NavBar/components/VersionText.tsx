@@ -1,5 +1,6 @@
 import { Typography } from '@equinor/eds-core-react'
 import { useEffect, useState } from 'react'
+
 import { parseVersionFile } from './VersionText.utils'
 import type { CommitInfo } from './VersionText.utils'
 

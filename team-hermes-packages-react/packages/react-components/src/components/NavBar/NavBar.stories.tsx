@@ -1,6 +1,7 @@
-import { dashboard, home, settings, folder, notifications, category, library_books, world } from '@equinor/eds-icons'
 import { Button, Icon } from '@equinor/eds-core-react'
+import { dashboard, home, settings, folder, notifications, category, library_books, world } from '@equinor/eds-icons'
 import type { Meta, StoryObj } from '@storybook/react-vite'
+
 import { NavBar } from './NavBar'
 import type { NavLinkType } from './NavBar.types'
 

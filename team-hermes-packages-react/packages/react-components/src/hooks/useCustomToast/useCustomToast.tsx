@@ -1,4 +1,5 @@
 import { toast } from 'react-toastify'
+
 import { ToastMessage } from '@/shared/components/ToastMessage/ToastMessage'
 
 export function useCustomToast() {

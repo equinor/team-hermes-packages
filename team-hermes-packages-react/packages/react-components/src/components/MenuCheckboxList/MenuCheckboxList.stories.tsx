@@ -1,7 +1,8 @@
+import { Button } from '@equinor/eds-core-react'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useState } from 'react'
+
 import { MenuCheckboxList } from './MenuCheckboxList'
-import { Button } from '@equinor/eds-core-react'
 
 const columnOptions = [
   { label: 'Name', value: 'name' },

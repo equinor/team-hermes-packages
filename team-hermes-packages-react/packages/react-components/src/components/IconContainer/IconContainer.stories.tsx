@@ -1,5 +1,6 @@
 import { save, settings, warning_outlined } from '@equinor/eds-icons'
 import type { Meta, StoryObj } from '@storybook/react-vite'
+
 import { IconContainer } from './IconContainer'
 
 const meta = {

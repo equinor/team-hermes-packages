@@ -2,6 +2,7 @@ import { Dialog, Menu } from '@base-ui/react'
 import { Button, Icon, Radio, Typography } from '@equinor/eds-core-react'
 import { add } from '@equinor/eds-icons'
 import { useId, useState } from 'react'
+
 import { FormTextField } from '../../../FormTextField/FormTextField'
 import { useDataGridContext } from '../../context/DataGridContext'
 import { dataGridActionsBar } from '../DataGridActionsBar.styles'

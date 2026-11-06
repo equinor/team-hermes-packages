@@ -1,7 +1,9 @@
-import { FilterOperator } from '@/shared/types'
 import { act, renderHook } from '@testing-library/react'
 import { withNuqsTestingAdapter } from 'nuqs/adapters/testing'
 import { describe, expect, it, vi } from 'vite-plus/test'
+
+import { FilterOperator } from '@/shared/types'
+
 import { useUrlFilters } from './useUrlFilters'
 
 const wrapperWith = (searchParams: string = '') => withNuqsTestingAdapter({ searchParams, hasMemory: true })
