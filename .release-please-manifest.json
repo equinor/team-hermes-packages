@@ -1,6 +1,6 @@
 {
   "team-hermes-packages-react/packages/react-components": "1.12.0",
-  "team-hermes-packages-react/packages/react-omnia-map": "1.0.0",
+  "team-hermes-packages-react/packages/react-omnia-map": "1.1.0",
   "team-hermes-packages-python/elasticsearch": "0.2.0",
   "team-hermes-packages-python/core": "0.2.0",
   "team-hermes-packages-python/validation": "0.2.0",

@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.1.0](https://github.com/equinor/team-hermes-packages/compare/team-hermes-react-omnia-map-v1.0.0...team-hermes-react-omnia-map-v1.1.0) (2026-11-06)
+
+
+### Features
+
+* add nearest-first feature popups ([8c9af83](https://github.com/equinor/team-hermes-packages/commit/8c9af834e28a4e21f94e3d997f270395f74da5f6))
+* Implement a reusable minimap ([a5f36c4](https://github.com/equinor/team-hermes-packages/commit/a5f36c4e32ab6587f1af70afcb09322454d2f3d1)), closes [#85](https://github.com/equinor/team-hermes-packages/issues/85)
+* support fitting the initial extent to selected layers ([fd38bce](https://github.com/equinor/team-hermes-packages/commit/fd38bcee31cf31a20105bb8c46a036dd6ae88c3b))
+
 ## 1.0.0 (2026-11-05)
 
 
