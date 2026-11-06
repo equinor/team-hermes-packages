@@ -13,6 +13,24 @@ export default defineConfig({
       '@typescript-eslint/no-explicit-any': 'off',
       'typescript/no-base-to-string': 'off',
     },
+    overrides: [
+      {
+        files: ['packages/*/src/**/*.{ts,tsx}'],
+        rules: {
+          'no-restricted-imports': [
+            'error',
+            {
+              patterns: [
+                {
+                  group: ['.', '..', './**', '../**'],
+                  message: 'Use the @/ alias instead of relative imports.',
+                },
+              ],
+            },
+          ],
+        },
+      },
+    ],
   },
   fmt: {
     ignorePatterns: ['**/CHANGELOG.md'],
