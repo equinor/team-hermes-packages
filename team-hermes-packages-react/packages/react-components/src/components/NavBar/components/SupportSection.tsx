@@ -3,9 +3,8 @@ import { close, info_circle, report_bug } from '@equinor/eds-icons'
 import { useState } from 'react'
 
 import { Stack } from '@/components'
-
-import type { ApplicationConfig } from '../NavBar.types'
-import { VersionText } from './VersionText'
+import { VersionText } from '@/components/NavBar/components/VersionText'
+import type { ApplicationConfig } from '@/components/NavBar/NavBar.types'
 
 export const SupportSection = ({ applicationConfig }: { applicationConfig?: ApplicationConfig }) => {
   const { serviceNowLink, githubRepoName, versionUrl } = applicationConfig || {}

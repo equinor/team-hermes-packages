@@ -1,8 +1,8 @@
 import type { ArcgisMap } from '@arcgis/map-components/components/arcgis-map'
 import { useEffect, useMemo, useState } from 'react'
 
-import { OmniaMap, type OmniaMapProps, useNearestFirstPopup } from '../index'
-import { createPlacesLayer, createSodirReferenceLayers, NORWEGIAN_CITIES } from './sample-data'
+import { OmniaMap, type OmniaMapProps, useNearestFirstPopup } from '@/index'
+import { createPlacesLayer, createSodirReferenceLayers, NORWEGIAN_CITIES } from '@/stories/sample-data'
 
 export const DEFAULT_VISIBLE_REFERENCE_LAYERS = [
   'Borders and areas / Area status',

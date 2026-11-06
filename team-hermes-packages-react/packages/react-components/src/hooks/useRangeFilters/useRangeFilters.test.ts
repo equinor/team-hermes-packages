@@ -2,7 +2,7 @@ import { act, renderHook, waitFor } from '@testing-library/react'
 import { type UrlUpdateEvent, withNuqsTestingAdapter } from 'nuqs/adapters/testing'
 import { describe, expect, it, vi } from 'vite-plus/test'
 
-import { useRangeFilters } from './useRangeFilters'
+import { useRangeFilters } from '@/hooks/useRangeFilters/useRangeFilters'
 
 function renderFilters(searchParams = '') {
   const onUrlUpdate = vi.fn<(event: UrlUpdateEvent) => void>()

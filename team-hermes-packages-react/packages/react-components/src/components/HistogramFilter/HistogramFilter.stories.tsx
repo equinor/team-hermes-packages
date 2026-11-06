@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useState } from 'react'
 
-import { HistogramFilter } from './HistogramFilter'
-import type { HistogramRangeBounds } from './HistogramFilter.types'
+import { HistogramFilter } from '@/components/HistogramFilter/HistogramFilter'
+import type { HistogramRangeBounds } from '@/components/HistogramFilter/HistogramFilter.types'
 
 const numberBuckets = [3, 8, 15, 27, 42, 55, 48, 36, 21, 12, 6, 2].map((count, i) => ({ key: 100 + i * 50, count }))
 const dateBuckets = [4, 9, 18, 31, 44, 38, 25, 14, 7].map((count, i) => ({ key: `${2000 + i * 3}-01-01`, count }))

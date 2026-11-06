@@ -1,8 +1,8 @@
 import { Typography } from '@equinor/eds-core-react'
 import { useEffect, useState } from 'react'
 
-import { parseVersionFile } from './VersionText.utils'
-import type { CommitInfo } from './VersionText.utils'
+import { parseVersionFile } from '@/components/NavBar/components/VersionText.utils'
+import type { CommitInfo } from '@/components/NavBar/components/VersionText.utils'
 
 const useCommitInfo = (versionUrl: string) => {
   const [result, setResult] = useState<{ url: string; commitInfo: CommitInfo } | null>(null)

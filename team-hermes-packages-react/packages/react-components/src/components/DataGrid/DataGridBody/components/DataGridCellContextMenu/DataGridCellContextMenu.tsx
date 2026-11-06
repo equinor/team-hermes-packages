@@ -1,11 +1,10 @@
 import { comment, copy, edit, filter_list, keyboard_backspace, paste } from '@equinor/eds-icons'
 import type { Cell } from '@tanstack/react-table'
 
+import { useDataGridContext } from '@/components/DataGrid/context/DataGridContext'
 import { useFilterActions } from '@/hooks'
 import { ContextMenu } from '@/index'
 import { AttributeType, FilterOperator, type FilterValue } from '@/shared/types'
-
-import { useDataGridContext } from '../../../context/DataGridContext'
 
 type DataGridCellContextMenuProps<TData extends Record<string, any>> = {
   cellRef: React.RefObject<HTMLButtonElement | null>

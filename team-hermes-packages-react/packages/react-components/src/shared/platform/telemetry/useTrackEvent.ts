@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef } from 'react'
 
-import { useTelemetry } from './TelemetryContext'
+import { useTelemetry } from '@/shared/platform/telemetry/TelemetryContext'
 
 // Returns a stable callback that emits a custom event through whichever
 // telemetry backend is active. Mirrors the ergonomics of

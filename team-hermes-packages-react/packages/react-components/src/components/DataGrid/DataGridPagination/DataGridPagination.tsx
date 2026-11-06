@@ -3,8 +3,7 @@ import { chevron_left, chevron_right, first_page, last_page } from '@equinor/eds
 import type { Table } from '@tanstack/react-table'
 
 import { SkeletonWrapper, Stack } from '@/components'
-
-import type { PaginationConfig } from '../DataGrid.types'
+import type { PaginationConfig } from '@/components/DataGrid/DataGrid.types'
 
 type DataGridPaginationProps<DataType> = {
   table: Table<DataType>

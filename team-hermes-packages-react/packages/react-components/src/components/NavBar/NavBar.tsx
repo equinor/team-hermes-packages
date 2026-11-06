@@ -2,15 +2,14 @@ import { NavigationMenu } from '@base-ui/react/navigation-menu'
 import { Icon } from '@equinor/eds-core-react'
 import { chevron_down } from '@equinor/eds-icons'
 
+import { Chip } from '@/components/Chip/Chip'
+import { ColorSchemePopover } from '@/components/NavBar/components/ColorSchemePopover'
+import { NavListItem } from '@/components/NavBar/components/NavListItem'
+import { SupportSection } from '@/components/NavBar/components/SupportSection'
+import { UserPopover } from '@/components/NavBar/components/UserPopover'
+import { navbar } from '@/components/NavBar/NavBar.styles'
+import type { NavBarProps } from '@/components/NavBar/NavBar.types'
 import { useColorScheme } from '@/hooks'
-
-import { Chip } from '../Chip/Chip'
-import { ColorSchemePopover } from './components/ColorSchemePopover'
-import { NavListItem } from './components/NavListItem'
-import { SupportSection } from './components/SupportSection'
-import { UserPopover } from './components/UserPopover'
-import { navbar } from './NavBar.styles'
-import type { NavBarProps } from './NavBar.types'
 
 export function NavBar(props: NavBarProps) {
   const {

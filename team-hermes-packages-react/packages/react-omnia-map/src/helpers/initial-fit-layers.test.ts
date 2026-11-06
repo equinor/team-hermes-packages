@@ -1,7 +1,7 @@
 import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
 import { describe, expect, it } from 'vite-plus/test'
 
-import { resolveInitialFitLayers } from './initial-fit-layers'
+import { resolveInitialFitLayers } from '@/helpers/initial-fit-layers'
 
 describe('resolveInitialFitLayers', () => {
   const a = new GraphicsLayer()

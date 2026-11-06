@@ -7,7 +7,7 @@ import type { ArcgisMap } from '@arcgis/map-components/components/arcgis-map'
 import { act, renderHook } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vite-plus/test'
 
-import { useLayerHighlight } from './useLayerHighlight'
+import { useLayerHighlight } from '@/hooks/useLayerHighlight'
 
 function createMapElement() {
   const removeHighlight = vi.fn()

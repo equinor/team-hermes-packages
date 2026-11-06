@@ -2,7 +2,7 @@ import { act, renderHook, waitFor } from '@testing-library/react'
 import { type UrlUpdateEvent, withNuqsTestingAdapter } from 'nuqs/adapters/testing'
 import { describe, expect, it, vi } from 'vite-plus/test'
 
-import { useTermFilters } from './useTermFilters'
+import { useTermFilters } from '@/hooks/useTermFilters/useTermFilters'
 
 describe('unified term filters', () => {
   it('reads canonical keys without rewriting history and updates terms on edit', async () => {

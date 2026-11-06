@@ -1,6 +1,6 @@
 import { type ColumnDef, createTable, getCoreRowModel } from '@tanstack/react-table'
 
-import type { DataGridCommentConfig } from '../DataGrid.types'
+import type { DataGridCommentConfig } from '@/components/DataGrid/DataGrid.types'
 
 export type TestRow = {
   uid: string

@@ -5,7 +5,7 @@ import {
   parseTermFilterString,
   serializeRangeFilters,
   serializeTermFilters,
-} from './urlFilterCodecs'
+} from '@/shared/utils/urlFilterCodecs'
 
 describe('term filter codecs', () => {
   it('merges repeated selections for the same key and serializes each key once', () => {

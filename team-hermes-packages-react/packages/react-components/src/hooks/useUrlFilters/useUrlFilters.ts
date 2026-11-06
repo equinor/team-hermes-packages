@@ -1,9 +1,8 @@
 import type { ColumnFiltersState, Updater } from '@tanstack/react-table'
 import { useQueryState } from 'nuqs'
 
+import { useFilters } from '@/hooks/useFilters/useFilters'
 import type { FilterOperator, FilterValue } from '@/shared/types'
-
-import { useFilters } from '../useFilters/useFilters'
 
 export type UseUrlFiltersOptions = {
   /** Namespaced URL param key: `${prefix}_filters`. Lets multiple grids coexist on one page. */

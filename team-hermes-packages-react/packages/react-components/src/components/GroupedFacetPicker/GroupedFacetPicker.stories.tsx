@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { fn } from 'storybook/test'
 
-import { GroupedFacetPicker, type FacetPickerGroup } from './GroupedFacetPicker'
+import { GroupedFacetPicker, type FacetPickerGroup } from '@/components/GroupedFacetPicker/GroupedFacetPicker'
 
 const groups: FacetPickerGroup[] = [
   {

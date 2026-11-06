@@ -7,7 +7,7 @@ import type { ArcgisMap } from '@arcgis/map-components/components/arcgis-map'
 import { act, renderHook } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vite-plus/test'
 
-import { useInitialFitToLayers } from './useInitialFitToLayers'
+import { useInitialFitToLayers } from '@/hooks/useInitialFitToLayers'
 
 function createMapElement() {
   const goTo = vi.fn(() => Promise.resolve())

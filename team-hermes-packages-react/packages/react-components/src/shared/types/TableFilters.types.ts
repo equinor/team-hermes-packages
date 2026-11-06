@@ -1,4 +1,4 @@
-import type { FilterOperator } from './FilterOperator.type'
+import type { FilterOperator } from '@/shared/types/FilterOperator.type'
 
 // biome-ignore lint/suspicious/noExplicitAny: The properties array can contain any type of values depending on the filter operator.
 export type FilterValue = { operator: FilterOperator; properties: any[] }[]

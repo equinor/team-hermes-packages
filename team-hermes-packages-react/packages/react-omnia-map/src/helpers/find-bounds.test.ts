@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vite-plus/test'
 
-import { findBounds } from './find-bounds'
+import { findBounds } from '@/helpers/find-bounds'
 
 describe('findBounds', () => {
   it('should return valid bounds for single valid polygon', () => {

@@ -3,14 +3,13 @@ import { list, lock } from '@equinor/eds-icons'
 import { type Cell, flexRender } from '@tanstack/react-table'
 import { useEffect } from 'react'
 
+import { useDataGridContext } from '@/components/DataGrid/context/DataGridContext'
+import { DataGridTextEditor } from '@/components/DataGrid/DataGridBody/components/DataGridEditor/DataGridTextEditor/DataGridTextEditor'
+import { useDataGridUpdates } from '@/components/DataGrid/hooks/useDataGridUpdates/useDataGridUpdates'
+import { isCellEditable } from '@/components/DataGrid/utils/cellUtils'
 import { Combobox, type ComboboxItem } from '@/index'
 import { AttributeType } from '@/shared/types'
 import { formatDate, pluralize } from '@/shared/utils'
-
-import { useDataGridContext } from '../../../context/DataGridContext'
-import { useDataGridUpdates } from '../../../hooks/useDataGridUpdates/useDataGridUpdates'
-import { isCellEditable } from '../../../utils/cellUtils'
-import { DataGridTextEditor } from '../DataGridEditor/DataGridTextEditor/DataGridTextEditor'
 
 type DataGridCellContentProps<TData extends Record<string, any>> = {
   options?: ComboboxItem[]

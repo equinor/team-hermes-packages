@@ -1,6 +1,6 @@
 import type { ColumnDef, ColumnFiltersState } from '@tanstack/react-table'
 
-import { AttributeType, type FilterValue } from '../../shared/types'
+import { AttributeType, type FilterValue } from '@/shared/types'
 
 // URI format: `id*op*prop1|prop2^op2*prop3~otherId*op*prop`.
 // `~`, `|`, `^` are picked because they rarely appear in filter values (unlike `,` `;`).

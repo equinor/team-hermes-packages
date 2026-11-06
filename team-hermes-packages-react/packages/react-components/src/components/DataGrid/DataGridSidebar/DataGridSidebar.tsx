@@ -3,11 +3,10 @@ import { check_circle_outlined, collapse, comment_chat, error_outlined, warning_
 import { useState } from 'react'
 
 import { Stack } from '@/components'
-
-import { useDataGridContext } from '../context/DataGridContext'
-import { DataGridCommentSection } from './DataGridCommentSection/DataGridCommentSection'
-import { DataGridSidebarSection } from './DataGridSidebarSection/DataGridSidebarSection'
-import { DataGridValidationSection } from './DataGridValidationSection/DataGridValidationSection'
+import { useDataGridContext } from '@/components/DataGrid/context/DataGridContext'
+import { DataGridCommentSection } from '@/components/DataGrid/DataGridSidebar/DataGridCommentSection/DataGridCommentSection'
+import { DataGridSidebarSection } from '@/components/DataGrid/DataGridSidebar/DataGridSidebarSection/DataGridSidebarSection'
+import { DataGridValidationSection } from '@/components/DataGrid/DataGridSidebar/DataGridValidationSection/DataGridValidationSection'
 
 export const DataGridSidebar = <TData extends Record<string, any>>() => {
   const { table, cellActions, editable, commentConfig } = useDataGridContext<TData>()

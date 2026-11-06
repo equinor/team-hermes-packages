@@ -2,7 +2,7 @@ import { renderHook } from '@testing-library/react'
 import { withNuqsTestingAdapter } from 'nuqs/adapters/testing'
 import { describe, expect, it } from 'vite-plus/test'
 
-import { useFinderPagination } from './useFinderPagination'
+import { useFinderPagination } from '@/hooks/useFinderPagination/useFinderPagination'
 
 describe('useFinderPagination', () => {
   it('defaults to a page size of 100', () => {

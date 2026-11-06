@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest'
 
-import { isApiError } from './ApiError'
+import { isApiError } from '@/shared/platform/api/ApiError'
 
 describe('isApiError', () => {
   test('true for a well-formed network error', () => {

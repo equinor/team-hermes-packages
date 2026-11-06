@@ -1,6 +1,6 @@
 import { useQueryState } from 'nuqs'
 
-import { useUrlPagination, type UseUrlPaginationOptions } from '../useUrlPagination/useUrlPagination'
+import { useUrlPagination, type UseUrlPaginationOptions } from '@/hooks/useUrlPagination/useUrlPagination'
 
 /**
  * Reset both paging mechanisms in the same nuqs batch as a search edit.

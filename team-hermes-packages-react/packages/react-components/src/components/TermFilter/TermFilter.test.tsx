@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import { describe, expect, test, vi } from 'vite-plus/test'
 
-import { TermFilter } from './TermFilter'
+import { TermFilter } from '@/components/TermFilter/TermFilter'
 
 const many = Array.from({ length: 12 }, (_, i) => ({ value: `Term ${i + 1}`, count: i + 1 }))
 

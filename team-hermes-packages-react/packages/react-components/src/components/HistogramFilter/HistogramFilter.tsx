@@ -1,9 +1,13 @@
 import { Slider } from '@base-ui/react/slider'
 import { useEffect, useMemo, useState } from 'react'
 
-import { formatNumberToLocale } from '../../shared/utils'
-import type { HistogramFilterProps, HistogramRangeBounds } from './HistogramFilter.types'
-import { createHistogramLabels, findMaxBucketIndex, findMinBucketIndex } from './HistogramFilter.utils'
+import type { HistogramFilterProps, HistogramRangeBounds } from '@/components/HistogramFilter/HistogramFilter.types'
+import {
+  createHistogramLabels,
+  findMaxBucketIndex,
+  findMinBucketIndex,
+} from '@/components/HistogramFilter/HistogramFilter.utils'
+import { formatNumberToLocale } from '@/shared/utils'
 
 function rangeToStrings(range: HistogramRangeBounds | undefined): [string, string] {
   if (!range) return ['', '']

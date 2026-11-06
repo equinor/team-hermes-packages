@@ -1,8 +1,8 @@
 /** biome-ignore-all lint/a11y/useSemanticElements: different table strategy */
 import type { Table } from '@tanstack/react-table'
 
-import { useDataGridContext } from '../../context/DataGridContext'
-import { dataGridHeader } from '../DataGridHeader.styles'
+import { useDataGridContext } from '@/components/DataGrid/context/DataGridContext'
+import { dataGridHeader } from '@/components/DataGrid/DataGridHeader/DataGridHeader.styles'
 
 export const DataGridActionHeaderCell = ({ table }: { table: Table<any> }) => {
   const { editable } = useDataGridContext()

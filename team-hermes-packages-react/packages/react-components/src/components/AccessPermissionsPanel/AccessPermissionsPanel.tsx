@@ -2,8 +2,8 @@ import { Typography } from '@equinor/eds-core-react'
 import { block, check } from '@equinor/eds-icons'
 import { useId } from 'react'
 
-import { Chip } from '../Chip/Chip'
-import type { AccessPermissionsPanelProps } from './AccessPermissionsPanel.types'
+import type { AccessPermissionsPanelProps } from '@/components/AccessPermissionsPanel/AccessPermissionsPanel.types'
+import { Chip } from '@/components/Chip/Chip'
 
 const skeletonChipWidths = ['w-36', 'w-44']
 

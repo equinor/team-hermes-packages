@@ -3,8 +3,8 @@ import { add, check_circle_outlined, copy, delete_forever, error_outlined, warni
 import type { Row } from '@tanstack/react-table'
 import { useRef, useState } from 'react'
 
-import { ContextMenu } from '../../../../ContextMenu/ContextMenu'
-import { useDataGridContext } from '../../../context/DataGridContext'
+import { ContextMenu } from '@/components/ContextMenu/ContextMenu'
+import { useDataGridContext } from '@/components/DataGrid/context/DataGridContext'
 
 type DataGridActionCellProps<TData extends Record<string, any>> = {
   index: number

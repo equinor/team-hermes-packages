@@ -1,7 +1,7 @@
 import type { TextareaProps, TextFieldProps } from '@equinor/eds-core-react'
 import { type ChangeEvent, memo, useEffect, useState } from 'react'
 
-import { StyledTextarea, StyledTextField } from './FormTextField.styles'
+import { StyledTextarea, StyledTextField } from '@/components/FormTextField/FormTextField.styles'
 
 export type InputValue = string | number | undefined | readonly string[]
 

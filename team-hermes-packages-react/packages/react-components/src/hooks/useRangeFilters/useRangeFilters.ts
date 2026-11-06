@@ -1,5 +1,5 @@
-import { parseRangeFilterString, type RangeFilter, serializeRangeFilters } from '../../shared/utils/urlFilterCodecs'
-import { type UseFilterQueryStateOptions, useFilterQueryState } from '../useFilterQueryState/useFilterQueryState'
+import { type UseFilterQueryStateOptions, useFilterQueryState } from '@/hooks/useFilterQueryState/useFilterQueryState'
+import { parseRangeFilterString, type RangeFilter, serializeRangeFilters } from '@/shared/utils/urlFilterCodecs'
 
 export function useRangeFilters(options: UseFilterQueryStateOptions = {}) {
   const [rangeFilters, setRangeFilters] = useFilterQueryState(

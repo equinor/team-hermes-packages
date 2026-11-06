@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vite-plus/test'
 
-import { backingMapKey } from './backing-map-key'
+import { backingMapKey } from '@/helpers/backing-map-key'
 
 describe('backingMapKey', () => {
   it('is stable for the same itemId and changes with it', () => {

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vite-plus/test'
 
-import { parseVersionFile } from './VersionText.utils'
+import { parseVersionFile } from '@/components/NavBar/components/VersionText.utils'
 
 describe('parseVersionFile', () => {
   it('parses the generated version file', () => {

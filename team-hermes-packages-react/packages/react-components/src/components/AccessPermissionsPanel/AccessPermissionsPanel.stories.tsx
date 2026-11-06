@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 
-import { AccessPermissionsPanel } from './AccessPermissionsPanel'
-import type { AccessRole } from './AccessPermissionsPanel.types'
+import { AccessPermissionsPanel } from '@/components/AccessPermissionsPanel/AccessPermissionsPanel'
+import type { AccessRole } from '@/components/AccessPermissionsPanel/AccessPermissionsPanel.types'
 
 const MockLink = ({ to, children, ...rest }: React.ComponentProps<'a'> & { to: string }) => (
   <a href={to} onClick={(e) => e.preventDefault()} {...rest}>

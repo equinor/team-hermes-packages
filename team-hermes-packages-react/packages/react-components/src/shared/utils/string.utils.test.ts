@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vite-plus/test'
 
-import { generateSlug, pluralize } from './string.utils'
+import { generateSlug, pluralize } from '@/shared/utils/string.utils'
 
 describe('pluralize', () => {
   it('returns the singular form when count is 1', () => {

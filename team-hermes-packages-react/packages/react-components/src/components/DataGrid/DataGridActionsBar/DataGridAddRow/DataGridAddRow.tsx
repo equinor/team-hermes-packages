@@ -3,9 +3,9 @@ import { Button, Icon, Radio, Typography } from '@equinor/eds-core-react'
 import { add } from '@equinor/eds-icons'
 import { useId, useState } from 'react'
 
-import { FormTextField } from '../../../FormTextField/FormTextField'
-import { useDataGridContext } from '../../context/DataGridContext'
-import { dataGridActionsBar } from '../DataGridActionsBar.styles'
+import { useDataGridContext } from '@/components/DataGrid/context/DataGridContext'
+import { dataGridActionsBar } from '@/components/DataGrid/DataGridActionsBar/DataGridActionsBar.styles'
+import { FormTextField } from '@/components/FormTextField/FormTextField'
 
 type AddRowLocation = 'end' | 'top' | 'atIndex'
 

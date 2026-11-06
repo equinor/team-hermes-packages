@@ -1,5 +1,5 @@
-import type { HistogramData } from '../../components/HistogramFilter/HistogramFilter.types'
-import type { TermFilterBucket } from '../../components/TermFilter/TermFilter'
+import type { HistogramData } from '@/components/HistogramFilter/HistogramFilter.types'
+import type { TermFilterBucket } from '@/components/TermFilter/TermFilter'
 
 /**
  * Facet contract for the facet sidebar.

@@ -3,8 +3,8 @@ import { fireEvent, render, screen } from '@testing-library/react'
 import { useState } from 'react'
 import { describe, expect, it, vi } from 'vite-plus/test'
 
-import type { Facet } from '../../shared/types/facet.types'
-import { SidebarFacet } from './SidebarFacet'
+import { SidebarFacet } from '@/components/FacetSidebar/SidebarFacet'
+import type { Facet } from '@/shared/types/facet.types'
 
 function termFacet(key: string, value: string): Facet {
   return {

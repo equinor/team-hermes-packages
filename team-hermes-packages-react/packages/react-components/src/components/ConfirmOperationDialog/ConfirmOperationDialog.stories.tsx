@@ -1,7 +1,7 @@
 import { Button } from '@equinor/eds-core-react'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 
-import { ConfirmOperationDialog } from './ConfirmOperationDialog'
+import { ConfirmOperationDialog } from '@/components/ConfirmOperationDialog/ConfirmOperationDialog'
 
 const meta = {
   title: 'Feature Components/ConfirmOperationDialog',

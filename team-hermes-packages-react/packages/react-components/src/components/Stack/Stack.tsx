@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react'
 
-import { defaultProps, type SpacingType, type StackProps } from './types'
+import { defaultProps, type SpacingType, type StackProps } from '@/components/Stack/types'
 
 const formatSpacing = (value: SpacingType | undefined): string | undefined => {
   if (value === undefined) return undefined

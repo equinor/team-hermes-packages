@@ -1,9 +1,8 @@
 import { Icon, Tooltip } from '@equinor/eds-core-react'
 import { close, type IconData } from '@equinor/eds-icons'
 
+import { chip } from '@/components/Chip/Chip.styles'
 import { ConditionalWrapper } from '@/shared/components/ConditionalWrapper'
-
-import { chip } from './Chip.styles'
 
 type ChipProps = {
   children: React.ReactNode

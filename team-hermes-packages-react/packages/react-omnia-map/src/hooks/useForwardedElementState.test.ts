@@ -2,7 +2,7 @@ import { act, renderHook } from '@testing-library/react'
 import { createRef } from 'react'
 import { describe, expect, it, vi } from 'vite-plus/test'
 
-import { useForwardedElementState } from './useForwardedElementState'
+import { useForwardedElementState } from '@/hooks/useForwardedElementState'
 
 const node = document.createElement('div')
 

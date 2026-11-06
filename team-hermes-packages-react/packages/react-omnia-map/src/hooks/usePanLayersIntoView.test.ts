@@ -6,7 +6,7 @@ import type { ArcgisMap } from '@arcgis/map-components/components/arcgis-map'
 import { act, renderHook } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vite-plus/test'
 
-import { usePanLayersIntoView } from './usePanLayersIntoView'
+import { usePanLayersIntoView } from '@/hooks/usePanLayersIntoView'
 
 const DEFAULT_DELAY_MS = 300
 

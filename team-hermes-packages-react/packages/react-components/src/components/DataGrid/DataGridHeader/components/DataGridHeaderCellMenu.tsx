@@ -13,9 +13,8 @@ import type { Header, Table } from '@tanstack/react-table'
 import { useState } from 'react'
 
 import { ConfirmOperationDialog } from '@/components'
-
-import type { CellActions } from '../../context/DataGridContext'
-import { ColumnPinningDirection } from '../../DataGrid.types'
+import type { CellActions } from '@/components/DataGrid/context/DataGridContext'
+import { ColumnPinningDirection } from '@/components/DataGrid/DataGrid.types'
 
 type DataGridHeaderCellMenuProps<TData extends Record<string, any>> = {
   header: Header<TData, unknown>

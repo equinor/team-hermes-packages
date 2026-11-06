@@ -6,8 +6,8 @@ import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
 import type Layer from '@arcgis/core/layers/Layer'
 import { describe, expect, it } from 'vite-plus/test'
 
-import { MINIMUM_DIFFERENCE } from './find-bounds'
-import { DEFAULT_EXTENT_PADDING, getLayersExtent } from './layers-extent'
+import { MINIMUM_DIFFERENCE } from '@/helpers/find-bounds'
+import { DEFAULT_EXTENT_PADDING, getLayersExtent } from '@/helpers/layers-extent'
 
 const DEFAULT_PADDING_FACTOR = 1 + DEFAULT_EXTENT_PADDING
 

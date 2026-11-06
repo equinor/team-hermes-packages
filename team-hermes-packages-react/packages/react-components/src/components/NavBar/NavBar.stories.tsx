@@ -2,8 +2,8 @@ import { Button, Icon } from '@equinor/eds-core-react'
 import { dashboard, home, settings, folder, notifications, category, library_books, world } from '@equinor/eds-icons'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 
-import { NavBar } from './NavBar'
-import type { NavLinkType } from './NavBar.types'
+import { NavBar } from '@/components/NavBar/NavBar'
+import type { NavLinkType } from '@/components/NavBar/NavBar.types'
 
 const testApplicationIcon = (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 91 91" fill="none" className="size-full">

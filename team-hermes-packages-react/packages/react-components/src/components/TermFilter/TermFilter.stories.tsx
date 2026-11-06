@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useState } from 'react'
 
-import { TermFilter } from './TermFilter'
+import { TermFilter } from '@/components/TermFilter/TermFilter'
 
 const fewBuckets = [
   { value: 'Core photo', count: 412 },

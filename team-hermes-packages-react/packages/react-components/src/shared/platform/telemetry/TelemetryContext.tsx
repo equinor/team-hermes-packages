@@ -1,7 +1,7 @@
 // oxlint-disable react/only-export-components -- useTelemetry hook shares this file by design
 import { createContext, type ReactNode, useContext } from 'react'
 
-import type { Telemetry } from './types'
+import type { Telemetry } from '@/shared/platform/telemetry/types'
 
 const TelemetryContext = createContext<Telemetry | null>(null)
 

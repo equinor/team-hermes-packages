@@ -4,10 +4,9 @@ import { filter_list } from '@equinor/eds-icons'
 import type { Table } from '@tanstack/react-table'
 
 import { MenuCheckboxList } from '@/components'
-
-import { useDataGridContext } from '../context/DataGridContext'
-import { dataGridHeader } from '../DataGridHeader/DataGridHeader.styles'
-import { dataGridFiltering } from './DataGridFiltering.styles'
+import { useDataGridContext } from '@/components/DataGrid/context/DataGridContext'
+import { dataGridFiltering } from '@/components/DataGrid/DataGridFiltering/DataGridFiltering.styles'
+import { dataGridHeader } from '@/components/DataGrid/DataGridHeader/DataGridHeader.styles'
 
 export const DataGridValidationHeaderCell = ({ table }: { table: Table<any> }) => {
   const { editable } = useDataGridContext()

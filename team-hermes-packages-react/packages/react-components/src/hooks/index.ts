@@ -1,17 +1,17 @@
-export { useFilterActions } from './useFilterActions/useFilterActions'
-export { useCopyToClipboard } from './useCopyToClipboard/useCopyToClipboard'
+export { useFilterActions } from '@/hooks/useFilterActions/useFilterActions'
+export { useCopyToClipboard } from '@/hooks/useCopyToClipboard/useCopyToClipboard'
 export {
   useColorScheme,
   initColorScheme,
   COLOR_SCHEME_TRANSITION_ATTRIBUTE,
   type ColorScheme,
   type ColorSchemePreference,
-} from './useColorScheme/useColorScheme'
-export { useUrlPagination } from './useUrlPagination/useUrlPagination'
-export { useCustomToast } from './useCustomToast/useCustomToast'
-export { useUrlSorting } from './useUrlSorting/useUrlSorting'
-export { useOutsideClick } from './useOutsideClick/useOutsideClick'
-export { useFilterQueryState } from './useFilterQueryState/useFilterQueryState'
-export { useFinderPagination } from './useFinderPagination/useFinderPagination'
-export { useRangeFilters, type RangeFiltering } from './useRangeFilters/useRangeFilters'
-export { useTermFilters, type TermFiltering } from './useTermFilters/useTermFilters'
+} from '@/hooks/useColorScheme/useColorScheme'
+export { useUrlPagination } from '@/hooks/useUrlPagination/useUrlPagination'
+export { useCustomToast } from '@/hooks/useCustomToast/useCustomToast'
+export { useUrlSorting } from '@/hooks/useUrlSorting/useUrlSorting'
+export { useOutsideClick } from '@/hooks/useOutsideClick/useOutsideClick'
+export { useFilterQueryState } from '@/hooks/useFilterQueryState/useFilterQueryState'
+export { useFinderPagination } from '@/hooks/useFinderPagination/useFinderPagination'
+export { useRangeFilters, type RangeFiltering } from '@/hooks/useRangeFilters/useRangeFilters'
+export { useTermFilters, type TermFiltering } from '@/hooks/useTermFilters/useTermFilters'

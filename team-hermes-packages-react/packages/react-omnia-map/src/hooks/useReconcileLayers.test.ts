@@ -4,7 +4,7 @@ import type { ArcgisMap } from '@arcgis/map-components/components/arcgis-map'
 import { act, renderHook } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vite-plus/test'
 
-import { useReconcileLayers } from './useReconcileLayers'
+import { useReconcileLayers } from '@/hooks/useReconcileLayers'
 
 function createMapElement() {
   const mapLayers: Layer[] = []

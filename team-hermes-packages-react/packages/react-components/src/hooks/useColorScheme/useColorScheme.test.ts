@@ -1,7 +1,11 @@
 import { act, cleanup, renderHook } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vite-plus/test'
 
-import { COLOR_SCHEME_TRANSITION_ATTRIBUTE, initColorScheme, useColorScheme } from './useColorScheme'
+import {
+  COLOR_SCHEME_TRANSITION_ATTRIBUTE,
+  initColorScheme,
+  useColorScheme,
+} from '@/hooks/useColorScheme/useColorScheme'
 
 const root = document.documentElement
 

@@ -1,7 +1,7 @@
 import { dashboard, folder, home, notifications, settings } from '@equinor/eds-icons'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 
-import { QuickAccessButton } from './QuickAccessButton'
+import { QuickAccessButton } from '@/components/QuickAccessButton/QuickAccessButton'
 
 const MockLink = ({ to, children, ...rest }: React.ComponentProps<'a'> & { to: string }) => (
   <a href={to} onClick={(e) => e.preventDefault()} {...rest}>

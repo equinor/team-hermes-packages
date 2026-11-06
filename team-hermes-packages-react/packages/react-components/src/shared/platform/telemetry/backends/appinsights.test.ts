@@ -39,7 +39,7 @@ beforeEach(() => {
 
 describe('createAppInsightsTelemetry — safe stringify', () => {
   test('toError falls back to String for values JSON.stringify cannot serialize', async () => {
-    const { createAppInsightsTelemetry } = await import('./appinsights')
+    const { createAppInsightsTelemetry } = await import('@/shared/platform/telemetry/backends/appinsights')
     const telemetry = createAppInsightsTelemetry()
     const values: unknown[] = [undefined, () => {}, Symbol('unserializable')]
 
@@ -52,7 +52,7 @@ describe('createAppInsightsTelemetry — safe stringify', () => {
   })
 
   test('trackException does not throw on a circular error context', async () => {
-    const { createAppInsightsTelemetry } = await import('./appinsights')
+    const { createAppInsightsTelemetry } = await import('@/shared/platform/telemetry/backends/appinsights')
     const telemetry = createAppInsightsTelemetry()
 
     const circular: Record<string, unknown> = { a: 1 }
@@ -66,7 +66,7 @@ describe('createAppInsightsTelemetry — safe stringify', () => {
   })
 
   test('trackEvent does not throw on a circular properties value', async () => {
-    const { createAppInsightsTelemetry } = await import('./appinsights')
+    const { createAppInsightsTelemetry } = await import('@/shared/platform/telemetry/backends/appinsights')
     const telemetry = createAppInsightsTelemetry()
 
     const circular: Record<string, unknown> = { a: 1 }
@@ -77,7 +77,7 @@ describe('createAppInsightsTelemetry — safe stringify', () => {
   })
 
   test('toError falls back to a stringified message for a circular non-Error value', async () => {
-    const { createAppInsightsTelemetry } = await import('./appinsights')
+    const { createAppInsightsTelemetry } = await import('@/shared/platform/telemetry/backends/appinsights')
     const telemetry = createAppInsightsTelemetry()
 
     const circular: Record<string, unknown> = { a: 1 }
@@ -92,7 +92,7 @@ describe('createAppInsightsTelemetry — safe stringify', () => {
 
 describe('createAppInsightsTelemetry — correlationHeaderDomains', () => {
   test('disables SDK exception tracking to avoid duplicate reports', async () => {
-    const { createAppInsightsTelemetry } = await import('./appinsights')
+    const { createAppInsightsTelemetry } = await import('@/shared/platform/telemetry/backends/appinsights')
     createAppInsightsTelemetry()
 
     expect(capturedConfig).toMatchObject({
@@ -110,7 +110,7 @@ describe('createAppInsightsTelemetry — correlationHeaderDomains', () => {
     })
 
     try {
-      const { createAppInsightsTelemetry } = await import('./appinsights')
+      const { createAppInsightsTelemetry } = await import('@/shared/platform/telemetry/backends/appinsights')
       createAppInsightsTelemetry()
 
       expect(capturedConfig?.correlationHeaderDomains).toEqual(['example.com:4321'])

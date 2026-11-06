@@ -2,10 +2,9 @@ import type { Cell, Row, Table } from '@tanstack/react-table'
 import { useCallback, useMemo, useState } from 'react'
 import { stringToPath } from 'remeda'
 
+import type { CellCoordinates } from '@/components/DataGrid/utils/cellUtils'
+import { getCellsInRange } from '@/components/DataGrid/utils/cellUtils'
 import { useOutsideClick } from '@/hooks'
-
-import type { CellCoordinates } from '../../utils/cellUtils'
-import { getCellsInRange } from '../../utils/cellUtils'
 
 export type CellSelection = ReturnType<typeof useCellSelection>
 

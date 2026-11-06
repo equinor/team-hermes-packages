@@ -4,9 +4,9 @@ import { format_indent_decrease } from '@equinor/eds-icons'
 import type { RefObject } from 'react'
 import { useState } from 'react'
 
-import { FormTextField } from '../../../FormTextField/FormTextField'
-import type { CellActions } from '../../context/DataGridContext'
-import { dataGridActionsBar } from '../DataGridActionsBar.styles'
+import type { CellActions } from '@/components/DataGrid/context/DataGridContext'
+import { dataGridActionsBar } from '@/components/DataGrid/DataGridActionsBar/DataGridActionsBar.styles'
+import { FormTextField } from '@/components/FormTextField/FormTextField'
 
 type RoundingMode = 'round' | 'floor' | 'ceil'
 

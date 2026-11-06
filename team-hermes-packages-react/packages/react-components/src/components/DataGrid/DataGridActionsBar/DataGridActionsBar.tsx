@@ -2,11 +2,11 @@ import { Menu, Menubar } from '@base-ui/react'
 import { Icon, Tooltip } from '@equinor/eds-core-react'
 import { check, comment_add, copy, edit_text, keyboard_backspace, paste, redo, undo } from '@equinor/eds-icons'
 
-import { useDataGridContext } from '../context/DataGridContext'
-import { isCellEditable as isCellEditableUtil } from '../utils/cellUtils'
-import { dataGridActionsBar } from './DataGridActionsBar.styles'
-import { DataGridAddRow } from './DataGridAddRow/DataGridAddRow'
-import { DataGridShortenDecimals } from './DataGridShortenDecimals/DataGridShortenDecimals'
+import { useDataGridContext } from '@/components/DataGrid/context/DataGridContext'
+import { dataGridActionsBar } from '@/components/DataGrid/DataGridActionsBar/DataGridActionsBar.styles'
+import { DataGridAddRow } from '@/components/DataGrid/DataGridActionsBar/DataGridAddRow/DataGridAddRow'
+import { DataGridShortenDecimals } from '@/components/DataGrid/DataGridActionsBar/DataGridShortenDecimals/DataGridShortenDecimals'
+import { isCellEditable as isCellEditableUtil } from '@/components/DataGrid/utils/cellUtils'
 
 const ICON_SIZE = 18
 

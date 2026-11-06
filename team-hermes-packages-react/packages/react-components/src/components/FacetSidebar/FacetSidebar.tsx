@@ -3,14 +3,14 @@ import { Button, Icon } from '@equinor/eds-core-react'
 import { filter_list, unfold_less, unfold_more } from '@equinor/eds-icons'
 import { useEffect, useMemo, useRef, useState } from 'react'
 
-import type { RangeFiltering } from '../../hooks/useRangeFilters/useRangeFilters'
-import type { TermFiltering } from '../../hooks/useTermFilters/useTermFilters'
-import type { Facet } from '../../shared/types/facet.types'
-import type { FacetPickerGroup } from '../GroupedFacetPicker/GroupedFacetPicker'
-import { GroupedFacetPicker } from '../GroupedFacetPicker/GroupedFacetPicker'
-import { ScrollArea } from '../ScrollArea/ScrollArea'
-import { ActiveFilters } from './ActiveFilters'
-import { SidebarFacet } from './SidebarFacet'
+import { ActiveFilters } from '@/components/FacetSidebar/ActiveFilters'
+import { SidebarFacet } from '@/components/FacetSidebar/SidebarFacet'
+import type { FacetPickerGroup } from '@/components/GroupedFacetPicker/GroupedFacetPicker'
+import { GroupedFacetPicker } from '@/components/GroupedFacetPicker/GroupedFacetPicker'
+import { ScrollArea } from '@/components/ScrollArea/ScrollArea'
+import type { RangeFiltering } from '@/hooks/useRangeFilters/useRangeFilters'
+import type { TermFiltering } from '@/hooks/useTermFilters/useTermFilters'
+import type { Facet } from '@/shared/types/facet.types'
 
 export type FacetSidebarProps = {
   /** Return value of `useTermFilters`. Create it once in the page and pass it down. */

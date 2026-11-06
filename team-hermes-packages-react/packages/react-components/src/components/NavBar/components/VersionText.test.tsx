@@ -1,8 +1,8 @@
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vite-plus/test'
 
-import { SupportSection } from './SupportSection'
-import { VersionText } from './VersionText'
+import { SupportSection } from '@/components/NavBar/components/SupportSection'
+import { VersionText } from '@/components/NavBar/components/VersionText'
 
 const versionFile = 'hash: abc123\r\ndate: 2026-11-05\r\nrefs: tag: v1.2.3\r\n'
 

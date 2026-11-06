@@ -3,13 +3,12 @@ import { comment_chat, error_outlined, warning_outlined } from '@equinor/eds-ico
 import type { Cell } from '@tanstack/react-table'
 import { memo, useId, useMemo, useRef, useState } from 'react'
 
+import { useDataGridContext } from '@/components/DataGrid/context/DataGridContext'
+import { DataGridCellContent } from '@/components/DataGrid/DataGridBody/components/DataGridCellContent/DataGridCellContent'
+import { DataGridCellContextMenu } from '@/components/DataGrid/DataGridBody/components/DataGridCellContextMenu/DataGridCellContextMenu'
+import { dataGridBody } from '@/components/DataGrid/DataGridBody/DataGridBody.styles'
+import { isCellEditable } from '@/components/DataGrid/utils/cellUtils'
 import { AttributeType } from '@/shared/types'
-
-import { useDataGridContext } from '../../context/DataGridContext'
-import { isCellEditable } from '../../utils/cellUtils'
-import { dataGridBody } from '../DataGridBody.styles'
-import { DataGridCellContent } from './DataGridCellContent/DataGridCellContent'
-import { DataGridCellContextMenu } from './DataGridCellContextMenu/DataGridCellContextMenu'
 
 type DataGridCellProps<TData extends Record<string, any>> = {
   cell: Cell<TData, unknown>

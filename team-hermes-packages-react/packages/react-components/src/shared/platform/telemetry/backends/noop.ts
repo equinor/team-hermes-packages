@@ -1,4 +1,4 @@
-import type { Telemetry } from '../types'
+import type { Telemetry } from '@/shared/platform/telemetry/types'
 
 export const createNoopTelemetry = (): Telemetry => ({
   trackException: () => {},
