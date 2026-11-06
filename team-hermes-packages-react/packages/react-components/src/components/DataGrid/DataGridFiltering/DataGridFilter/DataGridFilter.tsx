@@ -3,10 +3,9 @@ import { filter_list, search } from '@equinor/eds-icons'
 import type { Header } from '@tanstack/react-table'
 
 import { Combobox, type ComboboxItem, MenuCheckboxList, Popover, Stack, StyledTextField } from '@/components'
+import type { ClientFilter } from '@/components/DataGrid/DataGrid.types'
+import { dataGridFiltering } from '@/components/DataGrid/DataGridFiltering/DataGridFiltering.styles'
 import { FilterOperator, AttributeType } from '@/shared/types'
-
-import type { ClientFilter } from '../../DataGrid.types'
-import { dataGridFiltering } from '../DataGridFiltering.styles'
 
 type DataGridFilterProps<TData extends Record<string, any>> = {
   header: Header<TData, unknown>

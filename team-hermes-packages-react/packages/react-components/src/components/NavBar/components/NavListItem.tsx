@@ -2,9 +2,8 @@ import { Icon } from '@equinor/eds-core-react'
 import { chevron_right, external_link, lock } from '@equinor/eds-icons'
 
 import { Chip, IconContainer } from '@/components'
+import type { NavLinkType } from '@/components/NavBar/NavBar.types'
 import { ConditionalWrapper } from '@/shared/components/ConditionalWrapper'
-
-import type { NavLinkType } from '../NavBar.types'
 
 const wrapperClassName = 'block rounded [&.active>div]:opacity-50'
 const contentClassName =

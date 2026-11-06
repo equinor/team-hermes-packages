@@ -1,9 +1,9 @@
-import { TelemetryBackend } from './backend'
-import { createConsoleTelemetry } from './backends/console'
-import { createNoopTelemetry } from './backends/noop'
-import type { Telemetry } from './types'
+import { TelemetryBackend } from '@/shared/platform/telemetry/backend'
+import { createConsoleTelemetry } from '@/shared/platform/telemetry/backends/console'
+import { createNoopTelemetry } from '@/shared/platform/telemetry/backends/noop'
+import type { Telemetry } from '@/shared/platform/telemetry/types'
 
-export { isTelemetryBackend, TelemetryBackend } from './backend'
+export { isTelemetryBackend, TelemetryBackend } from '@/shared/platform/telemetry/backend'
 
 /**
  * The AppInsights SDK (`@microsoft/applicationinsights-web` +
@@ -23,7 +23,7 @@ const createLazyAppInsightsTelemetry = (): Telemetry => {
     queue.length = 0
   }
 
-  import('./backends/appinsights')
+  import('@/shared/platform/telemetry/backends/appinsights')
     .then(({ createAppInsightsTelemetry }) => {
       real = createAppInsightsTelemetry()
     })

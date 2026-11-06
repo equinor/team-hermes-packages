@@ -1,5 +1,5 @@
-import { parseTermFilterString, serializeTermFilters, type TermFilterEntry } from '../../shared/utils/urlFilterCodecs'
-import { type UseFilterQueryStateOptions, useFilterQueryState } from '../useFilterQueryState/useFilterQueryState'
+import { type UseFilterQueryStateOptions, useFilterQueryState } from '@/hooks/useFilterQueryState/useFilterQueryState'
+import { parseTermFilterString, serializeTermFilters, type TermFilterEntry } from '@/shared/utils/urlFilterCodecs'
 
 export function useTermFilters(options: UseFilterQueryStateOptions = {}) {
   const [termFilters, setTermFilters] = useFilterQueryState(

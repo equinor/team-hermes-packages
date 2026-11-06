@@ -1,7 +1,7 @@
 /** biome-ignore-all lint/a11y/useSemanticElements:  necessary datagrid functionality*/
 /** biome-ignore-all lint/a11y/noRedundantRoles: necessary datagrid functionality */
-import { dataGridBody } from '../DataGridBody/DataGridBody.styles'
-import { dataGridHeader } from '../DataGridHeader/DataGridHeader.styles'
+import { dataGridBody } from '@/components/DataGrid/DataGridBody/DataGridBody.styles'
+import { dataGridHeader } from '@/components/DataGrid/DataGridHeader/DataGridHeader.styles'
 
 type SkeletonComponentProps = {
   columnsAmount?: number

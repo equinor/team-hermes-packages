@@ -1,7 +1,7 @@
 import { Icon, Progress } from '@equinor/eds-core-react'
 import type { IconData } from '@equinor/eds-icons'
 
-import type { Theme } from '../../shared/types/themes.type'
+import type { Theme } from '@/shared/types/themes.type'
 
 type IconContainerProps = {
   icon?: IconData | null

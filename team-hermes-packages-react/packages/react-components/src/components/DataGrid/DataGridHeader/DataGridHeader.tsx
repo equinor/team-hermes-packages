@@ -3,13 +3,13 @@
 import { horizontalListSortingStrategy, SortableContext } from '@dnd-kit/sortable'
 import { Checkbox } from '@equinor/eds-core-react'
 
-import { useDataGridContext } from '../context/DataGridContext'
-import type { LoadingStateConfig } from '../DataGrid.types'
-import { DataGridFiltering } from '../DataGridFiltering/DataGridFiltering'
-import { SkeletonColumns } from '../DataGridSkeleton/DataGridSkeleton'
-import { DataGridActionHeaderCell } from './components/DataGridActionHeaderCell'
-import { DataGridHeaderCell } from './components/DataGridHeaderCell'
-import { dataGridHeader } from './DataGridHeader.styles'
+import { useDataGridContext } from '@/components/DataGrid/context/DataGridContext'
+import type { LoadingStateConfig } from '@/components/DataGrid/DataGrid.types'
+import { DataGridFiltering } from '@/components/DataGrid/DataGridFiltering/DataGridFiltering'
+import { DataGridActionHeaderCell } from '@/components/DataGrid/DataGridHeader/components/DataGridActionHeaderCell'
+import { DataGridHeaderCell } from '@/components/DataGrid/DataGridHeader/components/DataGridHeaderCell'
+import { dataGridHeader } from '@/components/DataGrid/DataGridHeader/DataGridHeader.styles'
+import { SkeletonColumns } from '@/components/DataGrid/DataGridSkeleton/DataGridSkeleton'
 
 type DataGridHeaderProps = {
   loadingStateConfig: LoadingStateConfig

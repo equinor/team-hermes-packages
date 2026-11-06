@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import { describe, expect, test, vi } from 'vite-plus/test'
 
-import { GroupedFacetPicker, type FacetPickerGroup } from './GroupedFacetPicker'
+import { GroupedFacetPicker, type FacetPickerGroup } from '@/components/GroupedFacetPicker/GroupedFacetPicker'
 
 const groups: FacetPickerGroup[] = [
   {

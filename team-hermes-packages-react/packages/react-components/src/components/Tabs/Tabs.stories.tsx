@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useState } from 'react'
 
-import { Tab, TabPanel, TabsList, TabsRoot, type TabValue } from './Tabs'
+import { Tab, TabPanel, TabsList, TabsRoot, type TabValue } from '@/components/Tabs/Tabs'
 
 const tabs = [
   { value: 'overview', label: 'Overview' },

@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import { describe, expect, test } from 'vite-plus/test'
 
-import { ScrollArea } from './ScrollArea'
+import { ScrollArea } from '@/components/ScrollArea/ScrollArea'
 
 describe('ScrollArea', () => {
   test('renders its children', () => {

@@ -6,16 +6,16 @@ import '@arcgis/map-components/components/arcgis-home'
 import '@arcgis/map-components/components/arcgis-layer-list'
 import '@arcgis/map-components/components/arcgis-expand'
 
-import { getLayersExtent } from './helpers/layers-extent'
-import { OmniaMap } from './OmniaMap'
+import { getLayersExtent } from '@/helpers/layers-extent'
+import { OmniaMap } from '@/OmniaMap'
 import {
   DEFAULT_VISIBLE_REFERENCE_LAYERS,
   ReferenceLayersExample,
   type ReferenceLayersArgs,
-} from './stories/ReferenceLayersExample'
-import referenceLayersExampleSource from './stories/ReferenceLayersExample.tsx?raw'
-import { createPlacesLayer, NORWEGIAN_CITIES, SODIR_REFERENCE_LAYER_TITLES, US_CITIES } from './stories/sample-data'
-import sampleDataSource from './stories/sample-data.ts?raw'
+} from '@/stories/ReferenceLayersExample'
+import referenceLayersExampleSource from '@/stories/ReferenceLayersExample.tsx?raw'
+import { createPlacesLayer, NORWEGIAN_CITIES, SODIR_REFERENCE_LAYER_TITLES, US_CITIES } from '@/stories/sample-data'
+import sampleDataSource from '@/stories/sample-data.ts?raw'
 
 // Esri's public "Accidental Deaths" web map (US states), the item used by the "Load a basic WebMap" sample:
 // https://developers.arcgis.com/javascript/latest/sample-code/webmap-basic/
@@ -252,7 +252,9 @@ const homeViewpoint = useMemo(() => {
 const REFERENCE_LAYERS_SOURCE = `// File: sample-data.ts
 ${sampleDataSource}
 // File: ReferenceLayersExample.tsx (save beside sample-data.ts)
-${referenceLayersExampleSource.replace("from '../index'", "from '@team-hermes/react-omnia-map'")}`
+${referenceLayersExampleSource
+  .replace("from '@/index'", "from '@team-hermes/react-omnia-map'")
+  .replace("from '@/stories/sample-data'", "from './sample-data'")}`
 
 export const ReferenceLayers: StoryObj<ReferenceLayersArgs> = {
   parameters: {

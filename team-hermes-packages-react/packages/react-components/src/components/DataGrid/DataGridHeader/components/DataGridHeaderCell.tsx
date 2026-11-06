@@ -6,9 +6,9 @@ import { arrow_down, arrow_up } from '@equinor/eds-icons'
 import { flexRender, type Header } from '@tanstack/react-table'
 import type { CSSProperties } from 'react'
 
-import { useDataGridContext } from '../../context/DataGridContext'
-import { dataGridHeader } from '../DataGridHeader.styles'
-import { DataGridHeaderCellMenu } from './DataGridHeaderCellMenu'
+import { useDataGridContext } from '@/components/DataGrid/context/DataGridContext'
+import { DataGridHeaderCellMenu } from '@/components/DataGrid/DataGridHeader/components/DataGridHeaderCellMenu'
+import { dataGridHeader } from '@/components/DataGrid/DataGridHeader/DataGridHeader.styles'
 
 type DataGridHeaderCellProps<TData extends Record<string, any>> = {
   header: Header<TData, unknown>

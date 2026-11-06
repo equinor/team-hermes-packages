@@ -1,7 +1,7 @@
 import { Icon, Typography } from '@equinor/eds-core-react'
 import { error_outlined } from '@equinor/eds-icons'
 
-import { messageFor, titleFor, traceIdFor } from './ErrorPanel.utils'
+import { messageFor, titleFor, traceIdFor } from '@/components/ErrorPanel/ErrorPanel.utils'
 
 /**
  * Single rendering surface for `ApiError` (and unknowns). Always shows

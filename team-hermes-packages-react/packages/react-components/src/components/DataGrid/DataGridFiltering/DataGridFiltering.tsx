@@ -2,10 +2,10 @@
 /** biome-ignore-all lint/a11y/useFocusableInteractive: using different focus strategy */
 import type { Header, HeaderGroup } from '@tanstack/react-table'
 
-import { useDataGridContext } from '../context/DataGridContext'
-import { dataGridHeader } from '../DataGridHeader/DataGridHeader.styles'
-import { DataGridSearchCell } from './DataGridSearchCell'
-import { DataGridValidationHeaderCell } from './DataGridValidationHeaderCell'
+import { useDataGridContext } from '@/components/DataGrid/context/DataGridContext'
+import { DataGridSearchCell } from '@/components/DataGrid/DataGridFiltering/DataGridSearchCell'
+import { DataGridValidationHeaderCell } from '@/components/DataGrid/DataGridFiltering/DataGridValidationHeaderCell'
+import { dataGridHeader } from '@/components/DataGrid/DataGridHeader/DataGridHeader.styles'
 
 type DataGridFilteringProps<TData extends Record<string, any>> = {
   headersByColumnId: Map<string, Header<TData, unknown>>

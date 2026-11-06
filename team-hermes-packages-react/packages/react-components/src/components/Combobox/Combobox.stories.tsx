@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useState } from 'react'
 
-import { Combobox, type ComboboxItem } from './Combobox'
+import { Combobox, type ComboboxItem } from '@/components/Combobox/Combobox'
 
 const fruitItems: ComboboxItem[] = [
   { label: 'Apple', value: 'apple' },

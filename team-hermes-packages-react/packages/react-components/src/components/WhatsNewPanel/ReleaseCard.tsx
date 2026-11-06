@@ -1,7 +1,7 @@
 import { Typography } from '@equinor/eds-core-react'
 
-import { Chip } from '../Chip/Chip'
-import type { ReleaseCardProps } from './WhatsNewPanel.types'
+import { Chip } from '@/components/Chip/Chip'
+import type { ReleaseCardProps } from '@/components/WhatsNewPanel/WhatsNewPanel.types'
 
 type HeadingTag = `h${2 | 3 | 4 | 5 | 6}`
 

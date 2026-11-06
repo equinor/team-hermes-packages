@@ -1,4 +1,4 @@
-import type { ApiError } from './types'
+import type { ApiError } from '@/shared/platform/api/types'
 
 // Type guard — used by the global query/mutation cache and by `<ErrorPanel>`.
 // Validates the full shape (not just presence of `kind`/`traceId`) so an

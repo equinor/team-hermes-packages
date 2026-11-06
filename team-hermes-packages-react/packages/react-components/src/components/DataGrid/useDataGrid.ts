@@ -8,7 +8,7 @@ import {
 } from '@tanstack/react-table'
 import { useMemo } from 'react'
 
-import { filterFn } from './DataGrid.utils'
+import { filterFn } from '@/components/DataGrid/DataGrid.utils'
 
 type ValidationFilterValue = 'success' | 'warning' | 'error'
 

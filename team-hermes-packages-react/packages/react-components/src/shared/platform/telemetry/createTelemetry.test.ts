@@ -7,13 +7,13 @@ const appInsightsFactory = vi.hoisted(() =>
     setUser: vi.fn(),
   }))
 )
-vi.mock('./backends/appinsights', () => ({
+vi.mock('@/shared/platform/telemetry/backends/appinsights', () => ({
   createAppInsightsTelemetry: appInsightsFactory,
 }))
 
 const loadTelemetry = async () => {
   vi.resetModules()
-  return await import('./createTelemetry')
+  return await import('@/shared/platform/telemetry/createTelemetry')
 }
 
 beforeEach(() => {

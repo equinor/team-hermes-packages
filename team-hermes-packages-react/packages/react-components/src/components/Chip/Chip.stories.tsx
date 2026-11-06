@@ -1,7 +1,7 @@
 import { save, settings } from '@equinor/eds-icons'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 
-import { Chip } from './Chip'
+import { Chip } from '@/components/Chip/Chip'
 
 const meta = {
   title: 'UI/Chip',

@@ -1,4 +1,4 @@
-import type { HistogramBucketType } from './HistogramFilter.types'
+import type { HistogramBucketType } from '@/components/HistogramFilter/HistogramFilter.types'
 
 type KeyedBucket = { key: number | string }
 

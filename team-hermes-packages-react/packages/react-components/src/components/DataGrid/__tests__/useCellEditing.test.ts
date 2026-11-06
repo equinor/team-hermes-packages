@@ -2,8 +2,8 @@ import type { Cell, RowData } from '@tanstack/react-table'
 import { act, renderHook } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 
-import { useCellEditing } from '../hooks/useCellEditing/useCellEditing'
-import { createTestTable } from './testUtils'
+import { createTestTable } from '@/components/DataGrid/__tests__/testUtils'
+import { useCellEditing } from '@/components/DataGrid/hooks/useCellEditing/useCellEditing'
 
 function findCell<T extends RowData>(cells: Cell<T, unknown>[], columnId: string) {
   const cell = cells.find((c) => c.column.id === columnId)

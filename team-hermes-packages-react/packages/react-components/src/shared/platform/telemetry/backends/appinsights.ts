@@ -1,7 +1,7 @@
 import { ReactPlugin } from '@microsoft/applicationinsights-react-js'
 import { ApplicationInsights, type IExceptionTelemetry } from '@microsoft/applicationinsights-web'
 
-import type { Telemetry } from '../types'
+import type { Telemetry } from '@/shared/platform/telemetry/types'
 
 // JSON.stringify can throw on circular references/BigInt or return undefined.
 // Telemetry reporting must never throw — a failure here would happen

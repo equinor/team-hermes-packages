@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vite-plus/test'
 
-import { deepSet, deleteByPath, getNestedValue } from './object.utils'
+import { deepSet, deleteByPath, getNestedValue } from '@/shared/utils/object.utils'
 
 describe('deepSet', () => {
   it('sets a top-level property', () => {

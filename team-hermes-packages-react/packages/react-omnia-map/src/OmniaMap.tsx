@@ -1,4 +1,4 @@
-import './initialize-arcgis-components'
+import '@/initialize-arcgis-components'
 import type Point from '@arcgis/core/geometry/Point'
 import type Layer from '@arcgis/core/layers/Layer'
 import type { ClickEvent, LayerViewCreateEvent } from '@arcgis/core/views/input/types'
@@ -8,11 +8,11 @@ import type { TargetedEvent } from '@esri/calcite-components'
 import type { JSX, Ref } from 'react'
 import { useRef } from 'react'
 
-import { backingMapKey } from './helpers/backing-map-key'
-import { resolveInitialFitLayers } from './helpers/initial-fit-layers'
-import { useForwardedElementState } from './hooks/useForwardedElementState'
-import { useInitialFitToLayers } from './hooks/useInitialFitToLayers'
-import { useReconcileLayers } from './hooks/useReconcileLayers'
+import { backingMapKey } from '@/helpers/backing-map-key'
+import { resolveInitialFitLayers } from '@/helpers/initial-fit-layers'
+import { useForwardedElementState } from '@/hooks/useForwardedElementState'
+import { useInitialFitToLayers } from '@/hooks/useInitialFitToLayers'
+import { useReconcileLayers } from '@/hooks/useReconcileLayers'
 
 type ArcgisMapElementProps = JSX.IntrinsicElements['arcgis-map']
 

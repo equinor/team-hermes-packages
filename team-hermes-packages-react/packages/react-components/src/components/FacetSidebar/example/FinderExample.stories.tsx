@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { NuqsTestingAdapter } from 'nuqs/adapters/testing'
 
-import { FinderExample } from './FinderExample'
+import { FinderExample } from '@/components/FacetSidebar/example/FinderExample'
 
 const meta: Meta<typeof FinderExample> = {
   title: 'Facet/Examples/Finder page',

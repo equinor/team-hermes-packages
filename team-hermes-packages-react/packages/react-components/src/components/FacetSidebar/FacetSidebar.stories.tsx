@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { NuqsTestingAdapter } from 'nuqs/adapters/testing'
 
-import { useRangeFilters } from '../../hooks/useRangeFilters/useRangeFilters'
-import { useTermFilters } from '../../hooks/useTermFilters/useTermFilters'
-import type { Facet } from '../../shared/types/facet.types'
-import { FacetSidebar, type FacetSidebarProps } from './FacetSidebar'
+import { FacetSidebar, type FacetSidebarProps } from '@/components/FacetSidebar/FacetSidebar'
+import { useRangeFilters } from '@/hooks/useRangeFilters/useRangeFilters'
+import { useTermFilters } from '@/hooks/useTermFilters/useTermFilters'
+import type { Facet } from '@/shared/types/facet.types'
 
 const facets: Facet[] = [
   {

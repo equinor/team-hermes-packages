@@ -3,10 +3,10 @@
 import { Checkbox } from '@equinor/eds-core-react'
 import type { Row, RowSelectionState } from '@tanstack/react-table'
 
-import { useDataGridContext } from '../context/DataGridContext'
-import { DataGridActionCell } from './components/DataGridActionCell/DataGridActionCell'
-import { DataGridCell } from './components/DataGridCell'
-import { dataGridBody } from './DataGridBody.styles'
+import { useDataGridContext } from '@/components/DataGrid/context/DataGridContext'
+import { DataGridActionCell } from '@/components/DataGrid/DataGridBody/components/DataGridActionCell/DataGridActionCell'
+import { DataGridCell } from '@/components/DataGrid/DataGridBody/components/DataGridCell'
+import { dataGridBody } from '@/components/DataGrid/DataGridBody/DataGridBody.styles'
 
 export function DataGridBody<TData extends Record<string, any>>() {
   const {

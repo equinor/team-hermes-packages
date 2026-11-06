@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vite-plus/test'
 
-import { formatNumberToLocale } from './number.utils'
+import { formatNumberToLocale } from '@/shared/utils/number.utils'
 
 describe('formatNumberToLocale', () => {
   it('returns empty string for null or undefined', () => {

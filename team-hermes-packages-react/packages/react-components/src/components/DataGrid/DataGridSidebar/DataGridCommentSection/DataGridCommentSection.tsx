@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 
-import type { CellActions } from '../../context/DataGridContext'
-import type { DataGridCommentConfig } from '../../DataGrid.types'
+import type { CellActions } from '@/components/DataGrid/context/DataGridContext'
+import type { DataGridCommentConfig } from '@/components/DataGrid/DataGrid.types'
 
 type DataGridCommentSectionProps = {
   commentConfig: DataGridCommentConfig<any>

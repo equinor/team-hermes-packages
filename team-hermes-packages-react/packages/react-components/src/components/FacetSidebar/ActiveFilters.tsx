@@ -1,6 +1,6 @@
-import type { RangeFiltering } from '../../hooks/useRangeFilters/useRangeFilters'
-import type { TermFiltering } from '../../hooks/useTermFilters/useTermFilters'
-import { Chip } from '../Chip/Chip'
+import { Chip } from '@/components/Chip/Chip'
+import type { RangeFiltering } from '@/hooks/useRangeFilters/useRangeFilters'
+import type { TermFiltering } from '@/hooks/useTermFilters/useTermFilters'
 
 type ActiveFiltersProps = {
   /** Return value of `useTermFilters`. */

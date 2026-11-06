@@ -1,9 +1,13 @@
 import { describe, expect, it } from 'vitest'
 
+import { createTestTable } from '@/components/DataGrid/__tests__/testUtils'
+import {
+  getCellsInRange,
+  getCellValuesAsText,
+  isCellEditable,
+  parseClipboardValue,
+} from '@/components/DataGrid/utils/cellUtils'
 import { AttributeType } from '@/shared/types'
-
-import { getCellsInRange, getCellValuesAsText, isCellEditable, parseClipboardValue } from '../utils/cellUtils'
-import { createTestTable } from './testUtils'
 
 describe('cellUtils', () => {
   describe('getCellsInRange', () => {

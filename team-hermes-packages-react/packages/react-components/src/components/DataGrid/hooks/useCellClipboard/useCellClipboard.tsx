@@ -1,12 +1,16 @@
 import type { Row, Table } from '@tanstack/react-table'
 import { useCallback, useState } from 'react'
 
+import type { CellChange, CellCoordinates } from '@/components/DataGrid/utils/cellUtils'
+import {
+  getCellsInRange,
+  getCellValuesAsText,
+  mutateCells,
+  parseClipboardValue,
+} from '@/components/DataGrid/utils/cellUtils'
 import { useCopyToClipboard, useCustomToast } from '@/hooks'
 import { AttributeType } from '@/shared/types'
 import { getNestedValue } from '@/shared/utils'
-
-import type { CellChange, CellCoordinates } from '../../utils/cellUtils'
-import { getCellsInRange, getCellValuesAsText, mutateCells, parseClipboardValue } from '../../utils/cellUtils'
 
 export type CellClipboard = ReturnType<typeof useCellClipboard>
 

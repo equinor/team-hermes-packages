@@ -5,7 +5,7 @@ import type { GeometryUnion } from '@arcgis/core/geometry/types'
 import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
 import type Layer from '@arcgis/core/layers/Layer'
 
-import { findBounds } from './find-bounds'
+import { findBounds } from '@/helpers/find-bounds'
 
 type LatLong = [latitude: number, longitude: number]
 

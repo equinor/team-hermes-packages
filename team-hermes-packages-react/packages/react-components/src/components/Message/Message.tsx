@@ -1,8 +1,8 @@
 import { Icon } from '@equinor/eds-core-react'
 import { close } from '@equinor/eds-icons'
 
-import { message } from './Message.styles'
-import { ICON_TYPES, type MessageProps } from './types'
+import { message } from '@/components/Message/Message.styles'
+import { ICON_TYPES, type MessageProps } from '@/components/Message/types'
 
 export const Message = (props: MessageProps) => {
   const {

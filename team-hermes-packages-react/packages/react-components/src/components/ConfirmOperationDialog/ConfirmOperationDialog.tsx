@@ -1,8 +1,8 @@
 import { AlertDialog } from '@base-ui/react'
 import { Button } from '@equinor/eds-core-react'
 
-import { ActionButton } from '../../shared/components/ActionButton/ActionButton'
-import type { Theme } from '../../shared/types/themes.type'
+import { ActionButton } from '@/shared/components/ActionButton/ActionButton'
+import type { Theme } from '@/shared/types/themes.type'
 
 type ConfirmOperationDialogBaseProps = {
   theme?: Theme

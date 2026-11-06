@@ -1,4 +1,4 @@
-import { Stack } from '../index'
+import { Stack } from '@/components/index'
 
 type SkeletonWrapperProps = {
   condition: boolean

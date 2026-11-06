@@ -4,8 +4,8 @@ import { describe, expect, it, vi } from 'vitest'
 // Mock to break circular dependency: @/hooks → useFilters → @/common/components → DataGridCell → FilterDialog.utils → @/hooks
 vi.mock('@/common/components/FilterDialog/FilterDialog.utils', () => ({}))
 
-import { useCellSelection } from '../hooks/useCellSelection/useCellSelection'
-import { createTestTable } from './testUtils'
+import { createTestTable } from '@/components/DataGrid/__tests__/testUtils'
+import { useCellSelection } from '@/components/DataGrid/hooks/useCellSelection/useCellSelection'
 
 function createSelectionHook(
   options: { validationErrors?: Record<string, string>; validationWarnings?: Record<string, string> } = {}

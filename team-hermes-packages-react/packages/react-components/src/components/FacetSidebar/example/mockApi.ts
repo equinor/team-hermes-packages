@@ -1,5 +1,5 @@
-import type { Facet } from '../../../shared/types/facet.types'
-import type { RangeFilters, TermFilters } from '../../../shared/utils/urlFilterCodecs'
+import type { Facet } from '@/shared/types/facet.types'
+import type { RangeFilters, TermFilters } from '@/shared/utils/urlFilterCodecs'
 
 /**
  * In-memory stand-in for a faceted search backend, used by the full example.

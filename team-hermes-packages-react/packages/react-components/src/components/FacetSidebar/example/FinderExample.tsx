@@ -1,11 +1,6 @@
 import { useQueryState } from 'nuqs'
 import { useEffect, useMemo, useState } from 'react'
 
-import { useFinderPagination } from '../../../hooks/useFinderPagination/useFinderPagination'
-import { useRangeFilters } from '../../../hooks/useRangeFilters/useRangeFilters'
-import { useTermFilters } from '../../../hooks/useTermFilters/useTermFilters'
-import type { Facet } from '../../../shared/types/facet.types'
-import { FacetSidebar } from '../FacetSidebar'
 import {
   facetGroup,
   facetUnits,
@@ -16,7 +11,12 @@ import {
   viewLabels,
   type SearchResponse,
   type View,
-} from './mockApi'
+} from '@/components/FacetSidebar/example/mockApi'
+import { FacetSidebar } from '@/components/FacetSidebar/FacetSidebar'
+import { useFinderPagination } from '@/hooks/useFinderPagination/useFinderPagination'
+import { useRangeFilters } from '@/hooks/useRangeFilters/useRangeFilters'
+import { useTermFilters } from '@/hooks/useTermFilters/useTermFilters'
+import type { Facet } from '@/shared/types/facet.types'
 
 const views = Object.keys(viewLabels) as View[]
 

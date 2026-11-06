@@ -1,4 +1,4 @@
-import type { Release } from './WhatsNewPanel.types'
+import type { Release } from '@/components/WhatsNewPanel/WhatsNewPanel.types'
 
 const MS_PER_DAY = 1000 * 60 * 60 * 24
 const VERSION_HEADING = /^## v(\d+\.\d+\.\d+)\s*\((\d{4}-\d{2}-\d{2})\)/

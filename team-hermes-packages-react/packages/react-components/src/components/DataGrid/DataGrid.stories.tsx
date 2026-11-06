@@ -2,10 +2,9 @@ import type { Meta, StoryObj } from '@storybook/react-vite'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useState } from 'react'
 
+import { DataGrid } from '@/components/DataGrid/DataGrid'
+import { useDataGrid } from '@/components/DataGrid/useDataGrid'
 import { AttributeType } from '@/shared/types'
-
-import { DataGrid } from './DataGrid'
-import { useDataGrid } from './useDataGrid'
 
 // ── Sample data types ────────────────────────────────────────────
 

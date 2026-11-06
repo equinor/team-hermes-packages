@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { isWithinLastHours, timeAgo } from './dateTime.utils'
+import { isWithinLastHours, timeAgo } from '@/shared/utils/dateTime.utils'
 
 describe('isWithinLastHours', () => {
   beforeEach(() => {

@@ -2,9 +2,9 @@ import type { ArcgisMap } from '@arcgis/map-components/components/arcgis-map'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useMemo, useState } from 'react'
 
-import { OmniaMap } from '../OmniaMap'
-import { createPlacesLayer, NORWEGIAN_CITIES } from '../stories/sample-data'
-import { useLayerHighlight } from './useLayerHighlight'
+import { useLayerHighlight } from '@/hooks/useLayerHighlight'
+import { OmniaMap } from '@/OmniaMap'
+import { createPlacesLayer, NORWEGIAN_CITIES } from '@/stories/sample-data'
 
 const meta = {
   title: 'Map/useLayerHighlight',

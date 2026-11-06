@@ -1,8 +1,12 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import { describe, expect, test, vi } from 'vite-plus/test'
 
-import { HistogramFilter } from './HistogramFilter'
-import { createHistogramLabels, findMaxBucketIndex, findMinBucketIndex } from './HistogramFilter.utils'
+import { HistogramFilter } from '@/components/HistogramFilter/HistogramFilter'
+import {
+  createHistogramLabels,
+  findMaxBucketIndex,
+  findMinBucketIndex,
+} from '@/components/HistogramFilter/HistogramFilter.utils'
 
 const buckets = [
   { key: 0, count: 5 },

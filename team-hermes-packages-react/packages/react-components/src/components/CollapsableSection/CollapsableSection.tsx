@@ -2,7 +2,7 @@ import { Accordion } from '@base-ui/react/accordion'
 import { Icon } from '@equinor/eds-core-react'
 import { chevron_down, close } from '@equinor/eds-icons'
 
-import { Chip } from '../Chip/Chip'
+import { Chip } from '@/components/Chip/Chip'
 
 export type CollapsableSectionProps = {
   /** Section heading. Also used as the accordion item value unless `value` is set. */

@@ -1,4 +1,4 @@
-import type { Telemetry } from './types'
+import type { Telemetry } from '@/shared/platform/telemetry/types'
 
 // Catches errors that escape React (event handlers, setTimeout, fire-and-forget
 // promises). Render-time errors are handled by TelemetryErrorBoundary.

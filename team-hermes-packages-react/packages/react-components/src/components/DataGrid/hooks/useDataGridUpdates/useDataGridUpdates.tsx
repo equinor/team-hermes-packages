@@ -1,9 +1,8 @@
 import type { Table } from '@tanstack/react-table'
 
+import type { CellChange } from '@/components/DataGrid/utils/cellUtils'
 import { AttributeType } from '@/shared/types'
 import { deepSet, getNestedValue } from '@/shared/utils'
-
-import type { CellChange } from '../../utils/cellUtils'
 
 /**
  * Hook that provides data mutation operations for the DataGrid.

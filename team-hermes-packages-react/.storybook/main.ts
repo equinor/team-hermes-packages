@@ -1,5 +1,3 @@
-import path from 'node:path'
-
 import type { StorybookConfig } from '@storybook/react-vite'
 
 const config: StorybookConfig = {
@@ -17,10 +15,7 @@ const config: StorybookConfig = {
   framework: '@storybook/react-vite',
   viteFinal: async (config) => {
     config.resolve = config.resolve || {}
-    config.resolve.alias = {
-      ...(config.resolve.alias as Record<string, string>),
-      '@': path.resolve(import.meta.dirname, '../packages/react-components/src'),
-    }
+    config.resolve.tsconfigPaths = true
 
     // Workaround for Rolldown bug: strictExecutionOrder (set by Storybook's
     // code-generator-plugin) combined with sideEffects:false causes reselect's

@@ -1,1 +1,1 @@
-export { useFilters } from './useFilters'
+export { useFilters } from '@/hooks/useFilters/useFilters'

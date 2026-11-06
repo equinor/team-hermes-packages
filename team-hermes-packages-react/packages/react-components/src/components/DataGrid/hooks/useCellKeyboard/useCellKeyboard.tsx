@@ -1,8 +1,8 @@
 import { useCallback } from 'react'
 
-import type { CellClipboard } from '../useCellClipboard/useCellClipboard'
-import type { CellEditing } from '../useCellEditing/useCellEditing'
-import type { CellSelection } from '../useCellSelection/useCellSelection'
+import type { CellClipboard } from '@/components/DataGrid/hooks/useCellClipboard/useCellClipboard'
+import type { CellEditing } from '@/components/DataGrid/hooks/useCellEditing/useCellEditing'
+import type { CellSelection } from '@/components/DataGrid/hooks/useCellSelection/useCellSelection'
 
 export type CellKeyboard = ReturnType<typeof useCellKeyboard>
 

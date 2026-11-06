@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 
-import { FileUploadInput } from './FileUploadInput'
+import { FileUploadInput } from '@/components/FileUploadInput/FileUploadInput'
 
 const meta = {
   title: 'UI/FileUploadInput',

@@ -4,9 +4,8 @@ import { close, dark_mode, invert_colors, sun, type IconData } from '@equinor/ed
 import { useId } from 'react'
 
 import { Popover } from '@/components'
+import { colorSchemePopover } from '@/components/NavBar/NavBar.styles'
 import type { ColorSchemePreference } from '@/hooks'
-
-import { colorSchemePopover } from '../NavBar.styles'
 
 const PREFERENCES = ['auto', 'light', 'dark'] as const satisfies readonly ColorSchemePreference[]
 

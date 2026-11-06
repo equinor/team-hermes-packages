@@ -2,12 +2,12 @@ import { Accordion } from '@base-ui/react'
 import { CircularProgress, Icon, Typography } from '@equinor/eds-core-react'
 import { chevron_down, new_alert } from '@equinor/eds-icons'
 
-import { Chip } from '../Chip/Chip'
-import { IconContainer } from '../IconContainer/IconContainer'
-import { Message } from '../Message/Message'
-import { ReleaseCard } from './ReleaseCard'
-import type { WhatsNewPanelProps } from './WhatsNewPanel.types'
-import { isRecentRelease } from './WhatsNewPanel.utils'
+import { Chip } from '@/components/Chip/Chip'
+import { IconContainer } from '@/components/IconContainer/IconContainer'
+import { Message } from '@/components/Message/Message'
+import { ReleaseCard } from '@/components/WhatsNewPanel/ReleaseCard'
+import type { WhatsNewPanelProps } from '@/components/WhatsNewPanel/WhatsNewPanel.types'
+import { isRecentRelease } from '@/components/WhatsNewPanel/WhatsNewPanel.utils'
 
 const PANEL_VALUE = 'whats-new'
 

@@ -1,9 +1,9 @@
 import { render, screen } from '@testing-library/react'
 import { describe, expect, test } from 'vite-plus/test'
 
-import { WhatsNewPanel } from './WhatsNewPanel'
-import type { Release } from './WhatsNewPanel.types'
-import { isRecentRelease, parseReleaseNotes, toIsoDate } from './WhatsNewPanel.utils'
+import { WhatsNewPanel } from '@/components/WhatsNewPanel/WhatsNewPanel'
+import type { Release } from '@/components/WhatsNewPanel/WhatsNewPanel.types'
+import { isRecentRelease, parseReleaseNotes, toIsoDate } from '@/components/WhatsNewPanel/WhatsNewPanel.utils'
 
 const MockLink = ({ to, children, ...rest }: React.ComponentProps<'a'> & { to: string }) => (
   <a href={to} {...rest}>

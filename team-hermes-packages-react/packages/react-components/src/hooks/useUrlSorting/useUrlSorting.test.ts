@@ -2,7 +2,7 @@ import { act, renderHook } from '@testing-library/react'
 import { withNuqsTestingAdapter } from 'nuqs/adapters/testing'
 import { describe, expect, it, vi } from 'vite-plus/test'
 
-import { useUrlSorting } from './useUrlSorting'
+import { useUrlSorting } from '@/hooks/useUrlSorting/useUrlSorting'
 
 const wrapperWith = (searchParams: string = '') => withNuqsTestingAdapter({ searchParams, hasMemory: true })
 

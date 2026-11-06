@@ -1,10 +1,10 @@
 import { Progress } from '@equinor/eds-core-react'
 
-import type { Facet } from '../../shared/types/facet.types'
-import type { RangeBounds, RangeFilter } from '../../shared/utils/urlFilterCodecs'
-import { CollapsableSection } from '../CollapsableSection/CollapsableSection'
-import { HistogramFilter } from '../HistogramFilter/HistogramFilter'
-import { TermFilter } from '../TermFilter/TermFilter'
+import { CollapsableSection } from '@/components/CollapsableSection/CollapsableSection'
+import { HistogramFilter } from '@/components/HistogramFilter/HistogramFilter'
+import { TermFilter } from '@/components/TermFilter/TermFilter'
+import type { Facet } from '@/shared/types/facet.types'
+import type { RangeBounds, RangeFilter } from '@/shared/utils/urlFilterCodecs'
 
 export type SidebarFacetProps = {
   /** The enabled key is available even while its facet metadata is loading. */

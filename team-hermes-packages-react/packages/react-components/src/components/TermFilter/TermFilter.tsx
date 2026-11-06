@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { FacetOption } from '../FacetOption/FacetOption'
+import { FacetOption } from '@/components/FacetOption/FacetOption'
 
 const INITIAL_VISIBLE_COUNT = 8
 

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useState } from 'react'
 
-import { FacetOption } from './FacetOption'
+import { FacetOption } from '@/components/FacetOption/FacetOption'
 
 const meta: Meta<typeof FacetOption> = {
   title: 'UI/FacetOption',

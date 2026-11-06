@@ -1,7 +1,7 @@
 import type { StoryObj } from '@storybook/react-vite'
 import { useState } from 'react'
 
-import { Popover } from './Popover'
+import { Popover } from '@/components/Popover/Popover'
 
 const meta = {
   title: 'UI/Popover',

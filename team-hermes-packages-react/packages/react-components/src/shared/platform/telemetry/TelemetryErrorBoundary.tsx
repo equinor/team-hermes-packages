@@ -3,7 +3,7 @@
 
 import { Component, type ComponentType, type ErrorInfo, type ReactNode } from 'react'
 
-import type { Telemetry } from './types'
+import type { Telemetry } from '@/shared/platform/telemetry/types'
 
 type Props = {
   telemetry: Telemetry

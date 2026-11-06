@@ -2,13 +2,12 @@ import { dark_mode, home, invert_colors, sun, world } from '@equinor/eds-icons'
 import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vite-plus/test'
 
+import { SupportSection } from '@/components/NavBar/components/SupportSection'
+import { NavBar } from '@/components/NavBar/NavBar'
+import type { NavBarProps } from '@/components/NavBar/NavBar.types'
 import { initColorScheme } from '@/hooks'
 
-import { SupportSection } from './components/SupportSection'
-import { NavBar } from './NavBar'
-import type { NavBarProps } from './NavBar.types'
-
-vi.mock('./components/SupportSection', () => ({
+vi.mock('@/components/NavBar/components/SupportSection', () => ({
   SupportSection: vi.fn(() => <button type="button">Support</button>),
 }))
 

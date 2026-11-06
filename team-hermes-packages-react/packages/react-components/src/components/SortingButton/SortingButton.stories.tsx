@@ -3,7 +3,7 @@ import type { SortingState } from '@tanstack/react-table'
 import { createColumnHelper, getCoreRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table'
 import { useState } from 'react'
 
-import { SortingButton } from './SortingButton'
+import { SortingButton } from '@/components/SortingButton/SortingButton'
 
 type ExampleRow = {
   name: string

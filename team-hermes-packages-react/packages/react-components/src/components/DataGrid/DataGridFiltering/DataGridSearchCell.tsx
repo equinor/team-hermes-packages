@@ -2,11 +2,10 @@ import type { Header } from '@tanstack/react-table'
 import type { ChangeEvent } from 'react'
 
 import { StyledTextField } from '@/components'
+import type { ClientFilter } from '@/components/DataGrid/DataGrid.types'
+import { DataGridFilter } from '@/components/DataGrid/DataGridFiltering/DataGridFilter/DataGridFilter'
+import { dataGridFiltering } from '@/components/DataGrid/DataGridFiltering/DataGridFiltering.styles'
 import { FilterOperator, AttributeType } from '@/shared/types'
-
-import type { ClientFilter } from '../DataGrid.types'
-import { DataGridFilter } from './DataGridFilter/DataGridFilter'
-import { dataGridFiltering } from './DataGridFiltering.styles'
 
 type DataGridSearchCellProps<TData extends Record<string, any>> = {
   header: Header<TData, unknown>

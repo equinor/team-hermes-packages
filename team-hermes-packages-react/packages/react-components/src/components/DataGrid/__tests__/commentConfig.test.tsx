@@ -4,9 +4,9 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 // Mock to break circular dependency: @/hooks → useFilters → @/common/components → DataGridCell → FilterDialog.utils → @/hooks
 vi.mock('@/common/components/FilterDialog/FilterDialog.utils', () => ({}))
 
-import type { CellActions } from '../context/DataGridContext'
-import { DataGridCommentSection } from '../DataGridSidebar/DataGridCommentSection/DataGridCommentSection'
-import { createTestCommentConfig, testComments } from './testUtils'
+import { createTestCommentConfig, testComments } from '@/components/DataGrid/__tests__/testUtils'
+import type { CellActions } from '@/components/DataGrid/context/DataGridContext'
+import { DataGridCommentSection } from '@/components/DataGrid/DataGridSidebar/DataGridCommentSection/DataGridCommentSection'
 
 function createMockCellActions(overrides: Partial<CellActions> = {}): CellActions {
   return {

@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react'
 import { describe, expect, test, vi } from 'vite-plus/test'
 
-import { AccessPermissionsPanel } from './AccessPermissionsPanel'
-import type { AccessRole } from './AccessPermissionsPanel.types'
+import { AccessPermissionsPanel } from '@/components/AccessPermissionsPanel/AccessPermissionsPanel'
+import type { AccessRole } from '@/components/AccessPermissionsPanel/AccessPermissionsPanel.types'
 
 const roles: AccessRole[] = [
   { value: 'regularuser', label: 'Regular User' },
