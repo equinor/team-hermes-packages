@@ -1,4 +1,5 @@
 import { Progress } from '@equinor/eds-core-react'
+
 import type { Facet } from '../../shared/types/facet.types'
 import type { RangeBounds, RangeFilter } from '../../shared/utils/urlFilterCodecs'
 import { CollapsableSection } from '../CollapsableSection/CollapsableSection'

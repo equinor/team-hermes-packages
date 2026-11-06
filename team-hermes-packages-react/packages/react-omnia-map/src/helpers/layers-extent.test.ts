@@ -1,10 +1,11 @@
-import Graphic from '@arcgis/core/Graphic'
 import Extent from '@arcgis/core/geometry/Extent'
 import Point from '@arcgis/core/geometry/Point'
 import Polygon from '@arcgis/core/geometry/Polygon'
+import Graphic from '@arcgis/core/Graphic'
 import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
 import type Layer from '@arcgis/core/layers/Layer'
 import { describe, expect, it } from 'vite-plus/test'
+
 import { MINIMUM_DIFFERENCE } from './find-bounds'
 import { DEFAULT_EXTENT_PADDING, getLayersExtent } from './layers-extent'
 

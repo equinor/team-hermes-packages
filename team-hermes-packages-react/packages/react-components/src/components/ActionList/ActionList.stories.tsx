@@ -1,7 +1,8 @@
 import { dashboard, folder, home, notifications, settings } from '@equinor/eds-icons'
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import { ActionListPanel } from './ActionListPanel'
+
 import { ActionListItem } from './ActionListItem'
+import { ActionListPanel } from './ActionListPanel'
 
 const MockLink = ({ to, children, ...rest }: React.ComponentProps<'a'> & { to: string }) => (
   <a href={to} onClick={(e) => e.preventDefault()} {...rest}>

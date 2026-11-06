@@ -2,6 +2,7 @@
 // `fallback` so users see more than a blank screen.
 
 import { Component, type ComponentType, type ErrorInfo, type ReactNode } from 'react'
+
 import type { Telemetry } from './types'
 
 type Props = {

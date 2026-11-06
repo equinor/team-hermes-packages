@@ -2,6 +2,7 @@
 
 import { horizontalListSortingStrategy, SortableContext } from '@dnd-kit/sortable'
 import { Checkbox } from '@equinor/eds-core-react'
+
 import { useDataGridContext } from '../context/DataGridContext'
 import type { LoadingStateConfig } from '../DataGrid.types'
 import { DataGridFiltering } from '../DataGridFiltering/DataGridFiltering'

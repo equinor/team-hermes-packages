@@ -1,5 +1,6 @@
 import { settings } from '@equinor/eds-icons'
 import type { Meta, StoryObj } from '@storybook/react-vite'
+
 import { Message } from './Message'
 
 const meta = {

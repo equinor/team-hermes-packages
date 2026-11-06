@@ -1,7 +1,8 @@
 import { Accordion } from '@base-ui/react/accordion'
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import { CollapsableSection } from './CollapsableSection'
+
 import { TermFilter } from '../TermFilter/TermFilter'
+import { CollapsableSection } from './CollapsableSection'
 
 const meta: Meta<typeof CollapsableSection> = {
   title: 'Facet/Components/CollapsableSection',

@@ -1,4 +1,5 @@
 import type { Column } from '@tanstack/react-table'
+
 import { type ComboboxItem } from '@/components'
 import { AttributeType, FilterOperator, type FilterValue } from '@/shared/types'
 

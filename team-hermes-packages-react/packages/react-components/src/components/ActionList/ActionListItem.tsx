@@ -1,8 +1,9 @@
 import { Icon } from '@equinor/eds-core-react'
 import { chevron_right, type IconData, lock } from '@equinor/eds-icons'
+
 import { Chip, IconContainer } from '@/components'
-import type { Theme } from '@/shared/types'
 import { ConditionalWrapper } from '@/shared/components/ConditionalWrapper'
+import type { Theme } from '@/shared/types'
 
 type ActionListItemProps = {
   /** EDS icon displayed in the item. */

@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest'
+
 import { AttributeType } from '@/shared/types'
+
 import { getCellsInRange, getCellValuesAsText, isCellEditable, parseClipboardValue } from '../utils/cellUtils'
 import { createTestTable } from './testUtils'
 

@@ -1,6 +1,8 @@
 import type { Column } from '@tanstack/react-table'
 import type { CSSProperties } from 'react'
+
 import { AttributeType, FilterOperator } from '@/shared/types'
+
 import { type ClientFilter, ColumnPinningDirection } from './DataGrid.types'
 
 export const getCommonPinningStyles = <TData extends Record<string, any>>(column: Column<TData>): CSSProperties => {

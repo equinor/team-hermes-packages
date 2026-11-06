@@ -1,7 +1,9 @@
 import { Button, Dialog, Icon, Tooltip, Typography } from '@equinor/eds-core-react'
 import { close, info_circle, report_bug } from '@equinor/eds-icons'
 import { useState } from 'react'
+
 import { Stack } from '@/components'
+
 import type { ApplicationConfig } from '../NavBar.types'
 import { VersionText } from './VersionText'
 

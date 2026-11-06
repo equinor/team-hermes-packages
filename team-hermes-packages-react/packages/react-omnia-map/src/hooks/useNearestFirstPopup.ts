@@ -1,5 +1,5 @@
-import { getNearestCoordinate } from '@arcgis/core/geometry/operators/proximityOperator'
 import { isAbortError } from '@arcgis/core/core/promiseUtils'
+import { getNearestCoordinate } from '@arcgis/core/geometry/operators/proximityOperator'
 import type Point from '@arcgis/core/geometry/Point'
 import { geographicToWebMercator, webMercatorToGeographic } from '@arcgis/core/geometry/support/webMercatorUtils'
 import type { GeometryUnion } from '@arcgis/core/geometry/types'

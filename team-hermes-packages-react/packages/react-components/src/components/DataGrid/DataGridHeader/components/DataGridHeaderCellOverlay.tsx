@@ -2,6 +2,7 @@
 import { Icon } from '@equinor/eds-core-react'
 import { arrow_down, arrow_up } from '@equinor/eds-icons'
 import { flexRender, type Header } from '@tanstack/react-table'
+
 import { dataGridHeader } from '../DataGridHeader.styles'
 
 type DataGridHeaderCellOverlayProps<TData extends Record<string, any>> = {

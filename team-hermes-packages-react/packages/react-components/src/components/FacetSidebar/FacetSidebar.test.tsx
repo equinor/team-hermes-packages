@@ -1,9 +1,10 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import { withNuqsTestingAdapter } from 'nuqs/adapters/testing'
 import { describe, expect, test } from 'vite-plus/test'
-import type { Facet } from '../../shared/types/facet.types'
+
 import { useRangeFilters } from '../../hooks/useRangeFilters/useRangeFilters'
 import { useTermFilters } from '../../hooks/useTermFilters/useTermFilters'
+import type { Facet } from '../../shared/types/facet.types'
 import { FacetSidebar } from './FacetSidebar'
 
 const facets: Facet[] = [

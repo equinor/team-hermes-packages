@@ -5,6 +5,7 @@ import { Icon } from '@equinor/eds-core-react'
 import { arrow_down, arrow_up } from '@equinor/eds-icons'
 import { flexRender, type Header } from '@tanstack/react-table'
 import type { CSSProperties } from 'react'
+
 import { useDataGridContext } from '../../context/DataGridContext'
 import { dataGridHeader } from '../DataGridHeader.styles'
 import { DataGridHeaderCellMenu } from './DataGridHeaderCellMenu'

@@ -7,6 +7,7 @@ import type { ArcgisMap } from '@arcgis/map-components/components/arcgis-map'
 import type { TargetedEvent } from '@esri/calcite-components'
 import type { JSX, Ref } from 'react'
 import { useRef } from 'react'
+
 import { backingMapKey } from './helpers/backing-map-key'
 import { resolveInitialFitLayers } from './helpers/initial-fit-layers'
 import { useForwardedElementState } from './hooks/useForwardedElementState'

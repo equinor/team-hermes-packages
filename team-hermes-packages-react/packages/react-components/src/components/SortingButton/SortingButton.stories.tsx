@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite'
 import type { SortingState } from '@tanstack/react-table'
 import { createColumnHelper, getCoreRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table'
 import { useState } from 'react'
+
 import { SortingButton } from './SortingButton'
 
 type ExampleRow = {

@@ -1,7 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useState } from 'react'
+
 import { AttributeType } from '@/shared/types'
+
 import { DataGrid } from './DataGrid'
 import { useDataGrid } from './useDataGrid'
 

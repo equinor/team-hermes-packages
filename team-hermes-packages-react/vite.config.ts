@@ -22,5 +22,6 @@ export default defineConfig({
     trailingComma: 'es5',
     printWidth: 119,
     semi: false,
+    sortImports: true,
   },
 })

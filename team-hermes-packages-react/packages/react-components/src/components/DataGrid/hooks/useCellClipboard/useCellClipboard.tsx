@@ -1,8 +1,10 @@
 import type { Row, Table } from '@tanstack/react-table'
 import { useCallback, useState } from 'react'
+
 import { useCopyToClipboard, useCustomToast } from '@/hooks'
-import { getNestedValue } from '@/shared/utils'
 import { AttributeType } from '@/shared/types'
+import { getNestedValue } from '@/shared/utils'
+
 import type { CellChange, CellCoordinates } from '../../utils/cellUtils'
 import { getCellsInRange, getCellValuesAsText, mutateCells, parseClipboardValue } from '../../utils/cellUtils'
 

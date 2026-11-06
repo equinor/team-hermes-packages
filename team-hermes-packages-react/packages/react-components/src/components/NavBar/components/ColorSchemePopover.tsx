@@ -2,8 +2,10 @@ import { Popover as BasePopover } from '@base-ui/react'
 import { Button, Icon, Tooltip } from '@equinor/eds-core-react'
 import { close, dark_mode, invert_colors, sun, type IconData } from '@equinor/eds-icons'
 import { useId } from 'react'
+
 import { Popover } from '@/components'
 import type { ColorSchemePreference } from '@/hooks'
+
 import { colorSchemePopover } from '../NavBar.styles'
 
 const PREFERENCES = ['auto', 'light', 'dark'] as const satisfies readonly ColorSchemePreference[]

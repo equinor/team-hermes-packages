@@ -1,8 +1,10 @@
 import type { IconData } from '@equinor/eds-icons'
 import type { PaginationState, RowData, Table } from '@tanstack/react-table'
 import type { CSSProperties } from 'react'
-import type { ComboboxItem } from '../Combobox/Combobox'
+
 import type { AttributeType, FilterOperator } from '@/shared/types'
+
+import type { ComboboxItem } from '../Combobox/Combobox'
 
 declare module '@tanstack/react-table' {
   interface TableMeta<TData extends RowData> {

@@ -2,9 +2,11 @@ import { Icon, Tooltip } from '@equinor/eds-core-react'
 import { comment_chat, error_outlined, warning_outlined } from '@equinor/eds-icons'
 import type { Cell } from '@tanstack/react-table'
 import { memo, useId, useMemo, useRef, useState } from 'react'
+
+import { AttributeType } from '@/shared/types'
+
 import { useDataGridContext } from '../../context/DataGridContext'
 import { isCellEditable } from '../../utils/cellUtils'
-import { AttributeType } from '@/shared/types'
 import { dataGridBody } from '../DataGridBody.styles'
 import { DataGridCellContent } from './DataGridCellContent/DataGridCellContent'
 import { DataGridCellContextMenu } from './DataGridCellContextMenu/DataGridCellContextMenu'

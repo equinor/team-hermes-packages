@@ -1,6 +1,8 @@
 import type { ColumnFiltersState, Updater } from '@tanstack/react-table'
-import type { FilterOperator, FilterValue } from '@/shared/types'
 import { useQueryState } from 'nuqs'
+
+import type { FilterOperator, FilterValue } from '@/shared/types'
+
 import { useFilters } from '../useFilters/useFilters'
 
 export type UseUrlFiltersOptions = {

@@ -2,6 +2,7 @@ import { Icon } from '@equinor/eds-core-react'
 import { upload } from '@equinor/eds-icons'
 import type React from 'react'
 import { useCallback, useEffect, useRef, useState } from 'react'
+
 import { isAcceptedFileType } from '../../shared/utils/file.utils'
 
 export interface FileUploadProps {

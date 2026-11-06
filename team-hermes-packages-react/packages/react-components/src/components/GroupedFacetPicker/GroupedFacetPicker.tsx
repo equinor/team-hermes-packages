@@ -2,6 +2,7 @@ import { Combobox } from '@base-ui/react/combobox'
 import { Button, Icon } from '@equinor/eds-core-react'
 import { add, check, chevron_down, search } from '@equinor/eds-icons'
 import { useState } from 'react'
+
 import { Chip } from '../Chip/Chip'
 
 export type FacetPickerItem = {

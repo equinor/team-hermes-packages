@@ -1,7 +1,9 @@
 import { Icon } from '@equinor/eds-core-react'
 import { chevron_left, chevron_right, first_page, last_page } from '@equinor/eds-icons'
 import type { Table } from '@tanstack/react-table'
+
 import { SkeletonWrapper, Stack } from '@/components'
+
 import type { PaginationConfig } from '../DataGrid.types'
 
 type DataGridPaginationProps<DataType> = {

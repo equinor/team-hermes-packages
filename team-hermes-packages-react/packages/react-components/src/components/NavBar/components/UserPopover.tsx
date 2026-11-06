@@ -1,6 +1,7 @@
 //import { Popover } from '@base-ui/react/popover'
 import { Button, Icon } from '@equinor/eds-core-react'
 import { account_circle, block, check, log_out } from '@equinor/eds-icons'
+
 import { Chip, Popover } from '@/components'
 
 type UserPopoverProps = {

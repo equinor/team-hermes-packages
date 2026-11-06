@@ -2,6 +2,7 @@
 /** biome-ignore-all lint/a11y/useFocusableInteractive: diff strategy */
 import { Checkbox } from '@equinor/eds-core-react'
 import type { Row, RowSelectionState } from '@tanstack/react-table'
+
 import { useDataGridContext } from '../context/DataGridContext'
 import { DataGridActionCell } from './components/DataGridActionCell/DataGridActionCell'
 import { DataGridCell } from './components/DataGridCell'

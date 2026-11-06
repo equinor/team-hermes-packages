@@ -1,14 +1,16 @@
 import { NavigationMenu } from '@base-ui/react/navigation-menu'
 import { Icon } from '@equinor/eds-core-react'
-import { useColorScheme } from '@/hooks'
-import { NavListItem } from './components/NavListItem'
 import { chevron_down } from '@equinor/eds-icons'
-import { navbar } from './NavBar.styles'
+
+import { useColorScheme } from '@/hooks'
+
+import { Chip } from '../Chip/Chip'
 import { ColorSchemePopover } from './components/ColorSchemePopover'
+import { NavListItem } from './components/NavListItem'
 import { SupportSection } from './components/SupportSection'
 import { UserPopover } from './components/UserPopover'
+import { navbar } from './NavBar.styles'
 import type { NavBarProps } from './NavBar.types'
-import { Chip } from '../Chip/Chip'
 
 export function NavBar(props: NavBarProps) {
   const {

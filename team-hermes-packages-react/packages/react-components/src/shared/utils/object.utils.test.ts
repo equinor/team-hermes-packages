@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vite-plus/test'
+
 import { deepSet, deleteByPath, getNestedValue } from './object.utils'
 
 describe('deepSet', () => {

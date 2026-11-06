@@ -1,6 +1,6 @@
 import Color from '@arcgis/core/Color'
-import Graphic from '@arcgis/core/Graphic'
 import Point from '@arcgis/core/geometry/Point'
+import Graphic from '@arcgis/core/Graphic'
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer'
 import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
 import type { FieldType } from '@arcgis/core/layers/support/types'

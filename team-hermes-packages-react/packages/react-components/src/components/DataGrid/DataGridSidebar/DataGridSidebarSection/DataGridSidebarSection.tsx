@@ -1,6 +1,7 @@
 import { Icon } from '@equinor/eds-core-react'
 import { add, type IconData, minimize } from '@equinor/eds-icons'
 import { useMemo, useState } from 'react'
+
 import { IconContainer, Stack } from '@/components'
 import type { Theme } from '@/shared/types'
 

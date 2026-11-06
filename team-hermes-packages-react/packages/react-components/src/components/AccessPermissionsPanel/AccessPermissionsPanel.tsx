@@ -1,6 +1,7 @@
 import { Typography } from '@equinor/eds-core-react'
 import { block, check } from '@equinor/eds-icons'
 import { useId } from 'react'
+
 import { Chip } from '../Chip/Chip'
 import type { AccessPermissionsPanelProps } from './AccessPermissionsPanel.types'
 

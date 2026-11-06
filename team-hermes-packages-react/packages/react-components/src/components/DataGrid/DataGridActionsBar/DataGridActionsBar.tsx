@@ -1,6 +1,7 @@
 import { Menu, Menubar } from '@base-ui/react'
 import { Icon, Tooltip } from '@equinor/eds-core-react'
 import { check, comment_add, copy, edit_text, keyboard_backspace, paste, redo, undo } from '@equinor/eds-icons'
+
 import { useDataGridContext } from '../context/DataGridContext'
 import { isCellEditable as isCellEditableUtil } from '../utils/cellUtils'
 import { dataGridActionsBar } from './DataGridActionsBar.styles'

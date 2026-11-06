@@ -1,8 +1,10 @@
 import { Icon } from '@equinor/eds-core-react'
 import { filter_list, search } from '@equinor/eds-icons'
 import type { Header } from '@tanstack/react-table'
-import { FilterOperator, AttributeType } from '@/shared/types'
+
 import { Combobox, type ComboboxItem, MenuCheckboxList, Popover, Stack, StyledTextField } from '@/components'
+import { FilterOperator, AttributeType } from '@/shared/types'
+
 import type { ClientFilter } from '../../DataGrid.types'
 import { dataGridFiltering } from '../DataGridFiltering.styles'
 

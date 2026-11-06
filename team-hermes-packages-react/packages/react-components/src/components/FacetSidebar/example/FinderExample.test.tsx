@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import { withNuqsTestingAdapter } from 'nuqs/adapters/testing'
 import { describe, expect, test } from 'vite-plus/test'
+
 import { FinderExample } from './FinderExample'
 
 const wait = { timeout: 4000 }

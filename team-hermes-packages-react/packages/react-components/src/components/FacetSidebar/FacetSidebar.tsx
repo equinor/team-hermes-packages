@@ -2,6 +2,7 @@ import { Accordion } from '@base-ui/react/accordion'
 import { Button, Icon } from '@equinor/eds-core-react'
 import { filter_list, unfold_less, unfold_more } from '@equinor/eds-icons'
 import { useEffect, useMemo, useRef, useState } from 'react'
+
 import type { RangeFiltering } from '../../hooks/useRangeFilters/useRangeFilters'
 import type { TermFiltering } from '../../hooks/useTermFilters/useTermFilters'
 import type { Facet } from '../../shared/types/facet.types'

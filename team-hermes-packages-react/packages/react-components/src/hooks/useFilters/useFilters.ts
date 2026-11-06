@@ -1,4 +1,5 @@
 import type { ColumnDef, ColumnFiltersState } from '@tanstack/react-table'
+
 import { AttributeType, type FilterValue } from '../../shared/types'
 
 // URI format: `id*op*prop1|prop2^op2*prop3~otherId*op*prop`.

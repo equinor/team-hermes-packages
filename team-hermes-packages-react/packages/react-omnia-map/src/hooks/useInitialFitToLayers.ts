@@ -2,6 +2,7 @@ import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
 import type Layer from '@arcgis/core/layers/Layer'
 import type { ArcgisMap } from '@arcgis/map-components/components/arcgis-map'
 import { useEffect, useRef } from 'react'
+
 import { getLayersExtent } from '../helpers/layers-extent'
 
 const noop = () => {}

@@ -1,6 +1,7 @@
 import type { Column, Row, Table } from '@tanstack/react-table'
-import { deepSet, deleteByPath, getNestedValue } from '@/shared/utils'
+
 import { AttributeType } from '@/shared/types'
+import { deepSet, deleteByPath, getNestedValue } from '@/shared/utils'
 
 export type CellCoordinates = {
   rowId: string

@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
+
 import { AccessPermissionsPanel } from './AccessPermissionsPanel'
 import type { AccessRole } from './AccessPermissionsPanel.types'
 

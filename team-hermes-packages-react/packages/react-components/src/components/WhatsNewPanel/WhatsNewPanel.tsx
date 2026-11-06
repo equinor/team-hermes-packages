@@ -1,6 +1,7 @@
 import { Accordion } from '@base-ui/react'
 import { CircularProgress, Icon, Typography } from '@equinor/eds-core-react'
 import { chevron_down, new_alert } from '@equinor/eds-icons'
+
 import { Chip } from '../Chip/Chip'
 import { IconContainer } from '../IconContainer/IconContainer'
 import { Message } from '../Message/Message'

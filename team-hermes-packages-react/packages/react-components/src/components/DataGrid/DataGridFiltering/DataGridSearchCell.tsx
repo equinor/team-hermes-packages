@@ -1,7 +1,9 @@
 import type { Header } from '@tanstack/react-table'
 import type { ChangeEvent } from 'react'
-import { FilterOperator, AttributeType } from '@/shared/types'
+
 import { StyledTextField } from '@/components'
+import { FilterOperator, AttributeType } from '@/shared/types'
+
 import type { ClientFilter } from '../DataGrid.types'
 import { DataGridFilter } from './DataGridFilter/DataGridFilter'
 import { dataGridFiltering } from './DataGridFiltering.styles'

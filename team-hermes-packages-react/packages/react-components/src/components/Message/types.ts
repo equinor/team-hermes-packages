@@ -5,6 +5,7 @@ import {
   info_circle,
   warning_outlined,
 } from '@equinor/eds-icons'
+
 import type { Theme } from '@/shared/types'
 
 export type MessageProps = {

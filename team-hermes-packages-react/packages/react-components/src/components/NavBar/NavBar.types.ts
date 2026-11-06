@@ -1,4 +1,5 @@
 import type { IconData } from '@equinor/eds-icons'
+
 import type { Theme } from '@/shared/types'
 
 export type NavLinkType = {

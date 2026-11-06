@@ -11,7 +11,9 @@ import {
 } from '@equinor/eds-icons'
 import type { Header, Table } from '@tanstack/react-table'
 import { useState } from 'react'
+
 import { ConfirmOperationDialog } from '@/components'
+
 import type { CellActions } from '../../context/DataGridContext'
 import { ColumnPinningDirection } from '../../DataGrid.types'
 

@@ -1,5 +1,6 @@
 import { fireEvent, render } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vite-plus/test'
+
 import { FileUploadInput } from './FileUploadInput'
 
 const png = new File(['x'], 'a.png', { type: 'image/png' })

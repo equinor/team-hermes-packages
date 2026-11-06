@@ -1,5 +1,6 @@
 import { copy, delete_to_trash, edit, external_link, paste, settings } from '@equinor/eds-icons'
 import type { Meta, StoryObj } from '@storybook/react-vite'
+
 import { ContextMenu } from './ContextMenu'
 
 const meta = {
