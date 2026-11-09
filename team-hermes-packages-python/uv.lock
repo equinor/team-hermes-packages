@@ -759,7 +759,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "elasticsearch", specifier = ">=8.18,<9" },
+    { name = "elasticsearch", specifier = ">=8.18,<10" },
     { name = "pydantic", specifier = ">=2,<3" },
 ]
 
