@@ -14,6 +14,7 @@ jobs:
     outputs:
       releases_created: ${{ steps.release.outputs.releases_created }}
       npm-packages: ${{ steps.npm-packages.outputs.packages }}
+      pypi-packages: ${{ steps.pypi-packages.outputs.packages }}
     steps:
       - uses: googleapis/release-please-action@v4
         id: release
@@ -33,6 +34,22 @@ jobs:
                 | select(endswith("--release_created") and $outputs[.] == "true")
                 | sub("--release_created$"; "")
                 | select(startswith("team-hermes-packages-react/"))
+                | { path: ., tag: $outputs[. + "--tag_name"] } ]
+          ' <<< "$RELEASE_OUTPUTS")"
+          echo "packages=$packages" >> "$GITHUB_OUTPUT"
+
+      # Releases under team-hermes-packages-python/ are PyPI packages; output them as a matrix for the publish job.
+      - name: "Collect released PyPI packages"
+        id: pypi-packages
+        env:
+          RELEASE_OUTPUTS: ${{ toJSON(steps.release.outputs) }}
+        run: |
+          packages="$(jq -c '
+            . as $outputs
+            | [ keys[]
+                | select(endswith("--release_created") and $outputs[.] == "true")
+                | sub("--release_created$"; "")
+                | select(startswith("team-hermes-packages-python/"))
                 | { path: ., tag: $outputs[. + "--tag_name"] } ]
           ' <<< "$RELEASE_OUTPUTS")"
           echo "packages=$packages" >> "$GITHUB_OUTPUT"
@@ -83,3 +100,33 @@ jobs:
 
       - name: "Publish to npm"
         run: npm publish ./*.tgz --access public
+
+  publish-pypi:
+    needs: release-please
+    if: needs.release-please.outputs.pypi-packages != '[]'
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+    permissions:
+      # IMPORTANT: this permission is mandatory for Trusted Publishing
+      id-token: write
+    defaults:
+      run:
+        working-directory: team-hermes-packages-python
+    steps:
+      - name: "Setup: checkout repository"
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: "Setup: Runtimes"
+        uses: jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c # v4.3.0
+        timeout-minutes: 5
+
+      - name: build packages
+        run: mise run python:build
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086 # v1.14.3
+        with:
+          packages-dir: ${{ github.workspace }}/team-hermes-packages-python/dist
+          skip-existing: true
+          verbose: true
