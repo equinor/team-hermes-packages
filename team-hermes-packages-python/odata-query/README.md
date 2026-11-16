@@ -1,4 +1,4 @@
-# Team Hermes Query
+# Team Hermes OData Query
 
 Shared filter, sorting, and selection contracts for Team Hermes Python projects.
 Build query descriptions without importing a repository, web framework, or database library.
@@ -13,7 +13,7 @@ Build the workspace distributions and install query with its dependencies:
 ```shell
 mise run python:build
 uv pip install --find-links team-hermes-packages-python/dist \
-  team-hermes-packages-python/dist/team_hermes_query-*.whl
+  team-hermes-packages-python/dist/team_hermes_odata_query-*.whl
 ```
 
 Dependencies are installed automatically. `--find-links` makes the locally built
@@ -27,7 +27,7 @@ is only for development; it is not embedded as a local path in the built distrib
 ## Query Contracts
 
 ```pycon
->>> from team_hermes.query import (
+>>> from team_hermes.odata_query import (
 ...     FilterBy,
 ...     FilterExpression,
 ...     FilterOperator,
@@ -78,8 +78,8 @@ The operator selects one of four Pydantic models:
 | `StringFilterExpression`  | `like`, `ilike`, `notlike`, `notilike`, `contains`, `notcontains`, `inlist`, `notinlist`, `starts_with`, `ends_with` | String                                                         |
 
 `FilterValue`, `FilterExpressions`, and `FilterExpressionDict` provide shared
-annotations. All classes and these aliases are available from `team_hermes.query`.
-Their implementation lives in `team_hermes.query.models`.
+annotations. All classes and these aliases are available from `team_hermes.odata_query`.
+Their implementation lives in `team_hermes.odata_query.models`.
 
 ## Compatibility Boundaries
 
@@ -107,7 +107,7 @@ Their implementation lives in `team_hermes.query.models`.
 Follow the [workspace setup](../README.md), then run from the repository root:
 
 ```shell
-mise run python:test -- query/tests
+mise run python:test -- odata-query/tests
 mise run python:lint
 mise run python:typecheck
 mise run python:build
@@ -115,13 +115,13 @@ mise run python:build
 
 The README example runs as a doctest through pytest.
 
-Query is also tested as an installed wheel on Python 3.12 in CI:
+OData Query is also tested as an installed wheel on Python 3.12 in CI:
 
 ```shell
-UV_PYTHON=3.12 mise run python:test:query
+UV_PYTHON=3.12 mise run python:test:odata-query
 ```
 
-The [artifact smoke check](tests/artifact_smoke.py) verifies the installed query
+The [artifact smoke check](tests/artifact_smoke.py) verifies the installed `odata_query`
 and core wheels with only their declared runtime dependencies.
 
 ## License

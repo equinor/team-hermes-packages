@@ -1,7 +1,7 @@
 # Team Hermes FastAPI Query
 
 FastAPI dependencies for filtering, field selection, ordering, and page-based
-pagination. Uses the models from [team-hermes-query](../query/README.md) and
+pagination. Uses the models from [team-hermes-odata-query](../odata-query/README.md) and
 exceptions from [team-hermes-core](../core/README.md).
 
 Requires Python 3.12+, FastAPI 0.115.6+, and Pydantic 2.9 or newer within version 2. No database or error-handling
@@ -34,7 +34,7 @@ uv pip install --find-links team-hermes-packages-python/dist \
 ...     parse_filter,
 ...     parse_select,
 ... )
->>> from team_hermes.query import FilterBy, OrderBy, Select
+>>> from team_hermes.odata_query import FilterBy, OrderBy, Select
 >>> app = FastAPI()
 >>> @app.get("/items")
 ... def items(

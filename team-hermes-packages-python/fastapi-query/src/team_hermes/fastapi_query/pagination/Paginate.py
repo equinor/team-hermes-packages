@@ -4,7 +4,7 @@ from typing import Any, Protocol
 
 from pydantic import BaseModel
 
-from team_hermes.query import FilterBy, OrderBy
+from team_hermes.odata_query import FilterBy, OrderBy
 
 from .PaginatedResponse import PageParams, PaginatedResponse
 

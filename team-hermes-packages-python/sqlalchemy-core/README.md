@@ -1,7 +1,7 @@
 # Team Hermes SQLAlchemy Core
 
 SQLAlchemy 2.x filter compilation for Python 3.12+, using
-[shared query contracts](../query/README.md). This package does not create
+[shared query contracts](../odata-query/README.md). This package does not create
 connections, execute queries, manage sessions, or provide repositories or facets.
 
 "Core" means the shared Team Hermes foundation here; these helpers also support
@@ -14,7 +14,7 @@ For local development, follow the [workspace setup](../README.md).
 ```pycon
 >>> from sqlalchemy import create_engine, select
 >>> from sqlalchemy.orm import DeclarativeBase, Mapped, Session, mapped_column
->>> from team_hermes.query import FilterExpression, FilterOperator
+>>> from team_hermes.odata_query import FilterExpression, FilterOperator
 >>> from team_hermes.sqlalchemy_core import apply_filters
 >>> class Base(DeclarativeBase):
 ...     pass

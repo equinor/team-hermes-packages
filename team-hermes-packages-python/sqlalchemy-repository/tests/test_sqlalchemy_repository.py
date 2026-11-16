@@ -8,7 +8,7 @@ from sqlalchemy import ForeignKey, create_engine, event, inspect
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import DeclarativeBase, Mapped, Session, joinedload, mapped_column, relationship
 from team_hermes.core import NotFoundException
-from team_hermes.query import FilterExpression, FilterOperator, OrderBy, SortDirection
+from team_hermes.odata_query import FilterExpression, FilterOperator, OrderBy, SortDirection
 
 from team_hermes.sqlalchemy_repository import Repository, RepositoryInterface
 

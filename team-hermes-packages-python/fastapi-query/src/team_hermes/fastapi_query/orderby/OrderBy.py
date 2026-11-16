@@ -4,7 +4,7 @@ from typing import Any
 from fastapi import Query
 
 from team_hermes.core import ValidationException
-from team_hermes.query import OrderBy, SortDirection
+from team_hermes.odata_query import OrderBy, SortDirection
 
 
 def create_order_by_options(valid_options: list[str] | None = None) -> Callable[[str], Any]:

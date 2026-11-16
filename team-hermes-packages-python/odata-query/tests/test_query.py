@@ -5,7 +5,7 @@ import pytest
 from pydantic import TypeAdapter, ValidationError
 from team_hermes.core.exceptions import ValidationException
 
-from team_hermes.query.models import (
+from team_hermes.odata_query.models import (
     BOOL_OPERATORS,
     DEFAULT_OPERATORS,
     NUM_OPERATORS,

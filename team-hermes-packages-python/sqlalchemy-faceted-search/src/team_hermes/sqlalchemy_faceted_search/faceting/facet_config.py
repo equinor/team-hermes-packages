@@ -4,7 +4,7 @@ from typing import Any, cast
 
 from sqlalchemy import Select, func, select
 
-from team_hermes.query import FilterBy, FilterExpression, LogicalFilter
+from team_hermes.odata_query import FilterBy, FilterExpression, LogicalFilter
 from team_hermes.sqlalchemy_core.filtering import apply_filters
 
 

@@ -1,7 +1,7 @@
 # Team Hermes SQLAlchemy Faceted Search
 
 SQLAlchemy 2.x faceting helpers for Python 3.12+, using
-[shared filtering](../sqlalchemy-core/README.md) and [query contracts](../query/README.md).
+[shared filtering](../sqlalchemy-core/README.md) and [query contracts](../odata-query/README.md).
 No repository or FastAPI dependency, database
 driver, engine creation, session management, or transaction handling is included.
 
@@ -13,7 +13,7 @@ Install a database driver separately when using a database other than SQLite.
 ```pycon
 >>> from sqlalchemy import create_engine, select
 >>> from sqlalchemy.orm import DeclarativeBase, Mapped, Session, mapped_column
->>> from team_hermes.query import FilterExpression, FilterOperator, LogicalFilter, LogicalOperator
+>>> from team_hermes.odata_query import FilterExpression, FilterOperator, LogicalFilter, LogicalOperator
 >>> from team_hermes.sqlalchemy_core import apply_filters
 >>> from team_hermes.sqlalchemy_faceted_search import FacetConfig, FacetCountsResponse, serialize_value
 >>> class Base(DeclarativeBase):

@@ -26,7 +26,7 @@ jobs:
       matrix:
         include:
           - { task: "test:core", python: "3.12" }
-          - { task: "test:query", python: "3.12" }
+          - { task: "test:odata-query", python: "3.12" }
           - { task: "test:elasticsearch", python: "3.12" }
           - { task: "test:validation", python: "3.12" }
           - { task: "test:fastapi-error-handling", python: "3.12" }

@@ -6,7 +6,7 @@ Independent Python 3.12+ libraries sharing a uv workspace and lockfile.
 
 - [🔍 Elasticsearch](elasticsearch/README.md): typed search, filtering, pagination, and aggregations.
 - [🧩 Core](core/README.md): shared application exceptions with no runtime dependencies.
-- [Query](query/README.md): filter, sorting, and selection contracts; depends on core and Pydantic.
+- [OData Query](odata-query/README.md): filter, sorting, and selection contracts; depends on core and Pydantic.
 - [Validation](validation/README.md): framework-independent validation rules, results, and serializable reports.
 - [Authorization](authorization/README.md): dependency-free role and attribute-based permission checks.
 - [FastAPI Error Handling](fastapi-error-handling/README.md): application error responses and correlation IDs.

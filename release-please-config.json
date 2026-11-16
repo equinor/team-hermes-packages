@@ -54,14 +54,14 @@
         }
       ]
     },
-    "team-hermes-packages-python/query": {
+    "team-hermes-packages-python/odata-query": {
       "release-type": "python",
-      "component": "team-hermes-query",
+      "component": "team-hermes-odata-query",
       "extra-files": [
         {
           "type": "toml",
           "path": "/team-hermes-packages-python/uv.lock",
-          "jsonpath": "$.package[?(@.name.value == 'team-hermes-query')].version"
+          "jsonpath": "$.package[?(@.name.value == 'team-hermes-odata-query')].version"
         }
       ]
     },

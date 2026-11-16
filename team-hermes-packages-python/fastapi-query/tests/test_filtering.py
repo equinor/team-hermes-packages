@@ -2,7 +2,7 @@ import datetime
 
 import pytest
 from team_hermes.core import ValidationException
-from team_hermes.query import (
+from team_hermes.odata_query import (
     FilterExpression,
     FilterOperator,
     LogicalFilter,

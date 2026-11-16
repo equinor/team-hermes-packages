@@ -10,8 +10,8 @@ import pytest
 from team_hermes.core import ValidationException
 
 import team_hermes
-from team_hermes import query
-from team_hermes.query import models
+from team_hermes import odata_query
+from team_hermes.odata_query import models
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "src" / "team_hermes"
@@ -20,12 +20,12 @@ SOURCE = ROOT / "src" / "team_hermes"
 def test_distribution_dependencies_and_typing():
     configuration = tomllib.loads((ROOT / "pyproject.toml").read_text())
     project = configuration["project"]
-    assert project["name"] == "team-hermes-query"
+    assert project["name"] == "team-hermes-odata-query"
     assert project["dependencies"] == ["team-hermes-core>=0.1.0", "pydantic>=2,<3"]
     assert configuration["tool"]["uv"]["sources"]["team-hermes-core"] == {"workspace": True}
     assert team_hermes.__file__ is None
-    assert {path.name for path in SOURCE.iterdir() if path.name != "__pycache__"} == {"query"}
-    assert (SOURCE / "query" / "py.typed").is_file()
+    assert {path.name for path in SOURCE.iterdir() if path.name != "__pycache__"} == {"odata_query"}
+    assert (SOURCE / "odata_query" / "py.typed").is_file()
 
 
 def test_no_application_framework_or_unrelated_sibling_imports():
@@ -67,31 +67,31 @@ def test_public_api_preserves_model_identity():
         "SortDirection",
         "StringFilterExpression",
     }
-    assert set(query.__all__) == expected
-    assert all(getattr(query, name) is getattr(models, name) for name in expected)
-    assert not hasattr(query, "RepositoryInterface")
+    assert set(odata_query.__all__) == expected
+    assert all(getattr(odata_query, name) is getattr(models, name) for name in expected)
+    assert not hasattr(odata_query, "RepositoryInterface")
 
 
 def test_query_raises_core_exception():
     assert models.ValidationException is ValidationException
     with pytest.raises(ValidationException, match="Unsupported operator"):
-        query.FilterExpression(key="quantity", operator="unknown", value=5)
+        odata_query.FilterExpression(key="quantity", operator="unknown", value=5)
 
 
 def test_package_registered_for_workspace_and_releases():
     workspace = tomllib.loads((ROOT.parent / "pyproject.toml").read_text())
-    assert "query" in workspace["tool"]["uv"]["workspace"]["members"]
-    assert "query/src" in workspace["tool"]["pyrefly"]["search-path"]
+    assert "odata-query" in workspace["tool"]["uv"]["workspace"]["members"]
+    assert "odata-query/src" in workspace["tool"]["pyrefly"]["search-path"]
     repository = ROOT.parent.parent
-    package_path = "team-hermes-packages-python/query"
+    package_path = "team-hermes-packages-python/odata-query"
     release = json.loads((repository / "release-please-config.json").read_text())["packages"][package_path]
-    assert release["component"] == "team-hermes-query"
+    assert release["component"] == "team-hermes-odata-query"
     assert release["release-type"] == "python"
     assert release["extra-files"] == [
         {
             "type": "toml",
             "path": "/team-hermes-packages-python/uv.lock",
-            "jsonpath": "$.package[?(@.name.value == 'team-hermes-query')].version",
+            "jsonpath": "$.package[?(@.name.value == 'team-hermes-odata-query')].version",
         }
     ]
     manifest = json.loads((repository / ".release-please-manifest.json").read_text())

@@ -3,7 +3,7 @@ requires = ["hatchling>=1.27,<2"]
 build-backend = "hatchling.build"
 
 [project]
-name = "team-hermes-query"
+name = "team-hermes-odata-query"
 version = "0.2.0"
 description = "Shared filter, sorting, and selection contracts for Team Hermes projects"
 readme = "README.md"

@@ -3,7 +3,7 @@ from collections.abc import Callable
 from fastapi import Query
 
 from team_hermes.core import ValidationException
-from team_hermes.query import Select
+from team_hermes.odata_query import Select
 
 
 def parse_select(valid_options: list[str] | None = None) -> Callable[[str], Select | None]:

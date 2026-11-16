@@ -3,7 +3,7 @@ from sqlalchemy import Column, ForeignKey, Integer, String, cast, create_engine,
 from sqlalchemy.dialects import postgresql
 from sqlalchemy.orm import Session, declarative_base, relationship
 from team_hermes.core import ValidationException
-from team_hermes.query import (
+from team_hermes.odata_query import (
     FilterExpression,
     FilterOperator,
     LogicalFilter,

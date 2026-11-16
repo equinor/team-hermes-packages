@@ -6,7 +6,7 @@ from collections.abc import Callable
 from fastapi import Query
 
 from team_hermes.core import ValidationException
-from team_hermes.query import (
+from team_hermes.odata_query import (
     FilterBy,
     FilterExpression,
     FilterValue,
