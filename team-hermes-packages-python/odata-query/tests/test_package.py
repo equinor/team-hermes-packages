@@ -20,7 +20,7 @@ SOURCE = ROOT / "src" / "team_hermes"
 def test_distribution_dependencies_and_typing():
     configuration = tomllib.loads((ROOT / "pyproject.toml").read_text())
     project = configuration["project"]
-    assert project["name"] == "team-hermes-odata-query"
+    assert project["name"] == "team-hermes.odata-query"
     assert project["dependencies"] == ["team-hermes-core>=0.1.0", "pydantic>=2,<3"]
     assert configuration["tool"]["uv"]["sources"]["team-hermes-core"] == {"workspace": True}
     assert team_hermes.__file__ is None
