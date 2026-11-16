@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy.orm.interfaces import LoaderOption
 
 from team_hermes.core import NotFoundException
-from team_hermes.query import FilterBy, OrderBy, SortDirection
+from team_hermes.odata_query import FilterBy, OrderBy, SortDirection
 from team_hermes.sqlalchemy_core import apply_filters
 
 from .repository_interface import RepositoryInterface

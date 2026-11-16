@@ -9,7 +9,12 @@ description = "SQLAlchemy facet queries and cross-filtered counts for Team Herme
 readme = "README.md"
 license-files = ["LICENSE"]
 requires-python = ">=3.12"
-dependencies = ["team-hermes-query>=0.1.0", "team-hermes-sqlalchemy-core>=0.1.0", "sqlalchemy>=2.0", "pydantic>=2.9"]
+dependencies = [
+  "team-hermes-odata-query>=0.1.0",
+  "team-hermes-sqlalchemy-core>=0.1.0",
+  "sqlalchemy>=2.0",
+  "pydantic>=2.9",
+]
 classifiers = [
   "Intended Audience :: Developers",
   "Programming Language :: Python :: 3",
@@ -32,7 +37,7 @@ packages = ["src/team_hermes"]
 include = ["src", "pyproject.toml", "README.md", "LICENSE"]
 
 [tool.uv.sources]
-team-hermes-query = { workspace = true }
+team-hermes-odata-query = { workspace = true }
 team-hermes-sqlalchemy-core = { workspace = true }
 
 [tool.ruff]

@@ -3,7 +3,7 @@ from typing import Any
 
 import pytest
 from pydantic import BaseModel, ConfigDict, ValidationError
-from team_hermes.query import FilterBy, FilterExpression, OrderBy, SortDirection
+from team_hermes.odata_query import FilterBy, FilterExpression, OrderBy, SortDirection
 
 from team_hermes.fastapi_query import PageParams, PaginatedResponse, paginate
 

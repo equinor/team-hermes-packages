@@ -9,7 +9,7 @@ description = "FastAPI filtering, selection, ordering, and pagination helpers fo
 readme = "README.md"
 license-files = ["LICENSE"]
 requires-python = ">=3.12"
-dependencies = ["team-hermes-core>=0.1.0", "team-hermes-query>=0.1.0", "fastapi>=0.115.6", "pydantic>=2.9,<3"]
+dependencies = ["team-hermes-core>=0.1.0", "team-hermes-odata-query>=0.1.0", "fastapi>=0.115.6", "pydantic>=2.9,<3"]
 classifiers = [
   "Intended Audience :: Developers",
   "Programming Language :: Python :: 3",
@@ -36,7 +36,7 @@ include = ["src", "pyproject.toml", "README.md", "LICENSE"]
 
 [tool.uv.sources]
 team-hermes-core = { workspace = true }
-team-hermes-query = { workspace = true }
+team-hermes-odata-query = { workspace = true }
 
 [tool.ruff]
 extend = "../pyproject.toml"

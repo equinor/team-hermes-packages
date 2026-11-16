@@ -13,7 +13,7 @@ is created by importing this package.
 >>> from uuid import UUID, uuid4
 >>> from sqlalchemy import create_engine
 >>> from sqlalchemy.orm import DeclarativeBase, Mapped, Session, mapped_column
->>> from team_hermes.query import FilterExpression, FilterOperator, OrderBy, SortDirection
+>>> from team_hermes.odata_query import FilterExpression, FilterOperator, OrderBy, SortDirection
 >>> from team_hermes.sqlalchemy_repository import Repository
 >>> class Base(DeclarativeBase):
 ...     pass

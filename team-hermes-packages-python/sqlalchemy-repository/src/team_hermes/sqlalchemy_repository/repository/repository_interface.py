@@ -7,7 +7,7 @@ from uuid import UUID
 
 from sqlalchemy.orm.interfaces import LoaderOption
 
-from team_hermes.query import FilterBy, OrderBy
+from team_hermes.odata_query import FilterBy, OrderBy
 
 
 class RepositoryInterface[Entity](ABC):

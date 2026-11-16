@@ -5,7 +5,7 @@ from sqlalchemy.orm import InstrumentedAttribute, RelationshipProperty
 from sqlalchemy.sql import and_, or_
 
 from team_hermes.core import ValidationException
-from team_hermes.query import (
+from team_hermes.odata_query import (
     BooleanFilterExpression,
     FilterBy,
     FilterExpression,

@@ -9,7 +9,7 @@ members = [
     "team-hermes-elasticsearch",
     "team-hermes-fastapi-error-handling",
     "team-hermes-fastapi-query",
-    "team-hermes-query",
+    "team-hermes-odata-query",
     "team-hermes-sqlalchemy-core",
     "team-hermes-sqlalchemy-faceted-search",
     "team-hermes-sqlalchemy-repository",
@@ -826,7 +826,7 @@ dependencies = [
     { name = "fastapi" },
     { name = "pydantic" },
     { name = "team-hermes-core" },
-    { name = "team-hermes-query" },
+    { name = "team-hermes-odata-query" },
 ]
 
 [package.dev-dependencies]
@@ -839,16 +839,16 @@ requires-dist = [
     { name = "fastapi", specifier = ">=0.115.6" },
     { name = "pydantic", specifier = ">=2.9,<3" },
     { name = "team-hermes-core", editable = "core" },
-    { name = "team-hermes-query", editable = "query" },
+    { name = "team-hermes-odata-query", editable = "odata-query" },
 ]
 
 [package.metadata.requires-dev]
 dev = [{ name = "httpx", specifier = ">=0.28,<1" }]
 
 [[package]]
-name = "team-hermes-query"
+name = "team-hermes-odata-query"
 version = "0.2.0"
-source = { editable = "query" }
+source = { editable = "odata-query" }
 dependencies = [
     { name = "pydantic" },
     { name = "team-hermes-core" },
@@ -867,14 +867,14 @@ source = { editable = "sqlalchemy-core" }
 dependencies = [
     { name = "sqlalchemy" },
     { name = "team-hermes-core" },
-    { name = "team-hermes-query" },
+    { name = "team-hermes-odata-query" },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "sqlalchemy", specifier = ">=2.0" },
     { name = "team-hermes-core", editable = "core" },
-    { name = "team-hermes-query", editable = "query" },
+    { name = "team-hermes-odata-query", editable = "odata-query" },
 ]
 
 [[package]]
@@ -884,7 +884,7 @@ source = { editable = "sqlalchemy-faceted-search" }
 dependencies = [
     { name = "pydantic" },
     { name = "sqlalchemy" },
-    { name = "team-hermes-query" },
+    { name = "team-hermes-odata-query" },
     { name = "team-hermes-sqlalchemy-core" },
 ]
 
@@ -892,7 +892,7 @@ dependencies = [
 requires-dist = [
     { name = "pydantic", specifier = ">=2.9" },
     { name = "sqlalchemy", specifier = ">=2.0" },
-    { name = "team-hermes-query", editable = "query" },
+    { name = "team-hermes-odata-query", editable = "odata-query" },
     { name = "team-hermes-sqlalchemy-core", editable = "sqlalchemy-core" },
 ]
 
@@ -903,7 +903,7 @@ source = { editable = "sqlalchemy-repository" }
 dependencies = [
     { name = "sqlalchemy" },
     { name = "team-hermes-core" },
-    { name = "team-hermes-query" },
+    { name = "team-hermes-odata-query" },
     { name = "team-hermes-sqlalchemy-core" },
 ]
 
@@ -911,7 +911,7 @@ dependencies = [
 requires-dist = [
     { name = "sqlalchemy" },
     { name = "team-hermes-core", editable = "core" },
-    { name = "team-hermes-query", editable = "query" },
+    { name = "team-hermes-odata-query", editable = "odata-query" },
     { name = "team-hermes-sqlalchemy-core", editable = "sqlalchemy-core" },
 ]
 

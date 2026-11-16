@@ -5,7 +5,7 @@ import pytest
 from fastapi import Depends, FastAPI
 from fastapi.testclient import TestClient
 from team_hermes.core import ValidationException
-from team_hermes.query import FilterBy, OrderBy, Select, SortDirection
+from team_hermes.odata_query import FilterBy, OrderBy, Select, SortDirection
 
 from team_hermes.fastapi_query import PageParams, create_order_by_options, parse_filter, parse_select
 

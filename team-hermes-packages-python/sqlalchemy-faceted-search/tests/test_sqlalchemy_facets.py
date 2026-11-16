@@ -4,7 +4,7 @@ from typing import Any
 import pytest
 from sqlalchemy import Select, create_engine, distinct, func, select
 from sqlalchemy.orm import DeclarativeBase, Mapped, Session, mapped_column
-from team_hermes.query import (
+from team_hermes.odata_query import (
     FilterExpression,
     FilterOperator,
     LogicalFilter,

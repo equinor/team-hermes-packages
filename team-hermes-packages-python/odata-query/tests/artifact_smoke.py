@@ -10,15 +10,15 @@ def main() -> None:
     import team_hermes.core
 
     import team_hermes
-    import team_hermes.query
+    import team_hermes.odata_query
 
     assert team_hermes.__file__ is None
     assert all("site-packages" in path for path in team_hermes.__path__)
-    assert {path.name for path in files("team_hermes").iterdir()} == {"core", "query"}
-    assert files("team_hermes.query").joinpath("py.typed").is_file()
+    assert {path.name for path in files("team_hermes").iterdir()} == {"core", "odata_query"}
+    assert files("team_hermes.odata_query").joinpath("py.typed").is_file()
     assert files("team_hermes.core").joinpath("py.typed").is_file()
     assert not metadata("team-hermes-core").get_all("Requires-Dist")
-    package_metadata = metadata("team-hermes-query")
+    package_metadata = metadata("team-hermes-odata-query")
     assert package_metadata.get_all("License-File") == ["LICENSE"]
     assert set(package_metadata.get_all("Requires-Dist") or []) == {"pydantic<3,>=2", "team-hermes-core>=0.1.0"}
     assert not package_metadata.get_all("Provides-Extra")
@@ -40,7 +40,7 @@ def main() -> None:
 
     from team_hermes.core import ValidationException
 
-    from team_hermes.query import (
+    from team_hermes.odata_query import (
         FilterExpression,
         FilterOperator,
         LogicalFilter,
