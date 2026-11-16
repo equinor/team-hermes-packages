@@ -3,7 +3,7 @@ requires = ["hatchling>=1.27,<2"]
 build-backend = "hatchling.build"
 
 [project]
-name = "team-hermes-sqlalchemy-core"
+name = "team-hermes.sqlalchemy-core"
 version = "0.2.0"
 description = "SQLAlchemy filter compilation for Team Hermes query contracts"
 readme = "README.md"

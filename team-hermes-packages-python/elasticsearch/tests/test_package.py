@@ -15,7 +15,7 @@ def test_namespace_root_contains_only_elasticsearch():
 
 def test_distribution_is_independent():
     project = tomllib.loads((ROOT / "pyproject.toml").read_text())["project"]
-    assert project["name"] == "team-hermes-elasticsearch"
+    assert project["name"] == "team-hermes.elasticsearch"
     assert not any("team-hermes" in dependency for dependency in project["dependencies"])
 
 
