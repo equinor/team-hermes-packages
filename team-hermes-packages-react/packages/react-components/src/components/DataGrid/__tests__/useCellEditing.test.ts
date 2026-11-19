@@ -1,6 +1,6 @@
 import type { Cell, RowData } from '@tanstack/react-table'
 import { act, renderHook } from '@testing-library/react'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it } from 'vite-plus/test'
 
 import { createTestTable } from '@/components/DataGrid/__tests__/testUtils'
 import { useCellEditing } from '@/components/DataGrid/hooks/useCellEditing/useCellEditing'

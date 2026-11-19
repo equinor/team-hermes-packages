@@ -1,5 +1,5 @@
 import { act, renderHook } from '@testing-library/react'
-import { describe, expect, it, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vite-plus/test'
 
 // Mock to break circular dependency: @/hooks → useFilters → @/common/components → DataGridCell → FilterDialog.utils → @/hooks
 vi.mock('@/common/components/FilterDialog/FilterDialog.utils', () => ({}))

@@ -26,8 +26,8 @@ The package's type declarations already reference `@arcgis/map-components/types/
 ## Usage
 
 ```tsx
-import Graphic from '@arcgis/core/Graphic'
 import Point from '@arcgis/core/geometry/Point'
+import Graphic from '@arcgis/core/Graphic'
 import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
 import { OmniaMap } from '@team-hermes/react-omnia-map'
 import { useMemo } from 'react'

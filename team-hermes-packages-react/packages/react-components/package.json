@@ -55,8 +55,9 @@
     "@equinor/eds-tokens": "^2.3.1",
     "@tailwindcss/cli": "^4.3.2",
     "@tailwindcss/vite": "catalog:",
-    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/jest-dom": "^8.0.0",
     "@testing-library/react": "catalog:",
+    "@testing-library/user-event": "^14.6.12",
     "@tsdown/css": "0.22.3",
     "@types/jest": "^30.0.0",
     "@types/node": "catalog:",
@@ -68,7 +69,7 @@
     "tailwindcss": "catalog:",
     "typescript": "catalog:",
     "vite-plus": "catalog:",
-    "vitest": "npm:@voidzero-dev/vite-plus-test@^0.1.24"
+    "vitest": "catalog:"
   },
   "peerDependencies": {
     "@equinor/eds-core-react": "^2.6.1",
