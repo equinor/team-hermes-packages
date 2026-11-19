@@ -1,5 +1,24 @@
 # Changelog
 
+## [2.0.0](https://github.com/equinor/team-hermes-packages/compare/team-hermes-fastapi-query-v1.0.0...team-hermes-fastapi-query-v2.0.0) (2026-11-19)
+
+
+### ⚠ BREAKING CHANGES
+
+* `team-hermes-<package>` -> `team-hermes.<package>`
+* `team-hermes-query` -> `team-hermes-odata-query`
+
+### Features
+
+* **python:** add FastAPI query package ([3e6e5d0](https://github.com/equinor/team-hermes-packages/commit/3e6e5d0a7f3b505a08455f388c560fcdff15b4b9))
+* **python:** standardize Python 3.12 and HTTP problem details ([e9eccab](https://github.com/equinor/team-hermes-packages/commit/e9eccab632a8abbbed69525d14237afac5b06d44))
+
+
+### Code Refactoring
+
+* `team-hermes-<package>` -&gt; `team-hermes.<package>` ([63fc22f](https://github.com/equinor/team-hermes-packages/commit/63fc22f3cab1a1a0e9104716627c4300ac5f44c1))
+* `team-hermes-query` -&gt; `team-hermes-odata-query` ([fdd55fd](https://github.com/equinor/team-hermes-packages/commit/fdd55fda79b664f6f36f96f524367691ce12744d))
+
 ## [1.0.0](https://github.com/equinor/team-hermes-packages/compare/team-hermes-fastapi-query-v0.2.0...team-hermes-fastapi-query-v1.0.0) (2026-11-19)
 
 

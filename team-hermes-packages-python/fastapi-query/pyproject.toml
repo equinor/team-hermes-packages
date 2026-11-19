@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "team-hermes.fastapi-query"
-version = "1.0.0"
+version = "2.0.0"
 description = "FastAPI filtering, selection, ordering, and pagination helpers for Team Hermes projects"
 readme = "README.md"
 license-files = ["LICENSE"]
