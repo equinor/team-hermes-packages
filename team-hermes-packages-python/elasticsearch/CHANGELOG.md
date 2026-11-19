@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.0.2](https://github.com/equinor/team-hermes-packages/compare/team-hermes-elasticsearch-v1.0.1...team-hermes-elasticsearch-v1.0.2) (2026-11-19)
+
+
+### Bug Fixes
+
+* Release missing PyPi packages ([207c4f3](https://github.com/equinor/team-hermes-packages/commit/207c4f3e35fdf32e352bc027d74a9a233eeb3eb9))
+
+
+### Miscellaneous Chores
+
+* Re-release packages which where not released ([adb9029](https://github.com/equinor/team-hermes-packages/commit/adb902977ec0d541a2aeb76b18952dc4a16be70e))
+
 ## [1.0.1](https://github.com/equinor/team-hermes-packages/compare/team-hermes-elasticsearch-v1.0.0...team-hermes-elasticsearch-v1.0.1) (2026-11-19)
 
 

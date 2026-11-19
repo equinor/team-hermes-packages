@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "team-hermes.core"
-version = "1.0.1"
+version = "1.0.2"
 description = "Shared application exceptions for Team Hermes projects"
 readme = "README.md"
 license-files = ["LICENSE.md"]
