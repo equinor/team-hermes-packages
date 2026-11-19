@@ -10,13 +10,23 @@ catalog:
   jsdom: ^29.1.1
   tailwindcss: ^4.3.1
   typescript: ^6.0.3
-  vite-plus: ^1.3.0
+  vite-plus: 1.7.0
+  vite: npm:@voidzero-dev/vite-plus-core@8.3.8000
+  vitest: 5.1.0
+  '@vitest/browser-playwright': 5.1.0
 
 overrides:
-  vite: 'npm:@voidzero-dev/vite-plus-core@latest'
-  vitest: 'npm:@voidzero-dev/vite-plus-test@latest'
+  vite@*: 'catalog:'
+  vitest@*: 'catalog:'
 
 allowBuilds:
   '@parcel/watcher': true
   '@vaadin/vaadin-usage-statistics': false
   esbuild: true
+peerDependencyRules:
+  allowAny:
+    - vitest
+  allowedVersions:
+    vitest: '*'
+minimumReleaseAgeExclude:
+  - '@testing-library/jest-dom@8.0.0'

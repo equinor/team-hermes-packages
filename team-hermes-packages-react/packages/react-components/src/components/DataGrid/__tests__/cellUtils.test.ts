@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it } from 'vite-plus/test'
 
 import { createTestTable } from '@/components/DataGrid/__tests__/testUtils'
 import {
