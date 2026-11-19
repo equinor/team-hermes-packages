@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "team-hermes.sqlalchemy-repository"
-version = "1.0.0"
+version = "1.0.1"
 description = "Generic SQLAlchemy CRUD repository for Team Hermes projects"
 readme = "README.md"
 license-files = ["LICENSE"]
