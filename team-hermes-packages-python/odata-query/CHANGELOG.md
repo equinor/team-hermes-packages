@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.0.1](https://github.com/equinor/team-hermes-packages/compare/team-hermes-odata-query-v1.0.0...team-hermes-odata-query-v1.0.1) (2026-11-19)
+
+
+### ⚠ BREAKING CHANGES
+
+* `team-hermes-<package>` -> `team-hermes.<package>`
+* `team-hermes-query` -> `team-hermes-odata-query`
+
+### Miscellaneous Chores
+
+* Re-release packages which where not released ([3774c0e](https://github.com/equinor/team-hermes-packages/commit/3774c0ec7aa9ee69e0f864f9e027bb71a1912a7a))
+
+
+### Code Refactoring
+
+* `team-hermes-<package>` -&gt; `team-hermes.<package>` ([63fc22f](https://github.com/equinor/team-hermes-packages/commit/63fc22f3cab1a1a0e9104716627c4300ac5f44c1))
+* `team-hermes-query` -&gt; `team-hermes-odata-query` ([fdd55fd](https://github.com/equinor/team-hermes-packages/commit/fdd55fda79b664f6f36f96f524367691ce12744d))
+
 ## [1.0.0](https://github.com/equinor/team-hermes-packages/compare/team-hermes-odata-query-v0.2.0...team-hermes-odata-query-v1.0.0) (2026-11-19)
 
 
