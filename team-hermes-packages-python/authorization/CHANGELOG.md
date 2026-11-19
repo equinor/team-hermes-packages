@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.0.0](https://github.com/equinor/team-hermes-packages/compare/team-hermes-authorization-v0.2.0...team-hermes-authorization-v1.0.0) (2026-11-19)
+
+
+### ⚠ BREAKING CHANGES
+
+* `team-hermes-<package>` -> `team-hermes.<package>`
+
+### Code Refactoring
+
+* `team-hermes-<package>` -&gt; `team-hermes.<package>` ([63fc22f](https://github.com/equinor/team-hermes-packages/commit/63fc22f3cab1a1a0e9104716627c4300ac5f44c1))
+
 ## [0.2.0](https://github.com/equinor/team-hermes-packages/compare/team-hermes-authorization-v0.1.0...team-hermes-authorization-v0.2.0) (2026-11-05)
 
 
