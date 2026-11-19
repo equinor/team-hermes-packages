@@ -3,6 +3,7 @@ requires = ["hatchling>=1.27,<2"]
 build-backend = "hatchling.build"
 
 [project]
+# Published to PyPI via GitHub Actions Trusted Publishing.
 name = "team-hermes.sqlalchemy-core"
 version = "1.0.0"
 description = "SQLAlchemy filter compilation for Team Hermes query contracts"

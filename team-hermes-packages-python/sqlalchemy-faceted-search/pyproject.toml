@@ -3,6 +3,7 @@ requires = ["hatchling>=1.27,<2"]
 build-backend = "hatchling.build"
 
 [project]
+# Published to PyPI via GitHub Actions Trusted Publishing.
 name = "team-hermes.sqlalchemy-faceted-search"
 version = "1.0.0"
 description = "SQLAlchemy facet queries and cross-filtered counts for Team Hermes projects"
