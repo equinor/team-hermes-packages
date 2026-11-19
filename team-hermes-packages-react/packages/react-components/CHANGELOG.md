@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.12.1](https://github.com/equinor/team-hermes-packages/compare/team-hermes-packages-react-v1.12.0...team-hermes-packages-react-v1.12.1) (2026-11-19)
+
+
+### Bug Fixes
+
+* `vp migrate` and resolve `jest-dom` discrepancy ([a7ee668](https://github.com/equinor/team-hermes-packages/commit/a7ee668f1b5b2f4971d42d8c91cfa4bc7d34f02b))
+
 ## [1.12.0](https://github.com/equinor/team-hermes-packages/compare/team-hermes-packages-react-v1.11.0...team-hermes-packages-react-v1.12.0) (2026-11-05)
 
 
