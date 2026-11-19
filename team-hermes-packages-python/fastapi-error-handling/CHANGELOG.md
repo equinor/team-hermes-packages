@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.0.0](https://github.com/equinor/team-hermes-packages/compare/team-hermes-fastapi-error-handling-v0.2.0...team-hermes-fastapi-error-handling-v1.0.0) (2026-11-19)
+
+
+### ⚠ BREAKING CHANGES
+
+* `team-hermes-<package>` -> `team-hermes.<package>`
+
+### Documentation
+
+* **python:** clarify exception and error handling guides ([b17cc20](https://github.com/equinor/team-hermes-packages/commit/b17cc203990c244f7f54a5fbe89e08aabef92a04))
+
+
+### Code Refactoring
+
+* `team-hermes-<package>` -&gt; `team-hermes.<package>` ([63fc22f](https://github.com/equinor/team-hermes-packages/commit/63fc22f3cab1a1a0e9104716627c4300ac5f44c1))
+
 ## [0.2.0](https://github.com/equinor/team-hermes-packages/compare/team-hermes-fastapi-error-handling-v0.1.0...team-hermes-fastapi-error-handling-v0.2.0) (2026-11-05)
 
 
