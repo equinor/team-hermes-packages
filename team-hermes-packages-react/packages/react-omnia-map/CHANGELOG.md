@@ -1,12 +1,5 @@
 # Changelog
 
-## [1.0.1](https://github.com/equinor/team-hermes-packages/compare/team-hermes-react-omnia-map-v1.1.0...team-hermes-react-omnia-map-v1.0.1) (2026-11-19)
-
-
-### Miscellaneous Chores
-
-* Re-release packages which where not released ([3774c0e](https://github.com/equinor/team-hermes-packages/commit/3774c0ec7aa9ee69e0f864f9e027bb71a1912a7a))
-
 ## [1.1.0](https://github.com/equinor/team-hermes-packages/compare/team-hermes-react-omnia-map-v1.0.0...team-hermes-react-omnia-map-v1.1.0) (2026-11-06)
 
 
