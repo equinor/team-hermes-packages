@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/equinor/team-hermes-packages/compare/team-hermes-core-v1.0.0...team-hermes-core-v1.0.1) (2026-11-19)
+
+
+### Bug Fixes
+
+* **python:** Trigger PyPI release for unpublished packages ([4d1717c](https://github.com/equinor/team-hermes-packages/commit/4d1717c40d722753175c2c4def67d08fbb24a319))
+
 ## [1.0.0](https://github.com/equinor/team-hermes-packages/compare/team-hermes-core-v0.2.0...team-hermes-core-v1.0.0) (2026-11-19)
 
 
