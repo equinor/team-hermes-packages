@@ -1,0 +1,38 @@
+import { Meta, Primary, ArgTypes } from '@storybook/addon-docs/blocks'
+import * as SearchAutocompleteStories from './SearchAutocomplete.stories'
+
+<Meta of={SearchAutocompleteStories} />
+
+# SearchAutocomplete
+
+A controlled search input with an anchored, grouped suggestion popup. Suggestions are supplied by the consumer and are not filtered by the component.
+
+<Primary />
+
+## Usage
+
+```tsx
+import { SearchAutocomplete, type SearchAutocompleteGroup } from '@team-hermes/react-components'
+
+const groups: SearchAutocompleteGroup[] = [
+  { id: 'places', label: 'Places', items: [{ id: 'sea', label: 'North Sea', metadata: '12 results' }] },
+]
+
+<SearchAutocomplete
+  value={query}
+  groups={groups}
+  onValueChange={setQuery}
+  onSelect={(item, group) => selectSuggestion(item, group)}
+  onSearch={(query) => search(query)}
+/>
+```
+
+Group IDs must be unique, and item IDs must be unique within their group. Groups and items can provide an `icon`; items can provide `metadata`. Custom item fields are preserved in `onSelect`. Recent searches can be supplied as another group.
+
+Enter selects the highlighted suggestion, or calls `onSearch` with trimmed, nonempty text. Escape closes the popup. Selection and search do not change the query; consumers decide whether to clear it. The clear button calls `onValueChange('')`.
+
+Pass `isLoading` or an `error` message to show status information. Existing suggestions remain selectable while either is displayed, so pass empty groups if stale results should not be available. Fetching, persistence, filter changes and pagination are consumer responsibilities.
+
+## Props
+
+<ArgTypes of={SearchAutocompleteStories} />
