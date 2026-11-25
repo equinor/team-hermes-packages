@@ -123,6 +123,41 @@ describe('SearchAutocomplete', () => {
     expect(input).toHaveValue('  north  ')
   })
 
+  test.each([
+    { isComposing: true, keyCode: 13, highlight: false },
+    { isComposing: true, keyCode: 13, highlight: true },
+    { isComposing: false, keyCode: 229, highlight: false },
+    { isComposing: false, keyCode: 229, highlight: true },
+  ])(
+    'preserves IME Enter confirmation with isComposing=$isComposing, keyCode=$keyCode, highlight=$highlight',
+    async ({ isComposing, keyCode, highlight }) => {
+      const user = userEvent.setup()
+      const onSelect = vi.fn()
+      const onSearch = vi.fn()
+      render(<Harness initialValue="query" onSelect={onSelect} onSearch={onSearch} />)
+      const input = screen.getByRole('combobox')
+      await user.click(input)
+      if (highlight) await user.keyboard('{ArrowDown}')
+
+      const nativeConfirmationAllowed = fireEvent.keyDown(input, { key: 'Enter', isComposing, keyCode })
+
+      expect(onSelect).not.toHaveBeenCalled()
+      expect(onSearch).not.toHaveBeenCalled()
+      expect(nativeConfirmationAllowed).toBe(true)
+      expect(input).toHaveAttribute('aria-expanded', 'true')
+      expect(input).toHaveValue('query')
+
+      await user.keyboard('{Enter}')
+      if (highlight) {
+        expect(onSelect).toHaveBeenCalledExactlyOnceWith(groups[0].items[0], groups[0])
+        expect(onSearch).not.toHaveBeenCalled()
+      } else {
+        expect(onSearch).toHaveBeenCalledExactlyOnceWith('query')
+        expect(onSelect).not.toHaveBeenCalled()
+      }
+    }
+  )
+
   test('does not select a removed highlighted item when results change', async () => {
     const user = userEvent.setup()
     const onSelect = vi.fn()
@@ -133,6 +168,10 @@ describe('SearchAutocomplete', () => {
     expect(screen.getByRole('combobox')).toHaveAttribute('aria-activedescendant')
     rerender(<Harness initialValue="query" onSelect={onSelect} onSearch={onSearch} resultGroups={[groups[1]]} />)
     expect(screen.getByRole('combobox')).not.toHaveAttribute('aria-activedescendant')
+    const replacement: SearchAutocompleteGroup = { id: 'more', label: 'More', items: [{ id: '3', label: 'Third' }] }
+    rerender(<Harness initialValue="query" onSelect={onSelect} onSearch={onSearch} resultGroups={[replacement]} />)
+    expect(screen.getByRole('combobox')).not.toHaveAttribute('aria-activedescendant')
+    expect(screen.getByRole('option', { name: 'Third' })).not.toHaveClass('bg-surface-hover')
     await user.keyboard('{Enter}')
     expect(onSelect).not.toHaveBeenCalled()
     expect(onSearch).toHaveBeenCalledExactlyOnceWith('query')

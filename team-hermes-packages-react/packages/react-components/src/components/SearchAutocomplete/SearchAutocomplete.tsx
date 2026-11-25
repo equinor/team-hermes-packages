@@ -144,8 +144,9 @@ export function SearchAutocomplete<T extends SearchAutocompleteItem = SearchAuto
       }}
       onItemHighlighted={(option, details) => {
         const previous = highlightedRef.current
-        // A changed result list can cause Base UI to highlight a different item at the same index.
-        if (details.reason === 'none' && previous && option && !sameOption(previous, option)) {
+        // A changed result list can cause Base UI to highlight a different item at the same index,
+        // even after an earlier replacement cleared the highlight; only keep an unchanged highlight.
+        if (details.reason === 'none' && !(previous && option && sameOption(previous, option))) {
           updateHighlight(undefined)
         } else {
           updateHighlight(option)
@@ -167,9 +168,10 @@ export function SearchAutocomplete<T extends SearchAutocompleteItem = SearchAuto
           onFocus={() => setOpen(true)}
           onClick={() => setOpen(true)}
           onKeyDown={(event) => {
-            if (event.key !== 'Enter' || event.nativeEvent.isComposing) return
-            event.preventDefault()
+            if (event.key !== 'Enter') return
             event.preventBaseUIHandler()
+            if (event.nativeEvent.isComposing || event.nativeEvent.keyCode === 229) return
+            event.preventDefault()
             if (open && currentHighlight) {
               select(currentHighlight)
             } else if (value.trim()) {
