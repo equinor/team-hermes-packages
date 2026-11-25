@@ -58,3 +58,31 @@ function Example() {
 }
 
 export const Controlled: Story = { render: () => <Example /> }
+
+function RecentSearchesExample() {
+  const [value, setValue] = useState('')
+  const [recent, setRecent] = useState<string[]>(['North Sea', 'Norwegian Sea'])
+  const [result, setResult] = useState('')
+
+  const search = (query: string) => {
+    setRecent((previous) => [query, ...previous.filter((entry) => entry !== query)].slice(0, 5))
+    setResult(`Searched for ${query}`)
+  }
+
+  return (
+    <div className="w-96 max-w-full space-y-4">
+      <SearchAutocomplete
+        value={value}
+        onValueChange={setValue}
+        groups={[
+          { id: 'recent', label: 'Recent searches', items: recent.map((query) => ({ id: query, label: query })) },
+        ]}
+        onSearch={search}
+        onSelect={(item) => search(item.label)}
+      />
+      <p>{result}</p>
+    </div>
+  )
+}
+
+export const RecentSearches: Story = { render: () => <RecentSearchesExample /> }

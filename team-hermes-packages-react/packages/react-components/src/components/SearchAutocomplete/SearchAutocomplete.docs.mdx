@@ -31,7 +31,29 @@ Group IDs must be unique, and item IDs must be unique within their group. Groups
 
 Enter selects the highlighted suggestion, or calls `onSearch` with trimmed, nonempty text. Escape closes the popup. Selection and search do not change the query; consumers decide whether to clear it. The clear button calls `onValueChange('')`.
 
-Pass `isLoading` or an `error` message to show status information. Existing suggestions remain selectable while either is displayed, so pass empty groups if stale results should not be available. Fetching, persistence, filter changes and pagination are consumer responsibilities.
+Pass `isLoading` or an `error` message to show and announce status information. Existing suggestions remain selectable while either is displayed, so pass empty groups if stale results should not be available.
+
+Use `label` and `placeholder` for the input text and the optional `messages` prop to override any built-in text, including keyboard key names and hints. For example:
+
+```tsx
+<SearchAutocomplete
+  {...props}
+  label="Søk"
+  placeholder="Søk..."
+  messages={{
+    clearSearch: 'Tøm søk',
+    loading: 'Laster forslag...',
+    empty: 'Ingen forslag.',
+    searchHint: (query) => `«${query}» søkes`,
+  }}
+/>
+```
+
+`searchHint` receives the trimmed query and replaces the whole search action hint, allowing translations to place the query anywhere. Without it, the hint combines `messages.search` with the query.
+
+## Recent searches
+
+The `RecentSearches` story demonstrates keeping history in consumer state and rendering it as an ordinary group. Its selection handler explicitly searches for the selected item; the component does not assign special behavior to that group. Fetching, persistence, history policy, filter changes and pagination are consumer responsibilities.
 
 ## Props
 

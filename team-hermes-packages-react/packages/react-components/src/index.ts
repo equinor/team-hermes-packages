@@ -16,6 +16,7 @@ export {
   SearchAutocomplete,
   type SearchAutocompleteGroup,
   type SearchAutocompleteItem,
+  type SearchAutocompleteMessages,
   type SearchAutocompleteProps,
 } from '@/components/SearchAutocomplete/SearchAutocomplete'
 export { ConfirmOperationDialog } from '@/components/ConfirmOperationDialog/ConfirmOperationDialog'

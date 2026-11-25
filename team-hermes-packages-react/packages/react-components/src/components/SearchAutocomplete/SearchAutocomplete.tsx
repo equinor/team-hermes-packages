@@ -1,7 +1,7 @@
 import { Autocomplete } from '@base-ui/react/autocomplete'
 import { Icon } from '@equinor/eds-core-react'
 import { close, search } from '@equinor/eds-icons'
-import { useMemo, useRef, useState, type ReactNode } from 'react'
+import { useId, useMemo, useRef, useState, type ReactNode } from 'react'
 
 export type SearchAutocompleteItem = {
   /** Unique within its group. */
@@ -19,6 +19,34 @@ export type SearchAutocompleteGroup<T extends SearchAutocompleteItem = SearchAut
   items: T[]
 }
 
+export type SearchAutocompleteMessages = {
+  clearSearch: string
+  loading: string
+  empty: string
+  arrowKeys: string
+  navigate: string
+  enterKey: string
+  select: string
+  search: string
+  /** Formats the search hint using the trimmed query; overrides the default based on `search`. */
+  searchHint?: (query: string) => string
+  escapeKey: string
+  close: string
+}
+
+const defaultMessages: SearchAutocompleteMessages = {
+  clearSearch: 'Clear search',
+  loading: 'Loading suggestions...',
+  empty: 'No suggestions.',
+  arrowKeys: 'Arrow keys',
+  navigate: 'navigate',
+  enterKey: 'Enter',
+  select: 'select',
+  search: 'search',
+  escapeKey: 'Escape',
+  close: 'close',
+}
+
 export type SearchAutocompleteProps<T extends SearchAutocompleteItem = SearchAutocompleteItem> = {
   value: string
   groups: SearchAutocompleteGroup<T>[]
@@ -29,6 +57,7 @@ export type SearchAutocompleteProps<T extends SearchAutocompleteItem = SearchAut
   error?: string | null
   label?: string
   placeholder?: string
+  messages?: Partial<SearchAutocompleteMessages>
 }
 
 type Option<T extends SearchAutocompleteItem> = {
@@ -47,7 +76,9 @@ function HighlightedText({ text, query }: { text: string; query: string }) {
   return (
     <>
       {text.slice(0, index)}
-      <mark className="bg-transparent font-semibold text-inherit">{text.slice(index, index + match.length)}</mark>
+      <mark className="rounded-sm bg-(--eds-color-bg-accent-fill-muted-hover) font-semibold text-(--eds-color-text-neutral-strong) underline decoration-2 underline-offset-2">
+        {text.slice(index, index + match.length)}
+      </mark>
       {text.slice(index + match.length)}
     </>
   )
@@ -64,16 +95,21 @@ export function SearchAutocomplete<T extends SearchAutocompleteItem = SearchAuto
   error,
   label = 'Search',
   placeholder = 'Search...',
+  messages,
 }: SearchAutocompleteProps<T>) {
   const [open, setOpen] = useState(false)
   const [highlighted, setHighlighted] = useState<Option<T> | undefined>()
   const highlightedRef = useRef<Option<T> | undefined>(undefined)
+  const statusId = useId()
+  const errorId = useId()
   const groupedOptions = useMemo(
     () => groups.map((group) => ({ group, options: group.items.map((item) => ({ item, group })) })),
     [groups]
   )
   const options = useMemo(() => groupedOptions.flatMap((entry) => entry.options), [groupedOptions])
   const currentHighlight = highlighted && options.find((option) => sameOption(option, highlighted))
+  const text = { ...defaultMessages, ...messages }
+  const status = isLoading ? text.loading : !error && options.length === 0 ? text.empty : ''
 
   const updateHighlight = (option: Option<T> | undefined) => {
     highlightedRef.current = option
@@ -122,11 +158,14 @@ export function SearchAutocomplete<T extends SearchAutocompleteItem = SearchAuto
         <Icon data={search} size={16} className="shrink-0 text-secondary" />
         <Autocomplete.Input
           aria-label={label}
+          aria-busy={isLoading || undefined}
+          aria-describedby={open ? (status ? statusId : error && !isLoading ? errorId : undefined) : undefined}
           {...(!currentHighlight ? { 'aria-activedescendant': undefined } : {})}
           placeholder={placeholder}
           enterKeyHint="search"
           className="w-full min-w-0 bg-transparent outline-none!"
           onFocus={() => setOpen(true)}
+          onClick={() => setOpen(true)}
           onKeyDown={(event) => {
             if (event.key !== 'Enter' || event.nativeEvent.isComposing) return
             event.preventDefault()
@@ -142,7 +181,7 @@ export function SearchAutocomplete<T extends SearchAutocompleteItem = SearchAuto
         />
         {value && !open && (
           <Autocomplete.Clear
-            aria-label="Clear search"
+            aria-label={text.clearSearch}
             tabIndex={0}
             className="shrink-0 rounded p-1 hover:bg-surface-hover"
           >
@@ -151,31 +190,21 @@ export function SearchAutocomplete<T extends SearchAutocompleteItem = SearchAuto
         )}
       </Autocomplete.InputGroup>
       <Autocomplete.Portal>
-        <Autocomplete.Backdrop className="fixed inset-0 z-40 bg-black/20" />
         <Autocomplete.Positioner className="z-50 outline-none" sideOffset={4} align="start">
           <Autocomplete.Popup className="popup-animation w-(--anchor-width) max-w-(--available-width) max-h-[min(var(--available-height),23rem)] origin-(--transform-origin) overflow-y-auto rounded bg-surface py-2 shadow-lg outline-1 outline-stroke-subtle">
             {value && (
               <div className="flex justify-end px-3">
                 <Autocomplete.Clear tabIndex={0} className="rounded px-2 py-1 text-xs hover:bg-surface-hover">
-                  Clear search
+                  {text.clearSearch}
                 </Autocomplete.Clear>
               </div>
             )}
-            {isLoading && (
-              <div role="status" className="px-4 py-2 text-sm text-secondary">
-                Loading suggestions...
-              </div>
-            )}
-            {!isLoading && error && (
-              <div role="alert" className="px-4 py-2 text-sm">
-                {error}
-              </div>
-            )}
-            {!isLoading && !error && options.length === 0 && (
-              <div role="status" className="px-4 py-2 text-sm text-secondary">
-                No suggestions.
-              </div>
-            )}
+            <div id={statusId} role="status" className={status ? 'px-4 py-2 text-sm text-secondary' : 'sr-only'}>
+              {status}
+            </div>
+            <div id={errorId} role="alert" className={!isLoading && error ? 'px-4 py-2 text-sm' : 'sr-only'}>
+              {!isLoading && error}
+            </div>
             <Autocomplete.List>
               {groupedOptions.map(({ group, options: groupOptions }) =>
                 groupOptions.length > 0 ? (
@@ -206,8 +235,31 @@ export function SearchAutocomplete<T extends SearchAutocompleteItem = SearchAuto
                 ) : null
               )}
             </Autocomplete.List>
-            <div className="border-t border-stroke-subtle px-4 pt-2 text-xs text-secondary">
-              Use arrow keys to navigate, Enter to select or search, Escape to close.
+            <div className="flex flex-wrap gap-x-3 gap-y-1 border-t border-stroke-subtle px-4 pt-2 text-xs text-secondary">
+              <span>
+                <span role="img" aria-label={text.arrowKeys}>
+                  <kbd aria-hidden="true" className="rounded border border-stroke-subtle px-1">
+                    ↑
+                  </kbd>{' '}
+                  <kbd aria-hidden="true" className="rounded border border-stroke-subtle px-1">
+                    ↓
+                  </kbd>
+                </span>{' '}
+                {text.navigate}
+              </span>
+              {(currentHighlight || value.trim()) && (
+                <span className="inline-flex max-w-full min-w-0 items-baseline gap-1">
+                  <kbd className="shrink-0 rounded border border-stroke-subtle px-1">{text.enterKey}</kbd>
+                  <span className="min-w-0 truncate">
+                    {currentHighlight
+                      ? text.select
+                      : (text.searchHint?.(value.trim()) ?? `${text.search} “${value.trim()}”`)}
+                  </span>
+                </span>
+              )}
+              <span>
+                <kbd className="rounded border border-stroke-subtle px-1">{text.escapeKey}</kbd> {text.close}
+              </span>
             </div>
           </Autocomplete.Popup>
         </Autocomplete.Positioner>

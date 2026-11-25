@@ -21,6 +21,7 @@ function Harness({
   resultGroups = groups,
   isLoading = false,
   error,
+  messages,
 }: {
   onSelect?: SearchAutocompleteProps['onSelect']
   onSearch?: SearchAutocompleteProps['onSearch']
@@ -28,6 +29,7 @@ function Harness({
   resultGroups?: SearchAutocompleteGroup[]
   isLoading?: boolean
   error?: string
+  messages?: SearchAutocompleteProps['messages']
 }) {
   const [value, setValue] = useState(initialValue)
   return (
@@ -39,11 +41,40 @@ function Harness({
       onSearch={onSearch}
       isLoading={isLoading}
       error={error}
+      messages={messages}
     />
   )
 }
 
 describe('SearchAutocomplete', () => {
+  test('does not render a backdrop that can intercept input clicks', async () => {
+    const user = userEvent.setup()
+    render(<Harness />)
+    await user.click(screen.getByRole('combobox', { name: 'Search' }))
+    expect(document.querySelector('[class~="bg-black/20"]')).not.toBeInTheDocument()
+  })
+
+  test('reopens on a focused input click after Escape and keyboard selection', async () => {
+    const user = userEvent.setup()
+    const onSelect = vi.fn()
+    render(<Harness onSelect={onSelect} />)
+    const input = screen.getByRole('combobox')
+    await user.click(input)
+    await user.keyboard('{Escape}')
+    expect(input).toHaveFocus()
+    expect(input).toHaveAttribute('aria-expanded', 'false')
+    fireEvent.click(input)
+    expect(input).toHaveAttribute('aria-expanded', 'true')
+    await user.click(input)
+    expect(input).toHaveAttribute('aria-expanded', 'true')
+    await user.keyboard('{ArrowDown}{Enter}')
+    expect(onSelect).toHaveBeenCalledOnce()
+    expect(input).toHaveFocus()
+    expect(input).toHaveAttribute('aria-expanded', 'false')
+    await user.click(input)
+    expect(input).toHaveAttribute('aria-expanded', 'true')
+  })
+
   test('shows consumer-provided groups without filtering and highlights matching text', async () => {
     const user = userEvent.setup()
     render(<Harness initialValue="sea" />)
@@ -51,8 +82,17 @@ describe('SearchAutocomplete', () => {
     expect(screen.getByText('Places')).toBeInTheDocument()
     expect(screen.getByText('Recent')).toBeInTheDocument()
     expect(screen.getByRole('option', { name: 'Other' })).toBeInTheDocument()
-    expect(within(screen.getByRole('option', { name: /North Sea/ })).getByText('Sea').tagName).toBe('MARK')
+    const match = within(screen.getByRole('option', { name: /North Sea/ })).getByText('Sea')
+    expect(match.tagName).toBe('MARK')
+    expect(match).toHaveClass(
+      'bg-(--eds-color-bg-accent-fill-muted-hover)',
+      'text-(--eds-color-text-neutral-strong)',
+      'underline'
+    )
     expect(screen.getByText('12 results')).toBeInTheDocument()
+    await user.keyboard('{ArrowDown}')
+    expect(screen.getByRole('option', { name: /North Sea/ })).toHaveClass('bg-surface-hover')
+    expect(match).toHaveClass('bg-(--eds-color-bg-accent-fill-muted-hover)', 'underline')
   })
 
   test('selects by click without changing the controlled input or submitting a search', async () => {
@@ -135,9 +175,134 @@ describe('SearchAutocomplete', () => {
     const { rerender } = render(<Harness resultGroups={[]} isLoading />)
     fireEvent.focus(screen.getByRole('combobox'))
     expect(screen.getByRole('status')).toHaveTextContent('Loading suggestions')
+    expect(screen.getByRole('combobox')).toHaveAttribute('aria-busy', 'true')
+    expect(screen.getByRole('combobox')).toHaveAccessibleDescription('Loading suggestions...')
     rerender(<Harness resultGroups={[]} error="Could not load suggestions" />)
     expect(screen.getByRole('alert')).toHaveTextContent('Could not load suggestions')
+    expect(screen.getByRole('combobox')).toHaveAccessibleDescription('Could not load suggestions')
+    expect(screen.getByRole('status')).toBeEmptyDOMElement()
     rerender(<Harness resultGroups={[]} />)
     expect(screen.getByRole('status')).toHaveTextContent('No suggestions')
+    expect(screen.getByRole('combobox')).toHaveAccessibleDescription('No suggestions.')
+    expect(screen.getByRole('alert')).toBeEmptyDOMElement()
+    expect(screen.getByRole('combobox')).not.toHaveAttribute('aria-busy')
+  })
+
+  test('updates the live status when loading starts and finishes while the popup is open', async () => {
+    const user = userEvent.setup()
+    const { rerender } = render(<Harness />)
+    const input = screen.getByRole('combobox')
+    await user.click(input)
+    const status = screen.getByRole('status')
+    expect(status).toBeEmptyDOMElement()
+
+    rerender(<Harness resultGroups={[]} isLoading />)
+    expect(input).toHaveAttribute('aria-expanded', 'true')
+    expect(screen.getByRole('status')).toBe(status)
+    expect(status).toHaveTextContent('Loading suggestions...')
+    expect(input).toHaveAccessibleDescription('Loading suggestions...')
+
+    rerender(<Harness resultGroups={[]} />)
+    expect(input).toHaveAttribute('aria-expanded', 'true')
+    expect(screen.getByRole('status')).toBe(status)
+    expect(status).toHaveTextContent('No suggestions.')
+    expect(input).toHaveAccessibleDescription('No suggestions.')
+  })
+
+  test('updates keyboard hints for the current action and localizes built-in text', async () => {
+    const user = userEvent.setup()
+    render(
+      <Harness
+        initialValue="  sea  "
+        messages={{
+          clearSearch: 'Clear translated',
+          arrowKeys: 'Arrows translated',
+          navigate: 'navigate translated',
+          enterKey: 'Enter translated',
+          select: 'select translated',
+          search: 'search translated',
+          searchHint: (query) => `${query}: search translated`,
+          escapeKey: 'Escape translated',
+          close: 'close translated',
+        }}
+      />
+    )
+    await user.click(screen.getByRole('combobox'))
+    expect(screen.getByRole('button', { name: 'Clear translated' })).toBeInTheDocument()
+    const arrows = screen.getByRole('img', { name: 'Arrows translated' })
+    expect(within(arrows).getByText('↑').tagName).toBe('KBD')
+    expect(within(arrows).getByText('↓').tagName).toBe('KBD')
+    expect(screen.getByText('Escape translated').tagName).toBe('KBD')
+    expect(screen.getByText('sea: search translated')).toBeInTheDocument()
+    await user.keyboard('{ArrowDown}')
+    expect(screen.getByText('select translated')).toBeInTheDocument()
+    expect(screen.queryByText('sea: search translated')).not.toBeInTheDocument()
+    await user.keyboard('{Escape}')
+    expect(screen.getByRole('button', { name: 'Clear translated' })).toBeInTheDocument()
+  })
+
+  test('shows the trimmed query in the search hint only when there is a query', async () => {
+    const user = userEvent.setup()
+    render(<Harness messages={{ search: 'Find' }} />)
+    const input = screen.getByRole('combobox')
+    await user.click(input)
+    expect(screen.queryByText('Enter')).not.toBeInTheDocument()
+    await user.type(input, ' Norway ')
+    expect(screen.getByText('Find “Norway”')).toBeInTheDocument()
+    await user.keyboard('{ArrowDown}')
+    expect(screen.getByText('select')).toBeInTheDocument()
+    expect(screen.queryByText('Find “Norway”')).not.toBeInTheDocument()
+  })
+
+  test('constrains long search hints without truncating their accessible text', async () => {
+    const user = userEvent.setup()
+    const query = 'a'.repeat(200)
+    render(<Harness initialValue={query} messages={{ searchHint: (value) => `${value} translated` }} />)
+    await user.click(screen.getByRole('combobox'))
+    const hint = screen.getByText(`${query} translated`)
+    expect(hint).toHaveClass('min-w-0', 'truncate')
+    expect(hint.parentElement).toHaveClass('max-w-full', 'min-w-0')
+    expect(screen.getByText('Escape')).toBeInTheDocument()
+  })
+
+  test('announces translated loading and empty messages', () => {
+    const messages = { loading: 'Loading translated', empty: 'Empty translated' }
+    const { rerender } = render(<Harness resultGroups={[]} isLoading messages={messages} />)
+    fireEvent.focus(screen.getByRole('combobox'))
+    expect(screen.getByRole('status')).toHaveTextContent('Loading translated')
+    rerender(<Harness resultGroups={[]} messages={messages} />)
+    expect(screen.getByRole('status')).toHaveTextContent('Empty translated')
+  })
+
+  test('supports recent searches as a consumer-owned group', async () => {
+    const user = userEvent.setup()
+    const onSearch = vi.fn()
+    function RecentSearches() {
+      const [value, setValue] = useState('')
+      const [recent, setRecent] = useState<string[]>([])
+      const search = (query: string) => {
+        setRecent((previous) => [query, ...previous.filter((entry) => entry !== query)])
+        onSearch(query)
+      }
+      return (
+        <SearchAutocomplete
+          value={value}
+          onValueChange={setValue}
+          groups={[
+            { id: 'recent', label: 'Recent searches', items: recent.map((query) => ({ id: query, label: query })) },
+          ]}
+          onSearch={search}
+          onSelect={(item) => search(item.label)}
+        />
+      )
+    }
+
+    render(<RecentSearches />)
+    await user.type(screen.getByRole('combobox'), 'North Sea{Enter}')
+    await user.click(screen.getByRole('combobox'))
+    expect(screen.getByText('Recent searches')).toBeInTheDocument()
+    await user.click(screen.getByRole('option', { name: 'North Sea' }))
+    expect(onSearch).toHaveBeenCalledTimes(2)
+    expect(onSearch).toHaveBeenLastCalledWith('North Sea')
   })
 })
