@@ -29,6 +29,8 @@ const groups: SearchAutocompleteGroup[] = [
 
 Group IDs must be unique, and item IDs must be unique within their group. Groups and items can provide an `icon`; items can provide `metadata`. Custom item fields are preserved in `onSelect`. Recent searches can be supplied as another group.
 
+Matching text uses the browser-default `<mark>` appearance.
+
 Enter selects the highlighted suggestion, or calls `onSearch` with trimmed, nonempty text. Enter used to confirm IME composition does not select or search. Escape closes the popup. Selection and search do not change the query; consumers decide whether to clear it. The clear button calls `onValueChange('')`.
 
 Pass `isLoading` or an `error` message to show and announce status information. Existing suggestions remain selectable while either is displayed, so pass empty groups if stale results should not be available.

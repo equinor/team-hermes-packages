@@ -84,15 +84,13 @@ describe('SearchAutocomplete', () => {
     expect(screen.getByRole('option', { name: 'Other' })).toBeInTheDocument()
     const match = within(screen.getByRole('option', { name: /North Sea/ })).getByText('Sea')
     expect(match.tagName).toBe('MARK')
-    expect(match).toHaveClass(
-      'bg-(--eds-color-bg-accent-fill-muted-hover)',
-      'text-(--eds-color-text-neutral-strong)',
-      'underline'
-    )
+    expect(match).not.toHaveAttribute('class')
+    expect(match).not.toHaveAttribute('style')
     expect(screen.getByText('12 results')).toBeInTheDocument()
     await user.keyboard('{ArrowDown}')
     expect(screen.getByRole('option', { name: /North Sea/ })).toHaveClass('bg-surface-hover')
-    expect(match).toHaveClass('bg-(--eds-color-bg-accent-fill-muted-hover)', 'underline')
+    expect(match).not.toHaveAttribute('class')
+    expect(match).not.toHaveAttribute('style')
   })
 
   test('selects by click without changing the controlled input or submitting a search', async () => {

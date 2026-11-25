@@ -76,9 +76,7 @@ function HighlightedText({ text, query }: { text: string; query: string }) {
   return (
     <>
       {text.slice(0, index)}
-      <mark className="rounded-sm bg-(--eds-color-bg-accent-fill-muted-hover) font-semibold text-(--eds-color-text-neutral-strong) underline decoration-2 underline-offset-2">
-        {text.slice(index, index + match.length)}
-      </mark>
+      <mark>{text.slice(index, index + match.length)}</mark>
       {text.slice(index + match.length)}
     </>
   )
