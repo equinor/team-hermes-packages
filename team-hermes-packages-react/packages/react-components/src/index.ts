@@ -12,6 +12,13 @@ export { chip as chipStyles } from '@/components/Chip/Chip.styles'
 export { ErrorPanel } from '@/components/ErrorPanel/ErrorPanel'
 // FORM COMPONENTS
 export { Combobox, type ComboboxItem } from '@/components/Combobox/Combobox'
+export {
+  SearchAutocomplete,
+  type SearchAutocompleteGroup,
+  type SearchAutocompleteItem,
+  type SearchAutocompleteMessages,
+  type SearchAutocompleteProps,
+} from '@/components/SearchAutocomplete/SearchAutocomplete'
 export { ConfirmOperationDialog } from '@/components/ConfirmOperationDialog/ConfirmOperationDialog'
 export { ContextMenu, type ContextMenuItem } from '@/components/ContextMenu/ContextMenu'
 // FEATURE COMPONENTS

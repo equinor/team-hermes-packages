@@ -1,0 +1,100 @@
+import { Meta, Primary, Canvas, ArgTypes } from '@storybook/addon-docs/blocks'
+import * as SearchAutocompleteStories from './SearchAutocomplete.stories'
+
+<Meta of={SearchAutocompleteStories} />
+
+# SearchAutocomplete
+
+A controlled search input with an anchored, grouped suggestion popup. Suggestions are supplied by the consumer and are not filtered by the component.
+
+<Primary />
+
+## Usage
+
+```tsx
+import { SearchAutocomplete, type SearchAutocompleteGroup } from '@team-hermes/react-components'
+
+const groups: SearchAutocompleteGroup[] = [
+  { id: 'places', label: 'Places', items: [{ id: 'sea', label: 'North Sea', metadata: '12 results' }] },
+]
+
+<SearchAutocomplete
+  value={query}
+  groups={groups}
+  onValueChange={setQuery}
+  onSelect={(item, group) => selectSuggestion(item, group)}
+  onSearch={(query) => search(query)}
+/>
+```
+
+Group IDs must be unique, and item IDs must be unique within their group. Groups and items can provide an `icon`; items can provide `metadata`. Custom item fields are preserved in `onSelect`. Recent searches can be supplied as another group.
+
+Matching text uses the browser-default `<mark>` appearance.
+
+Enter selects the highlighted suggestion, or calls `onSearch` with trimmed, nonempty text. Enter used to confirm IME composition does not select or search. While the popup is open, Escape closes only this popup without propagating to enclosing dialogs or popovers, even when no suggestions are available. Selection and search do not change the query; consumers decide whether to clear it. The clear button calls `onValueChange('')`.
+
+Pass `isLoading` or an `error` message to show and announce status information. Existing suggestions remain selectable while either is displayed, so pass empty groups if stale results should not be available.
+
+Use `label` and `placeholder` for the input text and the optional `messages` prop to override any built-in text, including keyboard key names and hints. For example:
+
+```tsx
+<SearchAutocomplete
+  {...props}
+  label="Søk"
+  placeholder="Søk..."
+  messages={{
+    clearSearch: 'Tøm søk',
+    loading: 'Laster forslag...',
+    empty: 'Ingen forslag.',
+    searchHint: (query) => `«${query}» søkes`,
+  }}
+/>
+```
+
+`searchHint` receives the trimmed query and replaces the whole search action hint, allowing translations to place the query anywhere. Without it, the hint combines `messages.search` with the query.
+
+## Examples
+
+### Interactive
+
+Use the buttons to switch between loading, error, and suggestion states.
+
+<Canvas of={SearchAutocompleteStories.Interactive} />
+
+### Matching query
+
+Matching text in suggestions is highlighted.
+
+<Canvas of={SearchAutocompleteStories.WithQuery} />
+
+### Loading
+
+<Canvas of={SearchAutocompleteStories.Loading} />
+
+### Loading with suggestions
+
+Existing suggestions remain selectable while new ones are loading.
+
+<Canvas of={SearchAutocompleteStories.LoadingWithSuggestions} />
+
+### Error
+
+<Canvas of={SearchAutocompleteStories.WithError} />
+
+### Empty
+
+<Canvas of={SearchAutocompleteStories.Empty} />
+
+### Localized
+
+<Canvas of={SearchAutocompleteStories.Localized} />
+
+## Recent searches
+
+The `RecentSearches` story demonstrates keeping history in consumer state and rendering it as an ordinary group. Its selection handler explicitly searches for the selected item; the component does not assign special behavior to that group. Fetching, persistence, history policy, filter changes and pagination are consumer responsibilities.
+
+<Canvas of={SearchAutocompleteStories.RecentSearches} />
+
+## Props
+
+<ArgTypes of={SearchAutocompleteStories} />
