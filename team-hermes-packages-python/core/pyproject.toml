@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 # Published to PyPI via GitHub Actions Trusted Publishing.
 name = "team-hermes.core"
-version = "2.0.0"
+version = "1.0.1"
 description = "Shared application exceptions for Team Hermes projects"
 readme = "README.md"
 license-files = ["LICENSE.md"]

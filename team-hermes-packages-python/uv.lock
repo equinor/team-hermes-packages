@@ -738,12 +738,12 @@ source = { editable = "authorization" }
 
 [[package]]
 name = "team-hermes-core"
-version = "2.0.0"
+version = "1.0.1"
 source = { editable = "core" }
 
 [[package]]
 name = "team-hermes-elasticsearch"
-version = "2.0.0"
+version = "1.0.1"
 source = { editable = "elasticsearch" }
 dependencies = [
     { name = "elasticsearch" },
