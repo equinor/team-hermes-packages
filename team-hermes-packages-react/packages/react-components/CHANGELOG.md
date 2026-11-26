@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.13.0](https://github.com/equinor/team-hermes-packages/compare/team-hermes-packages-react-v1.12.0...team-hermes-packages-react-v1.13.0) (2026-11-26)
+
+
+### Features
+
+* autocomplete search component ([#120](https://github.com/equinor/team-hermes-packages/issues/120)) ([0f5ba9a](https://github.com/equinor/team-hermes-packages/commit/0f5ba9a4959a41f376f289466994198a3c592ae7))
+
+
+### Bug Fixes
+
+* `vp migrate` and resolve `jest-dom` discrepancy ([a7ee668](https://github.com/equinor/team-hermes-packages/commit/a7ee668f1b5b2f4971d42d8c91cfa4bc7d34f02b))
+
 ## [1.12.0](https://github.com/equinor/team-hermes-packages/compare/team-hermes-packages-react-v1.11.0...team-hermes-packages-react-v1.12.0) (2026-11-05)
 
 
