@@ -69,15 +69,22 @@ function sameOption<T extends SearchAutocompleteItem>(a: Option<T>, b: Option<T>
   return a.group.id === b.group.id && a.item.id === b.item.id
 }
 
+function escapeRegExp(value: string) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}
+
 function HighlightedText({ text, query }: { text: string; query: string }) {
-  const match = query.trim()
-  const index = match ? text.toLocaleLowerCase().indexOf(match.toLocaleLowerCase()) : -1
-  if (index < 0) return text
+  const trimmed = query.trim()
+  // Match against the original text so the offsets stay valid; case mapping (e.g. İ → i̇) can change string length.
+  const match = trimmed ? new RegExp(escapeRegExp(trimmed), 'iu').exec(text) : null
+  if (!match) return text
+  const start = match.index
+  const end = start + match[0].length
   return (
     <>
-      {text.slice(0, index)}
-      <mark>{text.slice(index, index + match.length)}</mark>
-      {text.slice(index + match.length)}
+      {text.slice(0, start)}
+      <mark>{text.slice(start, end)}</mark>
+      {text.slice(end)}
     </>
   )
 }
@@ -166,6 +173,7 @@ export function SearchAutocomplete<T extends SearchAutocompleteItem = SearchAuto
           onFocus={() => setOpen(true)}
           onClick={() => setOpen(true)}
           onKeyDown={(event) => {
+            if (open && event.key === 'Escape') event.stopPropagation()
             if (event.key !== 'Enter') return
             event.preventBaseUIHandler()
             if (event.nativeEvent.isComposing || event.nativeEvent.keyCode === 229) return
@@ -191,7 +199,12 @@ export function SearchAutocomplete<T extends SearchAutocompleteItem = SearchAuto
       </Autocomplete.InputGroup>
       <Autocomplete.Portal>
         <Autocomplete.Positioner className="z-50 outline-none" sideOffset={4} align="start">
-          <Autocomplete.Popup className="popup-animation w-(--anchor-width) max-w-(--available-width) max-h-[min(var(--available-height),23rem)] origin-(--transform-origin) overflow-y-auto rounded bg-surface py-2 shadow-lg outline-1 outline-stroke-subtle">
+          <Autocomplete.Popup
+            className="popup-animation w-(--anchor-width) max-w-(--available-width) max-h-[min(var(--available-height),23rem)] origin-(--transform-origin) overflow-y-auto rounded bg-surface py-2 shadow-lg outline-1 outline-stroke-subtle"
+            onKeyDown={(event) => {
+              if (open && event.key === 'Escape') event.stopPropagation()
+            }}
+          >
             {value && (
               <div className="flex justify-end px-3">
                 <Autocomplete.Clear tabIndex={0} className="rounded px-2 py-1 text-xs hover:bg-surface-hover">

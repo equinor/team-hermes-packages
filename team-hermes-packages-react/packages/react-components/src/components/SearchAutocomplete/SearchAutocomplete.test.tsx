@@ -93,6 +93,20 @@ describe('SearchAutocomplete', () => {
     expect(match).not.toHaveAttribute('style')
   })
 
+  test.each([
+    { label: 'İstanbul', query: 'stan', expected: 'stan' },
+    { label: 'Price (USD)', query: '(usd)', expected: '(USD)' },
+  ])('highlights "$expected" in "$label" for query "$query"', async ({ label, query, expected }) => {
+    const user = userEvent.setup()
+    const resultGroups: SearchAutocompleteGroup[] = [{ id: 'g', label: 'Group', items: [{ id: '1', label }] }]
+    render(<Harness initialValue={query} resultGroups={resultGroups} />)
+    await user.click(screen.getByRole('combobox', { name: 'Search' }))
+    const option = screen.getByRole('option', { name: label })
+    const match = within(option).getByText(expected)
+    expect(match.tagName).toBe('MARK')
+    expect(option).toHaveTextContent(label)
+  })
+
   test('selects by click without changing the controlled input or submitting a search', async () => {
     const user = userEvent.setup()
     const onSelect = vi.fn()
@@ -206,6 +220,38 @@ describe('SearchAutocomplete', () => {
     expect(onSearch).not.toHaveBeenCalled()
     await user.keyboard('{Escape}')
     expect(input).toHaveAttribute('aria-expanded', 'false')
+  })
+
+  test.each(
+    [
+      { state: 'suggestions', resultGroups: groups },
+      { state: 'empty', resultGroups: [] },
+      { state: 'loading', resultGroups: [], isLoading: true },
+      { state: 'error', resultGroups: [], error: 'Could not load suggestions' },
+    ].flatMap((props) => ['input', 'popup'].map((target) => ({ ...props, target })))
+  )('contains Escape from the $target in the $state state only while open', async ({ target, ...props }) => {
+    const user = userEvent.setup()
+    const onKeyDown = vi.fn()
+    render(
+      <div onKeyDown={onKeyDown}>
+        <Harness initialValue="query" {...props} />
+      </div>
+    )
+    const input = screen.getByRole('combobox')
+    await user.click(input)
+    expect(input).toHaveAttribute('aria-expanded', 'true')
+    const source = target === 'input' ? input : screen.getByRole('listbox')
+
+    fireEvent.keyDown(source, { key: 'Shift' })
+    expect(onKeyDown).toHaveBeenCalled()
+    onKeyDown.mockClear()
+
+    fireEvent.keyDown(source, { key: 'Escape' })
+    expect(input).toHaveAttribute('aria-expanded', 'false')
+    expect(onKeyDown).not.toHaveBeenCalled()
+
+    fireEvent.keyDown(input, { key: 'Escape' })
+    expect(onKeyDown).toHaveBeenCalledOnce()
   })
 
   test('shows loading, error and empty states', () => {

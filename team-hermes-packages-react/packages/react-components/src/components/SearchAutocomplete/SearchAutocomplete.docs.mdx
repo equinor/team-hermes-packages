@@ -31,7 +31,7 @@ Group IDs must be unique, and item IDs must be unique within their group. Groups
 
 Matching text uses the browser-default `<mark>` appearance.
 
-Enter selects the highlighted suggestion, or calls `onSearch` with trimmed, nonempty text. Enter used to confirm IME composition does not select or search. Escape closes the popup. Selection and search do not change the query; consumers decide whether to clear it. The clear button calls `onValueChange('')`.
+Enter selects the highlighted suggestion, or calls `onSearch` with trimmed, nonempty text. Enter used to confirm IME composition does not select or search. While the popup is open, Escape closes only this popup without propagating to enclosing dialogs or popovers, even when no suggestions are available. Selection and search do not change the query; consumers decide whether to clear it. The clear button calls `onValueChange('')`.
 
 Pass `isLoading` or an `error` message to show and announce status information. Existing suggestions remain selectable while either is displayed, so pass empty groups if stale results should not be available.
 
