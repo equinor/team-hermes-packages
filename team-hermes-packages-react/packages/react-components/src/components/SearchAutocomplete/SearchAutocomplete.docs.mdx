@@ -1,4 +1,4 @@
-import { Meta, Primary, ArgTypes } from '@storybook/addon-docs/blocks'
+import { Meta, Primary, Canvas, ArgTypes } from '@storybook/addon-docs/blocks'
 import * as SearchAutocompleteStories from './SearchAutocomplete.stories'
 
 <Meta of={SearchAutocompleteStories} />
@@ -53,9 +53,47 @@ Use `label` and `placeholder` for the input text and the optional `messages` pro
 
 `searchHint` receives the trimmed query and replaces the whole search action hint, allowing translations to place the query anywhere. Without it, the hint combines `messages.search` with the query.
 
+## Examples
+
+### Interactive
+
+Use the buttons to switch between loading, error, and suggestion states.
+
+<Canvas of={SearchAutocompleteStories.Interactive} />
+
+### Matching query
+
+Matching text in suggestions is highlighted.
+
+<Canvas of={SearchAutocompleteStories.WithQuery} />
+
+### Loading
+
+<Canvas of={SearchAutocompleteStories.Loading} />
+
+### Loading with suggestions
+
+Existing suggestions remain selectable while new ones are loading.
+
+<Canvas of={SearchAutocompleteStories.LoadingWithSuggestions} />
+
+### Error
+
+<Canvas of={SearchAutocompleteStories.WithError} />
+
+### Empty
+
+<Canvas of={SearchAutocompleteStories.Empty} />
+
+### Localized
+
+<Canvas of={SearchAutocompleteStories.Localized} />
+
 ## Recent searches
 
 The `RecentSearches` story demonstrates keeping history in consumer state and rendering it as an ordinary group. Its selection handler explicitly searches for the selected item; the component does not assign special behavior to that group. Fetching, persistence, history policy, filter changes and pagination are consumer responsibilities.
+
+<Canvas of={SearchAutocompleteStories.RecentSearches} />
 
 ## Props
 
