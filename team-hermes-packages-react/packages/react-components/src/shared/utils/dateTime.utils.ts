@@ -48,8 +48,11 @@ export function isWithinLastHours(dateString: string, hours: number): boolean {
  * @param input string or Date object
  * @returns string in dd/mm/yyyy format
  */
-export function formatDate(input: string | Date): string {
+export function formatDate(input: null | undefined | string | Date): string {
   try {
+    if (input === null || input === undefined) {
+      return ''
+    }
     const date = input instanceof Date ? input : new Date(input)
     if (Number.isNaN(date.getTime())) {
       return String(input)
