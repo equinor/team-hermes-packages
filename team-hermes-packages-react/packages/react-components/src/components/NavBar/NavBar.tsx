@@ -33,8 +33,10 @@ export function NavBar(props: NavBarProps) {
       <div className="flex items-center gap-4">
         {props.leftContent ?? (
           <>
-            {props.applicationIcon && <span>{props.applicationIcon}</span>}
-            <LinkComponent to="/">
+            <LinkComponent to="/" className="flex items-center gap-4">
+              {props.applicationIcon && (
+                <span aria-hidden={props.applicationConfig?.name ? true : undefined}>{props.applicationIcon}</span>
+              )}
               <span className="text-lg font-semibold tracking-wide">{props.applicationConfig?.name}</span>
             </LinkComponent>
             {environment && <Chip fontSize="xs">{environment}</Chip>}
