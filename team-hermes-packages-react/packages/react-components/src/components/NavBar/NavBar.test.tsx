@@ -123,6 +123,15 @@ describe('NavBar navigation', () => {
     }
   })
 
+  it('links both the application icon and name to the home page', () => {
+    render(<NavBar {...defaultProps} />)
+
+    const homeLink = screen.getByRole('link', { name: 'MyApp' })
+    expect(homeLink).toHaveAttribute('href', '/')
+    expect(within(homeLink).getByText('Application icon')).toBeInTheDocument()
+    expect(within(homeLink).queryByText('Development')).not.toBeInTheDocument()
+  })
+
   it('omits optional branding when no icon, environment, or application config is provided', () => {
     render(
       <NavBar {...defaultProps} applicationIcon={undefined} environment={undefined} applicationConfig={undefined} />
