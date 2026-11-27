@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.13.1](https://github.com/equinor/team-hermes-packages/compare/team-hermes-packages-react-v1.13.0...team-hermes-packages-react-v1.13.1) (2026-11-27)
+
+
+### Bug Fixes
+
+* **react:** link NavBar logo and name to home ([25271cc](https://github.com/equinor/team-hermes-packages/commit/25271cc101e84e38b3cbb8a9d205a5f58d2c8347))
+
 ## [1.13.0](https://github.com/equinor/team-hermes-packages/compare/team-hermes-packages-react-v1.12.0...team-hermes-packages-react-v1.13.0) (2026-11-26)
 
 
